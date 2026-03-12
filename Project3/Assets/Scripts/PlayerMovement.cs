@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public struct MovementInput
@@ -31,6 +32,8 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float moveAcceleration = 10f;
+    [SerializeField] private float moveRotation = 10f;
+    [Space]
     [Space]
     [SerializeField] private CapsuleCollider hurtbox;
     [SerializeField] private float dodgeSpeed= 7f;
@@ -157,6 +160,20 @@ public class PlayerMovement : MonoBehaviour
 
         // Update State Machine
         _prevState = _state;
+    }
+
+    public void UpdateRotation(float deltaTime)
+    {
+        if (_requestedMovement.sqrMagnitude > 0f)
+        {
+            var targetRotation = Quaternion.LookRotation(_requestedMovement);
+            transform.rotation = Quaternion.Lerp
+            (
+                transform.rotation,
+                targetRotation,
+                1f - Mathf.Exp(-moveRotation * deltaTime)
+            );
+        }
     }
 
     public MovementState GetState() => _state;

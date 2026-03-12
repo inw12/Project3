@@ -43,7 +43,10 @@ public class Player : MonoBehaviour
     void LateUpdate()
     {
         // Update camera to follow player
-        mainCamera.transform.SetPositionAndRotation(cameraTarget.position, cameraTarget.rotation);
+        //mainCamera.transform.SetPositionAndRotation(cameraTarget.position, cameraTarget.rotation);
+
+        // Rotate character
+        playerMovement.UpdateRotation(Time.deltaTime);
 
         // Update Animations
         animationController.UpdateAnimation();
