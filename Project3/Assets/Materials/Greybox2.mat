@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Greybox-M
+  m_Name: Greybox2
   m_Shader: {fileID: -6465566751694194690, guid: c325862f1a4e344a8ac7e801ef427431, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
