@@ -13,7 +13,9 @@ public struct MovementState
 }
 public enum MovementAction
 {
-    Idle, Move, Dodge
+    Idle    = 0, 
+    Move    = 1, 
+    Dodge   = 2
 }
 
 [RequireComponent(typeof(CharacterController))]
@@ -156,4 +158,6 @@ public class PlayerMovement : MonoBehaviour
         // Update State Machine
         _prevState = _state;
     }
+
+    public MovementState GetState() => _state;
 }
