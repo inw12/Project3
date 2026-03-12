@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     [Space]
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerAnimationController animationController;
     [SerializeField] private Transform cameraTarget;
 
     private PlayerInput _inputActions;
@@ -23,6 +24,8 @@ public class Player : MonoBehaviour
         _inputActions.Enable();
 
         playerMovement.Initialize();
+        animationController.Initialize();
+
         mainCamera.transform.SetPositionAndRotation(cameraTarget.position, cameraTarget.rotation);
     }
 
@@ -41,6 +44,9 @@ public class Player : MonoBehaviour
     {
         // Update camera to follow player
         mainCamera.transform.SetPositionAndRotation(cameraTarget.position, cameraTarget.rotation);
+
+        // Update Animations
+        animationController.UpdateAnimation();
     }
 
     void FixedUpdate()
