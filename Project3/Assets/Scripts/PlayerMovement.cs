@@ -7,11 +7,11 @@ public struct MovementInput
 }
 public struct MovementState
 {
-    public CurrentAction Action;
+    public MovementAction CurrentAction;
     public Vector3 Velocity;
     public bool IsGrounded;
 }
-public enum CurrentAction
+public enum MovementAction
 {
     Idle, Move, Dodge
 }
@@ -28,9 +28,11 @@ public class PlayerMovement : MonoBehaviour
 
     [Space]
     [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float moveAcceleration = 10f;
     [Space]
     [SerializeField] private CapsuleCollider hurtbox;
     [SerializeField] private float dodgeSpeed= 7f;
+    [SerializeField] private float dodgeAcceleration = 15f;
     [SerializeField] private float dodgeDuration = 1f;
     private DodgeInfo _dodgeInfo;
 
@@ -54,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
         _inputEnabled = true;
         
         // State Machine
-        _state.Action = CurrentAction.Idle;
+        _state.CurrentAction = MovementAction.Idle;
         _state.Velocity = Vector3.zero;
         _state.IsGrounded = _controller.isGrounded;
         _prevState = _state;
@@ -102,12 +104,17 @@ public class PlayerMovement : MonoBehaviour
         // Dodge Movement
         if (_dodgeInfo.Triggered)
         {
-            _state.Action = CurrentAction.Dodge;
+            _state.CurrentAction = MovementAction.Dodge;
             _dodgeInfo.Timer += deltaTime;
 
             // Sustain this movement during dodge duration
-            var targetVelocity = deltaTime * dodgeSpeed * _dodgeInfo.Direction;
-            _controller.Move(targetVelocity);
+            var targetVelocity = dodgeSpeed * _dodgeInfo.Direction;
+            _state.Velocity = Vector3.Lerp
+            (
+                _state.Velocity,
+                targetVelocity,
+                1f - Mathf.Exp(-dodgeAcceleration * deltaTime)
+            );
 
             // Reset everything once dodge duration reached
             if (_dodgeInfo.Timer > dodgeDuration)
@@ -120,17 +127,33 @@ public class PlayerMovement : MonoBehaviour
         // Regular Movement
         else if (_requestedMovement.sqrMagnitude > 0f)
         {
-            _state.Action = CurrentAction.Move;
-            var targetVelocity = deltaTime * moveSpeed * _requestedMovement;
-            _controller.Move(targetVelocity);
+            _state.CurrentAction = MovementAction.Move;
+
+            var targetVelocity = moveSpeed * _requestedMovement;
+            _state.Velocity = Vector3.Lerp
+            (
+                _state.Velocity,
+                targetVelocity,
+                1f - Mathf.Exp(-moveAcceleration * deltaTime)
+            );
         }
+        // Idle
         else
         {
-            _state.Action = CurrentAction.Idle;
+            _state.CurrentAction = MovementAction.Idle;
+
+            _state.Velocity = Vector3.Lerp
+            (
+                _state.Velocity,
+                Vector3.zero,
+                1f - Mathf.Exp(-moveAcceleration * deltaTime)
+            );
         }
 
+        // Apply Movement
+        _controller.Move(_state.Velocity * deltaTime);
+
         // Update State Machine
-        _state.Velocity = _controller.velocity;
         _prevState = _state;
     }
 }

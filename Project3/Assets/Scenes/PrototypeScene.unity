@@ -604,9 +604,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 10
+  moveAcceleration: 15
   hurtbox: {fileID: 1440943202}
-  dodgeSpeed: 7
-  dodgeDuration: 1
+  dodgeSpeed: 12
+  dodgeAcceleration: 20
+  dodgeDuration: 0.5
 --- !u!114 &825495740
 MonoBehaviour:
   m_ObjectHideFlags: 0
