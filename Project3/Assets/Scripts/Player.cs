@@ -12,7 +12,9 @@ public class Player : MonoBehaviour
     [Space]
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerAnimationController animationController;
-    [SerializeField] private Transform cameraTarget;
+    [Space]
+    [SerializeField] private Transform cameraHeight;
+    [SerializeField] private Vector3 cameraOffset;
 
     private PlayerInput _inputActions;
 
@@ -26,7 +28,7 @@ public class Player : MonoBehaviour
         playerMovement.Initialize();
         animationController.Initialize();
 
-        mainCamera.transform.SetPositionAndRotation(cameraTarget.position, cameraTarget.rotation);
+        mainCamera.transform.position = cameraHeight.position;
     }
 
     void Update()
@@ -42,14 +44,14 @@ public class Player : MonoBehaviour
 
     void LateUpdate()
     {
-        // Update camera to follow player
-        //mainCamera.transform.SetPositionAndRotation(cameraTarget.position, cameraTarget.rotation);
-
         // Rotate character
         playerMovement.UpdateRotation(Time.deltaTime);
 
         // Update Animations
         animationController.UpdateAnimation();
+
+        // Update Camera Position
+        mainCamera.transform.position = cameraHeight.position + cameraOffset;
     }
 
     void FixedUpdate()
