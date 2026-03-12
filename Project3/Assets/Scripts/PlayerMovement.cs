@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
             // Dodge Input
             _requestedDodge = input.Dodge;
             // Trigger Dodge (if pressed)
-            if (_requestedDodge && !_dodgeInfo.Triggered)
+            if (_requestedDodge && !_dodgeInfo.Triggered && _requestedMovement.sqrMagnitude > 0f)
             {
                 // Update dodge info
                 _dodgeInfo.Triggered = true;

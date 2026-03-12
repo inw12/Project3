@@ -17,7 +17,8 @@ public class PlayerAnimationController : MonoBehaviour
         animator.SetFloat("xInput", input.x);
         animator.SetFloat("yInput", input.z);
 
-        if (_prevState.CurrentAction != state.CurrentAction) {
+        if (_prevState.CurrentAction != state.CurrentAction)
+        {
             animator.SetInteger(currentAction, (int)state.CurrentAction);
         }
 
