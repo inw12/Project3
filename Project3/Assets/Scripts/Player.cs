@@ -13,27 +13,44 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private Transform cameraTarget;
 
+    private PlayerInput _inputActions;
+
     void Awake() => Instance = this;
 
     void Start()
     {
-        playerMovement.Initialize();
+        _inputActions = new PlayerInput();
+        _inputActions.Enable();
 
+        playerMovement.Initialize();
         mainCamera.transform.SetPositionAndRotation(cameraTarget.position, cameraTarget.rotation);
     }
 
-    void Update() 
+    void Update()
     {
-
+        var input = _inputActions.Movement;
+        var movementInput = new MovementInput
+        {
+            Movement    = input.Move.ReadValue<Vector2>(),
+            Dodge       = input.Dodge.WasPressedThisFrame()
+        };
+        playerMovement.UpdateInput(movementInput);
     }
 
     void LateUpdate()
     {
-
+        // Update camera to follow player
+        mainCamera.transform.SetPositionAndRotation(cameraTarget.position, cameraTarget.rotation);
     }
 
     void FixedUpdate()
     {
+        var deltaTime = Time.deltaTime;
+        playerMovement.UpdateMovement(deltaTime);
+    }
 
+    void OnDisable()
+    {
+        _inputActions.Dispose();
     }
 }
