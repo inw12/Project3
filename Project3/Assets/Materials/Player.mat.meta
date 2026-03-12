@@ -1,8 +1,15 @@
 fileFormatVersion: 2
-guid: f82d190a098d945ffa174b9d231a4ba7
-timeCreated: 1536372382
-licenseType: Store
+guid: 648ffaa5c9a6a9745a09dafdd6ae1fd1
 NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 273074
+  packageName: LowPoly Survival Character Rio
+  packageVersion: 1.0
+  assetPath: Assets/Unity Technologies/LowpolyCharacterRio/Materials/Rio.mat
+  uploadId: 670968
