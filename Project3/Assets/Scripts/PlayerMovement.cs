@@ -4,6 +4,7 @@ public struct MovementInput
 {
     public Vector2 Movement;
     public bool Dodge;
+    public Vector2 MousePosition;
 }
 public struct MovementState
 {
@@ -33,7 +34,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveAcceleration = 10f;
     [SerializeField] private float moveRotation = 10f;
     [Space]
-    [Space]
     [SerializeField] private CapsuleCollider hurtbox;
     [SerializeField] private float dodgeSpeed= 7f;
     [SerializeField] private float dodgeAcceleration = 15f;
@@ -46,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     // Requested Inputs
     private Vector3 _requestedMovement;
     private bool _requestedDodge;
+    private Vector2 _requestedCursor;
 
     // State Machine
     private MovementState _state;
@@ -89,6 +90,9 @@ public class PlayerMovement : MonoBehaviour
                 // Disable player inputs
                 _inputEnabled = false;
             }
+
+            // Mouse Input
+            _requestedCursor = input.MousePosition;
         }
     }
 
@@ -162,7 +166,26 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpdateRotation(float deltaTime)
     {
-        if (_requestedMovement.sqrMagnitude > 0f)
+        // Rotate player towards cursor (if attacking)
+        if (PlayerAttack.Instance.GetState() != AttackState.None)
+        {
+            Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
+            if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity))
+            {
+                var targetDirection = (hit.point - transform.position).normalized;
+                targetDirection.y = 0f;
+
+                var targetRotation = Quaternion.LookRotation(targetDirection);
+                transform.rotation = Quaternion.Lerp
+                (
+                    transform.rotation,
+                    targetRotation,
+                    1f - Mathf.Exp(-moveRotation * 2f * deltaTime)
+                );
+            }
+        }
+        // Rotate player towards direction of movement
+        else if (_requestedMovement.sqrMagnitude > 0f)
         {
             var targetRotation = Quaternion.LookRotation(_requestedMovement);
             transform.rotation = Quaternion.Lerp

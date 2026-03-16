@@ -39,8 +39,9 @@ public class Player : MonoBehaviour
         var input = _inputActions.Movement;
         var movementInput = new MovementInput
         {
-            Movement    = input.Move.ReadValue<Vector2>(),
-            Dodge       = input.Dodge.WasPressedThisFrame()
+            Movement        = input.Move.ReadValue<Vector2>(),
+            Dodge           = input.Dodge.WasPressedThisFrame(),
+            MousePosition   = input.MousePosition.ReadValue<Vector2>()
         };
         playerMovement.UpdateInput(movementInput);
 
@@ -57,6 +58,8 @@ public class Player : MonoBehaviour
     {
         // Rotate character
         playerMovement.UpdateRotation(Time.deltaTime);
+
+        playerAttack.UpdateAttack();
 
         // Update Animations
         animationController.UpdateAnimation();

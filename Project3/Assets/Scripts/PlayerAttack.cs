@@ -14,6 +14,8 @@ public struct AttackInput
 
 public class PlayerAttack : MonoBehaviour
 {
+    public static PlayerAttack Instance { get; private set; }
+
     // State Machine
     private AttackState _state;
     private AttackState _prevState;
@@ -24,6 +26,8 @@ public class PlayerAttack : MonoBehaviour
 
     public void Initialize()
     {
+        Instance = this;
+
         _state = AttackState.None;
     }
 
@@ -35,6 +39,14 @@ public class PlayerAttack : MonoBehaviour
 
     public void UpdateAttack() 
     {
-        
+        _state = _requestedRanged
+                ? AttackState.Ranged
+                : _requestedMelee
+                    ? AttackState.Melee 
+                    : AttackState.None;
+        _prevState = _state;
     }
+
+    public AttackState GetState() => _state;
+    public AttackState GetPrevState() => _prevState;
 }
