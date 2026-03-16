@@ -45,18 +45,28 @@ public class PlayerAttack : MonoBehaviour
         _requestedCursor = input.MousePosition;
     }
 
-    public void UpdateAttack() 
+    public void UpdateAttack(MovementState movementState) 
     {
-        // Update '_state.AttackPosition'
-        Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
-        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity)) {
-            _state.AttackPosition = hit.point;
-        }
+        // Check to see if we can attack
+        bool canAttack = movementState.CurrentAction != MovementAction.Dodge;
 
-        // Update '_state.CurrentAttack'
-        _state.CurrentAttack = _requestedRanged
-                                ? Attack.Ranged : _requestedMelee
-                                    ? Attack.Melee : Attack.None;
+        if (canAttack)
+        {
+            // * Update '_state.AttackPosition'
+            // * WHERE we are attacking
+            Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
+            if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity)) {
+                _state.AttackPosition = hit.point;
+            }
+
+            // * Update '_state.CurrentAttack'
+            // * Determine WHAT attack we're performing
+            _state.CurrentAttack = _requestedRanged ? Attack.Ranged : Attack.Melee;
+        }
+        else
+        {
+            _state.CurrentAttack = Attack.None;
+        }
 
         // Update '_prevState'
         _prevState = _state;

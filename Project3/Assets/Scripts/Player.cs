@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
         playerMovement.UpdateRotation(deltaTime);
 
         // Trigger Attacks
-        playerAttack.UpdateAttack();
+        playerAttack.UpdateAttack(playerMovement.GetState());
 
         // Update Animations
         animationController.UpdateAnimation();
