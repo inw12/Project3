@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public struct AttackState
@@ -23,8 +24,9 @@ public class PlayerAttack : MonoBehaviour
     // Called by 'PlayerAnimationRig' to activate animation rig
     public static PlayerAttack Instance { get; private set; }
 
-    [SerializeField] private Animator animator;
     [Header("Melee Attack")]
+    [SerializeField] private Animator animator;
+    [Space]
     [SerializeField] private float comboBuffer = 0.7f;
     private bool _comboActive;
     private int _comboCounter;
@@ -79,6 +81,15 @@ public class PlayerAttack : MonoBehaviour
                                     ? Attack.Melee : _comboActive
                                     ? Attack.Melee : Attack.None;
             
+            // Update Melee Combo Stats
+            _comboTimer += Time.deltaTime;
+            // Reset combo if timer exceeds input buffer window
+            if (_comboTimer > comboBuffer)
+            {
+                _comboCounter = 0;
+                _comboActive = false;
+            }
+
             // Perform ranged attack
             if (_state.CurrentAttack is Attack.Ranged)
             {
@@ -89,12 +100,22 @@ public class PlayerAttack : MonoBehaviour
             {
                 // begin melee routine
                 if (!_comboActive) _comboActive = true;
-                _comboCounter++;
                 _comboTimer = 0f;
+                _comboCounter++;
 
+                animator.SetInteger("ComboCounter", _comboCounter);
+                animator.SetTrigger("MeleeTrigger");
 
+                // End of combo
+                if (_comboCounter >= 3)
+                {
+                    _comboCounter = 0;
+                    _comboActive = false;
+                }
             }
         }
+
+        
 
         // Update '_prevState'
         _prevState = _state;
