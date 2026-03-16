@@ -50,7 +50,7 @@ public class PlayerAttack : MonoBehaviour
         // Check to see if we can attack
         bool canAttack = movementState.CurrentAction != MovementAction.Dodge;
 
-        if (canAttack)
+        if (canAttack && (_requestedRanged || _requestedMelee))
         {
             // * Update '_state.AttackPosition'
             // * WHERE we are attacking
