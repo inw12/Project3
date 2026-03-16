@@ -1,7 +1,6 @@
 ///
-/// * This script is responsible for handling player input
-///   and updating functions related to the player character
-///   in response to input
+/// * This script is responsible for handling ALL logic surrounding the player
+/// * Any script that will affect the player in any way will have their functions called from this script
 /// 
 using UnityEngine;
 public class Player : MonoBehaviour
@@ -65,14 +64,17 @@ public class Player : MonoBehaviour
 
     void LateUpdate()
     {
+        var deltaTime = Time.deltaTime;
+
         // Rotate character
-        playerMovement.UpdateRotation(Time.deltaTime);
+        playerMovement.UpdateRotation(deltaTime);
 
         // Trigger Attacks
         playerAttack.UpdateAttack();
 
         // Update Animations
         animationController.UpdateAnimation();
+        animationRig.UpdateRig();
 
         // Update Camera Position
         mainCamera.transform.position = cameraHeight.position + cameraOffset;

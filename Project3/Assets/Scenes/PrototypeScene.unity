@@ -513,6 +513,7 @@ MonoBehaviour:
   playerMovement: {fileID: 825495739}
   playerAttack: {fileID: 825495741}
   animationController: {fileID: 5866666020582766722}
+  animationRig: {fileID: 2105932399}
   cameraHeight: {fileID: 1809324024}
   cameraOffset: {x: 0, y: 0, z: -12}
 --- !u!114 &825495741
