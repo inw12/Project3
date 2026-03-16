@@ -15,7 +15,7 @@ public class PlayerAnimationRig : MonoBehaviour
     [Space]
     [SerializeField] [Range(0f, 100f)] private float targetWeight = 100f;
     [SerializeField] private float animationSpeed = 10f;
-    [SerializeField] private float elbowOffset = 0.5f;
+    [SerializeField] private Vector2 elbowOffset;
 
     private AttackState _state;
     private bool _rigActive;
@@ -53,8 +53,8 @@ public class PlayerAnimationRig : MonoBehaviour
         var shoulder = shoulderAim.data.constrainedObject.transform;
         var direction = (target.position - shoulder.position).normalized;
         var targetPosition = shoulder.position
-                            + direction * 0.25f             // slightly forward
-                            + Vector3.down * -elbowOffset;  // slightly backward
+                            + direction * elbowOffset.x     // forward offset
+                            + Vector3.up * elbowOffset.y;   // up/down offset
         hint.position = targetPosition;
 
         // Lerp WEIGHT values to 100

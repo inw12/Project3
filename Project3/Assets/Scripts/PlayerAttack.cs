@@ -3,7 +3,7 @@ using UnityEngine;
 public struct AttackState
 {
     public Attack CurrentAttack;
-    public Vector2 AttackPosition;
+    public Vector3 AttackPosition;
 }
 public enum Attack
 {
@@ -49,10 +49,8 @@ public class PlayerAttack : MonoBehaviour
     {
         // Update '_state.AttackPosition'
         Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
-        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity))
-        {
+        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity)) {
             _state.AttackPosition = hit.point;
-            _state.AttackPosition.y = 0f;
         }
 
         // Update '_state.CurrentAttack'

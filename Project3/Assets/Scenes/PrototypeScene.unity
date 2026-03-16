@@ -1087,6 +1087,9 @@ MonoBehaviour:
   armAim: {fileID: 1831285616}
   target: {fileID: 1111468721}
   hint: {fileID: 829284753}
+  targetWeight: 75
+  animationSpeed: 10
+  elbowOffset: {x: 0.25, y: 0}
 --- !u!4 &176919254991888818
 Transform:
   m_ObjectHideFlags: 0
