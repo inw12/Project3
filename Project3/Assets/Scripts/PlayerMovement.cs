@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public struct MovementInput
@@ -77,8 +76,7 @@ public class PlayerMovement : MonoBehaviour
 
             // Dodge Input
             _requestedDodge = input.Dodge;
-            // Trigger Dodge (if pressed)
-            if (_requestedDodge && !_dodgeInfo.Triggered && _requestedMovement.sqrMagnitude > 0f)
+            if (_requestedDodge && !_dodgeInfo.Triggered && _requestedMovement.sqrMagnitude > 0f)   // Trigger Dodge (if pressed)
             {
                 // Update dodge info
                 _dodgeInfo.Triggered = true;

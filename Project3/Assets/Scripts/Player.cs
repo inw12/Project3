@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     [Space]
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerAttack playerAttack;
     [SerializeField] private PlayerAnimationController animationController;
     [Space]
     [SerializeField] private Transform cameraHeight;
@@ -26,6 +27,7 @@ public class Player : MonoBehaviour
         _inputActions.Enable();
 
         playerMovement.Initialize();
+        playerAttack.Initialize();
         animationController.Initialize();
 
         mainCamera.transform.position = cameraHeight.position;
@@ -33,6 +35,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        // Movement Input
         var input = _inputActions.Movement;
         var movementInput = new MovementInput
         {
@@ -40,6 +43,14 @@ public class Player : MonoBehaviour
             Dodge       = input.Dodge.WasPressedThisFrame()
         };
         playerMovement.UpdateInput(movementInput);
+
+        // Combat Input
+        var attackInput  = new AttackInput
+        {
+            Ranged  =   _inputActions.Combat.RangedAttack.IsPressed(),
+            Melee   =   _inputActions.Combat.MeleeAttack.WasPressedThisFrame()
+        };
+        playerAttack.UpdateInput(attackInput);
     }
 
     void LateUpdate()
