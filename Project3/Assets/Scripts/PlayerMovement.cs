@@ -197,7 +197,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void EnableMovementInput() => _inputEnabled = true;
+    public void DisableMovementInput() => _inputEnabled = false;
+    
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
+
     public Vector3 GetMovementDirection() => _requestedMovement;
 }

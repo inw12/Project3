@@ -22,6 +22,8 @@ public class PlayerAttack : MonoBehaviour
 {
     public static PlayerAttack Instance { get; private set; }
 
+    [SerializeField] private Animator animator;
+
     // State Machine
     private AttackState _state;
     private AttackState _prevState;
@@ -49,19 +51,25 @@ public class PlayerAttack : MonoBehaviour
     {
         // Check to see if we can attack
         bool canAttack = movementState.CurrentAction != MovementAction.Dodge;
-
         if (canAttack && (_requestedRanged || _requestedMelee))
         {
-            // * Update '_state.AttackPosition'
-            // * WHERE we are attacking
+            // "Where are we attacking?"
             Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
             if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity)) {
                 _state.AttackPosition = hit.point;
             }
 
-            // * Update '_state.CurrentAttack'
-            // * Determine WHAT attack we're performing
-            _state.CurrentAttack = _requestedRanged ? Attack.Ranged : Attack.Melee;
+            // "What attack are we performing?"
+            if (_requestedRanged && _state.CurrentAttack is Attack.None or Attack.Ranged)
+            {
+                _state.CurrentAttack = Attack.Ranged;
+            }
+            else if (_requestedMelee && _state.CurrentAttack is Attack.None or Attack.Melee)
+            {
+                _state.CurrentAttack = Attack.Melee;
+            }
+
+            Debug.Log(_state.CurrentAttack);
         }
         else
         {
