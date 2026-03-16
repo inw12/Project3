@@ -71,33 +71,38 @@ public class PlayerAttack : MonoBehaviour
             _state.AttackPosition = hit.point;
         }
 
-        // Trigger attack (if possible)
         if (movementState.CurrentAction != MovementAction.Dodge)
         {
             // "What attack are we performing?"
             _state.CurrentAttack = _requestedRanged
-                                    ? Attack.Ranged : _requestedMelee
+                                    ? Attack.Ranged : _requestedMelee 
+                                    ? Attack.Melee : _comboActive
                                     ? Attack.Melee : Attack.None;
-
-            if (_prevState.CurrentAttack != _state.CurrentAttack) {
-                Debug.Log(_state.CurrentAttack);
-            }
             
-            // *** CHECKPOINT ***
-            // What we have:
-            //      - What attack we should be doing currently
+            // Perform ranged attack
             if (_state.CurrentAttack is Attack.Ranged)
             {
-                // shoot projectile
+                // fire projectile
             }
+            // Melee combo
             else if (_state.CurrentAttack is Attack.Melee)
             {
                 // begin melee routine
+                if (!_comboActive) _comboActive = true;
+                _comboCounter++;
+                _comboTimer = 0f;
+
+
             }
         }
 
         // Update '_prevState'
         _prevState = _state;
+    }
+
+    private void MeleeCombo()
+    {
+        
     }
 
     public AttackState GetState() => _state;
