@@ -167,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
     public void UpdateRotation(float deltaTime)
     {
         // Rotate player towards cursor (if attacking)
-        if (PlayerAttack.Instance.GetState() != AttackState.None)
+        if (PlayerAttack.Instance.GetState().CurrentAttack != Attack.None)
         {
             Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
             if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity))

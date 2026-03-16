@@ -12,7 +12,9 @@ public class Player : MonoBehaviour
     [Space]
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerAttack playerAttack;
+    [Space]
     [SerializeField] private PlayerAnimationController animationController;
+    [SerializeField] private PlayerAnimationRig animationRig;
     [Space]
     [SerializeField] private Transform cameraHeight;
     [SerializeField] private Vector3 cameraOffset;
@@ -23,13 +25,19 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        // Player Input
         _inputActions = new PlayerInput();
         _inputActions.Enable();
 
+        // Player Actions (Movement/Attacks)
         playerMovement.Initialize();
         playerAttack.Initialize();
-        animationController.Initialize();
 
+        // Character Animations
+        animationController.Initialize();
+        animationRig.Initialize();
+
+        // Main Camera
         mainCamera.transform.position = cameraHeight.position;
     }
 
@@ -48,8 +56,9 @@ public class Player : MonoBehaviour
         // Combat Input
         var attackInput  = new AttackInput
         {
-            Ranged  =   _inputActions.Combat.RangedAttack.IsPressed(),
-            Melee   =   _inputActions.Combat.MeleeAttack.WasPressedThisFrame()
+            Ranged          =   _inputActions.Combat.RangedAttack.IsPressed(),
+            Melee           =   _inputActions.Combat.MeleeAttack.WasPressedThisFrame(),
+            MousePosition   =   input.MousePosition.ReadValue<Vector2>()
         };
         playerAttack.UpdateInput(attackInput);
     }
@@ -59,6 +68,7 @@ public class Player : MonoBehaviour
         // Rotate character
         playerMovement.UpdateRotation(Time.deltaTime);
 
+        // Trigger Attacks
         playerAttack.UpdateAttack();
 
         // Update Animations
