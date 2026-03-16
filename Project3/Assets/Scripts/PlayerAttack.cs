@@ -20,9 +20,15 @@ public struct AttackInput
 
 public class PlayerAttack : MonoBehaviour
 {
+    // Called by 'PlayerAnimationRig' to activate animation rig
     public static PlayerAttack Instance { get; private set; }
 
     [SerializeField] private Animator animator;
+    [Header("Melee Attack")]
+    [SerializeField] private float comboBuffer = 0.7f;
+    private bool _comboActive;
+    private int _comboCounter;
+    private float _comboTimer;
 
     // State Machine
     private AttackState _state;
@@ -36,44 +42,58 @@ public class PlayerAttack : MonoBehaviour
     public void Initialize()
     {
         Instance = this;
-
         _state.CurrentAttack = Attack.None;
+
+        // Combo Variables
+        _comboActive = false;
+        _comboCounter = 0;
+        _comboTimer = 0f;
     }
 
     public void UpdateInput(AttackInput input)
     {
-        _requestedRanged = input.Ranged;
-        _requestedMelee = input.Melee;
         _requestedCursor = input.MousePosition;
+
+        // Ranged attack should only be available if the button is pressed
+        // AND we're not in the middle of a melee attack string
+        _requestedRanged = input.Ranged && !_comboActive;
+
+        // Melee attack should only be available if the button is pressed
+        // AND we're not firing ranged attacks
+        _requestedMelee = input.Melee && !_requestedRanged;
     }
 
     public void UpdateAttack(MovementState movementState) 
     {
-        // Check to see if we can attack
-        bool canAttack = movementState.CurrentAction != MovementAction.Dodge;
-        if (canAttack && (_requestedRanged || _requestedMelee))
-        {
-            // "Where are we attacking?"
-            Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
-            if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity)) {
-                _state.AttackPosition = hit.point;
-            }
-
-            // "What attack are we performing?"
-            if (_requestedRanged && _state.CurrentAttack is Attack.None or Attack.Ranged)
-            {
-                _state.CurrentAttack = Attack.Ranged;
-            }
-            else if (_requestedMelee && _state.CurrentAttack is Attack.None or Attack.Melee)
-            {
-                _state.CurrentAttack = Attack.Melee;
-            }
-
-            Debug.Log(_state.CurrentAttack);
+        // ** "Where are we attacking?" **
+        Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
+        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity)) {
+            _state.AttackPosition = hit.point;
         }
-        else
+
+        // Trigger attack (if possible)
+        if (movementState.CurrentAction != MovementAction.Dodge)
         {
-            _state.CurrentAttack = Attack.None;
+            // "What attack are we performing?"
+            _state.CurrentAttack = _requestedRanged
+                                    ? Attack.Ranged : _requestedMelee
+                                    ? Attack.Melee : Attack.None;
+
+            if (_prevState.CurrentAttack != _state.CurrentAttack) {
+                Debug.Log(_state.CurrentAttack);
+            }
+            
+            // *** CHECKPOINT ***
+            // What we have:
+            //      - What attack we should be doing currently
+            if (_state.CurrentAttack is Attack.Ranged)
+            {
+                // shoot projectile
+            }
+            else if (_state.CurrentAttack is Attack.Melee)
+            {
+                // begin melee routine
+            }
         }
 
         // Update '_prevState'
