@@ -174,7 +174,7 @@ public class PlayerMovement : MonoBehaviour
     public void UpdateRotation(float deltaTime)
     {
         // Ranged Attack Orientation (towards cursor)
-        if (PlayerAttack.Instance.GetState().CurrentAttack is not Attack.None)
+        if (PlayerAttack.Instance.GetState().CurrentAttack is not Attack.None && _state.CurrentAction is not MovementAction.Dodge)
         {
             Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
             if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity))
