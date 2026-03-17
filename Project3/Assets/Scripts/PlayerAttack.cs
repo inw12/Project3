@@ -39,6 +39,10 @@ public class PlayerAttack : MonoBehaviour
     [Header("Melee Attack")]
     [SerializeField] private Animator animator;
     [Space]
+    [SerializeField] private LayerMask meleeTarget;
+    [SerializeField] private float meleeRange = 5f;
+    private readonly Collider[] _overlapBuffer = new Collider[5];
+    [Space]
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashAcceleration = 15f;
     [SerializeField] private float dashDuration = 0.5f;
@@ -90,6 +94,15 @@ public class PlayerAttack : MonoBehaviour
             _state.AttackPosition = hit.point;
         }
 
+        // "Are there enemies in our personal bubble?"
+        var hits = Physics.OverlapSphereNonAlloc
+        (
+            transform.position,
+            meleeRange,
+            _overlapBuffer,
+            meleeTarget
+        );
+
         if (movementState.CurrentAction != MovementAction.Dodge)
         {
             // "WHAT attack are we performing?"
@@ -135,6 +148,7 @@ public class PlayerAttack : MonoBehaviour
                     // Move Character w/ Attack
                     var direction = (_state.AttackPosition - transform.position).normalized;
                     var targetVelocity = _dashTimer < dashDuration ? dashSpeed * direction : Vector3.zero;
+                    targetVelocity = hits == 0 ? targetVelocity : Vector3.zero;
                     PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
                 }                
 
@@ -153,6 +167,7 @@ public class PlayerAttack : MonoBehaviour
                     // Move Character w/ Attack
                     var direction = (_state.AttackPosition - transform.position).normalized;
                     var targetVelocity = _dashTimer < dashDuration ? dashSpeed * direction : Vector3.zero;
+                    targetVelocity = hits == 0 ? targetVelocity : Vector3.zero;
                     PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
                 }
             }
@@ -185,6 +200,12 @@ public class PlayerAttack : MonoBehaviour
 
         // Update '_prevState'
         _prevState = _state;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, meleeRange);
     }
 
     private void ResetCombo()

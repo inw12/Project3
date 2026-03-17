@@ -685,6 +685,10 @@ MonoBehaviour:
   projectilePool: {fileID: 1566646403}
   projectileSpawn: {fileID: 8494364548069243440}
   animator: {fileID: 5866666020582766721}
+  meleeTarget:
+    serializedVersion: 2
+    m_Bits: 64
+  meleeRange: 2
   dashSpeed: 300
   dashAcceleration: 50
   dashDuration: 1
