@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 public struct AttackState
@@ -38,23 +39,29 @@ public class PlayerAttack : MonoBehaviour
     private Vector3 _projectileDirection;
     private float _fireTimer;
 
-    [Header("Melee Attack")]
+    [Header("Melee Attack | Game Components")]
     [SerializeField] private LayerMask meleeTarget;
+    [SerializeField] private LayerMask enemyHurtbox;
     [SerializeField] private Animator animator;
-    [Space]
+    [Header("Melee Attack | Hitbox")]
+    [SerializeField] private float meleeDamage = 2f;
+    [SerializeField] private float sweepRadius = 0.1f;
+    [SerializeField] private Transform meleeBase;
+    [SerializeField] private Transform meleeTip;
+    [Header("Melee Attack | Range")]
     [SerializeField] private float meleeOuterRange = 8f;
     [SerializeField] private float meleeInnerRange = 2f;
     private readonly Collider[] _outerHits = new Collider[5];
     private readonly Collider[] _innerHits = new Collider[5];
     private bool _hasMeleeTarget;
-    [Space]
+    [Header("Melee Attack | Movement Speed")]
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashAcceleration = 15f;
     [SerializeField] private float dashDuration = 0.5f;
     [SerializeField] [Range(1f, 2f)] private float targetedDashSpeedMultiplier = 1.5f;
     private Vector3 _dashVelocity;
     private float _dashTimer;
-    [Space]
+    [Header("Melee Attack | Combo")]
     [SerializeField] private float comboBuffer = 0.7f;
     private bool _comboActive;
     private int _comboCounter;
@@ -68,6 +75,12 @@ public class PlayerAttack : MonoBehaviour
     private bool _requestedRanged;
     private bool _requestedMelee;
     private Vector2 _requestedCursor;
+
+    // Hitbox Scanning
+    private Vector3 _prevTipPosition;
+    private Vector3 _prevBasePosition;
+    private bool _hitboxActive;
+    private readonly HashSet<Collider> _meleeHits = new();
 
     public void Initialize()
     {
@@ -140,6 +153,8 @@ public class PlayerAttack : MonoBehaviour
             {
                 _comboTimer = 0f;
 
+                DisableHitbox();
+
                 // Animation State (for checking if current animation is complete)
                 AnimatorStateInfo animState = animator.GetCurrentAnimatorStateInfo(0);
                 bool animFinished = !animState.loop && animState.normalizedTime >= 1f;
@@ -148,6 +163,7 @@ public class PlayerAttack : MonoBehaviour
                 if (!_comboActive) 
                 {
                     PlayerMovement.Instance.DisableMovementInput();
+                    EnableHitbox();
 
                     // Set combo as Active
                     _comboActive = true;
@@ -190,6 +206,8 @@ public class PlayerAttack : MonoBehaviour
                 // *** THIS IS THE COMBO LOOP ***
                 if (animFinished)
                 {
+                    EnableHitbox();
+
                     if (_comboCounter == 3) _comboCounter = 0;
 
                     // Increment Combo Counter
@@ -265,6 +283,45 @@ public class PlayerAttack : MonoBehaviour
         _prevState = _state;
     }
 
+    public void UpdateMeleeHitbox()
+    {
+        if (!_hitboxActive) return;
+
+        {
+            var direction = meleeTip.position - _prevTipPosition;
+            var distance = direction.magnitude;
+
+            if (distance < 0.001f) return;  // skip if sword hasn't moved
+
+            RaycastHit[] hits = Physics.SphereCastAll
+            (
+                _prevTipPosition,
+                sweepRadius,
+                direction.normalized,
+                distance,
+                enemyHurtbox
+            );
+
+            foreach (var hit in hits)
+            {
+                // skip if we've already hit
+                if (_meleeHits.Contains(hit.collider)) continue;   
+                
+                // update hit list
+                _meleeHits.Add(hit.collider);
+
+                // damage enemy
+                if (hit.collider.TryGetComponent(out EnemyHealth e))
+                {
+                    e.DecreaseHealth(meleeDamage);
+                }
+            }
+        }
+
+        _prevBasePosition = meleeBase.position;
+        _prevTipPosition = meleeTip.position;
+    }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -272,7 +329,23 @@ public class PlayerAttack : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, meleeInnerRange);
+
+        if (meleeTip == null || meleeBase == null) return;
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawLine(meleeBase.position, meleeTip.position);
+        Gizmos.DrawWireSphere(meleeTip.position, sweepRadius);
     }
+
+    #region Melee Hitbox Shenanigans
+    private void EnableHitbox()
+    {
+        _meleeHits.Clear();
+        _prevBasePosition = meleeBase.position;
+        _prevTipPosition = meleeTip.position;
+        _hitboxActive = true;
+    }
+    private void DisableHitbox() => _hitboxActive = false;
+    #endregion
 
     private void ResetCombo()
     {
