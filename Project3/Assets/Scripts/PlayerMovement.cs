@@ -104,13 +104,15 @@ public class PlayerMovement : MonoBehaviour
     // Should be called in FIXEDUPDATE() in 'Player'
     public void UpdateMovement(float deltaTime)
     {
-        // Apply mild gravity force while grounded
+        // Gravity
         _state.IsGrounded = _controller.isGrounded;
         if (_state.IsGrounded)
         {
             if (_prevState.Velocity.y < -2f) {
                 _state.Velocity.y = -2f;
             }
+        } else {
+            _state.Velocity += 2 * Time.deltaTime * Physics.gravity;
         }
 
         // Dodge Movement
@@ -171,8 +173,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpdateRotation(float deltaTime)
     {
-        // Rotate player towards cursor (if attacking)
-        if (PlayerAttack.Instance.GetState().CurrentAttack != Attack.None)
+        // Ranged Attack Orientation (towards cursor)
+        if (PlayerAttack.Instance.GetState().CurrentAttack is not Attack.None && _state.CurrentAction is not MovementAction.Dodge)
         {
             Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
             if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity))
@@ -188,6 +190,28 @@ public class PlayerMovement : MonoBehaviour
                     1f - Mathf.Exp(-moveRotation * 2f * deltaTime)
                 );
             }
+        }
+        // Melee Attack Orientation (when valid target is in range)
+        else if (PlayerAttack.Instance.GetState().CurrentAttack is Attack.Melee && PlayerAttack.Instance.HasMeleeTarget())
+        {
+            var enemy = PlayerAttack.Instance.GetState().MeleeTarget;
+            var targetRotation = Quaternion.LookRotation(enemy);
+            transform.rotation = Quaternion.Lerp
+            (
+                transform.rotation,
+                targetRotation,
+                1f - Mathf.Exp(-moveRotation * 2f * deltaTime)
+            );
+        }
+        else if (_state.CurrentAction is MovementAction.Dodge)
+        {
+            var targetRotation = Quaternion.LookRotation(_dodgeInfo.Direction);
+            transform.rotation = Quaternion.Lerp
+            (
+                transform.rotation,
+                targetRotation,
+                1f - Mathf.Exp(-moveRotation * deltaTime)
+            );
         }
         // Rotate player towards direction of movement
         else if (_requestedMovement.sqrMagnitude > 0f)
