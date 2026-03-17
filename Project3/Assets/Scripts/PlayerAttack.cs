@@ -153,7 +153,7 @@ public class PlayerAttack : MonoBehaviour
                     animator.SetBool("ComboActive", _comboActive);
 
                     // Increment combo counter
-                    _comboCounter++;
+                    _comboCounter = 1;
                     animator.SetInteger("ComboCounter", _comboCounter);
 
                     // Melee Animation Trigger
@@ -189,6 +189,8 @@ public class PlayerAttack : MonoBehaviour
                 // *** THIS IS THE COMBO LOOP ***
                 if (animFinished)
                 {
+                    if (_comboCounter == 3) _comboCounter = 0;
+
                     // Increment Combo Counter
                     _comboCounter++;
                     _comboCounter = Math.Clamp(_comboCounter, 0, 3);
@@ -223,7 +225,7 @@ public class PlayerAttack : MonoBehaviour
                     }
                 }
             }
-            // "When holding down the Ranged atack button..."
+            // "When holding down the Ranged attack button..."
             else if (_state.CurrentAttack is Attack.Ranged)
             {
                 // calculate projectile direction
