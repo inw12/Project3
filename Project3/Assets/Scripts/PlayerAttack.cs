@@ -51,6 +51,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashAcceleration = 15f;
     [SerializeField] private float dashDuration = 0.5f;
+    [SerializeField] [Range(1f, 2f)] private float targetedDashSpeedMultiplier = 1.5f;
     private Vector3 _dashVelocity;
     private float _dashTimer;
     [Space]
@@ -181,7 +182,7 @@ public class PlayerAttack : MonoBehaviour
                         var direction = (targetPos - transform.position).normalized;
 
                         var distance = Vector3.Distance(enemy.transform.position, transform.position) - meleeInnerRange;
-                        _dashVelocity = distance / dashDuration * direction;
+                        _dashVelocity = distance / dashDuration * direction * targetedDashSpeedMultiplier;
                     }
                 }                
 
@@ -221,7 +222,7 @@ public class PlayerAttack : MonoBehaviour
                         var direction = (targetPos - transform.position).normalized;
 
                         var distance = Vector3.Distance(enemy.transform.position, transform.position) - meleeInnerRange;
-                        _dashVelocity = distance / dashDuration * direction;
+                        _dashVelocity = distance / dashDuration * direction * targetedDashSpeedMultiplier;
                     }
                 }
             }
