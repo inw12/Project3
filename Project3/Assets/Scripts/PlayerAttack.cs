@@ -94,19 +94,35 @@ public class PlayerAttack : MonoBehaviour
             // Melee combo
             else if (_requestedMelee)
             {
-                // begin melee routine
+                // Animation State (for checking if current animation is complete)
+                AnimatorStateInfo animState = animator.GetCurrentAnimatorStateInfo(0);
+                bool animFinished = !animState.loop && animState.normalizedTime >= 1f;
+
+                // Melee START
                 if (!_comboActive) 
                 {
                     _comboActive = true;
                     animator.SetBool("ComboActive", _comboActive);
+
+                    _comboCounter++;
+                    animator.SetInteger("ComboCounter", _comboCounter);
+                    animator.SetTrigger("MeleeTrigger");
+
                     PlayerMovement.Instance.DisableMovementInput();
                 }
+
+                // "With every melee input..."
                 _comboTimer = 0f;
-                _comboCounter++;
 
-                animator.SetInteger("ComboCounter", _comboCounter);
-                animator.SetTrigger("MeleeTrigger");
+                // "When pressing melee input at the end of an animation..."
+                if (animFinished)
+                {
+                    _comboCounter++;
+                    animator.SetInteger("ComboCounter", _comboCounter);
+                    animator.SetTrigger("MeleeTrigger");
+                }
 
+                // Reset combo counter when capped
                 if (_comboCounter >= 3) 
                     ResetCombo();
             }
