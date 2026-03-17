@@ -112,6 +112,10 @@ public class PlayerMovement : MonoBehaviour
                 _state.Velocity.y = -2f;
             }
         }
+        else
+        {
+            _state.Velocity += 2 * Time.deltaTime * Physics.gravity;
+        }
 
         // Dodge Movement
         if (_dodgeInfo.Triggered)

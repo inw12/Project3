@@ -40,16 +40,15 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Animator animator;
     [Space]
     [SerializeField] private LayerMask meleeTarget;
-    [SerializeField] private float meleeRange = 8f;
-    [SerializeField] private float meleeStopDistance = 2f;
+    [SerializeField] private float meleeOuterRange = 8f;
+    [SerializeField] private float meleeInnerRange = 2f;
     private readonly Collider[] _enemiesDetected = new Collider[5];
     [Space]
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashAcceleration = 15f;
     [SerializeField] private float dashDuration = 0.5f;
-
-    [Space]
-    [SerializeField] private float trackingMeleeDuration = 0.5f;
+    private Vector3 _dashVelocity;
+    private float _dashTimer;
     [Space]
     [SerializeField] private float comboBuffer = 0.7f;
     private bool _comboActive;
@@ -101,7 +100,7 @@ public class PlayerAttack : MonoBehaviour
         var hits = Physics.OverlapSphereNonAlloc
         (
             transform.position,
-            meleeRange,
+            meleeOuterRange,
             _enemiesDetected,
             meleeTarget
         );
@@ -117,6 +116,7 @@ public class PlayerAttack : MonoBehaviour
 
             // Melee Attack Timers
             _comboTimer += deltaTime;
+            _dashTimer += deltaTime;
 
             // Ranged Attack Timers
             _fireTimer += deltaTime;
@@ -147,26 +147,25 @@ public class PlayerAttack : MonoBehaviour
                     animator.SetTrigger("MeleeTrigger");
 
                     // * Melee Movement *
+                    _dashTimer = 0f;
                     // When enemy is not in range
                     if (hits == 0)
                     {
+                        // Simply dash in the direction of cursor
                         var direction = (_state.AttackPosition - transform.position).normalized;
-                        var targetVelocity = dashSpeed * direction;
-                        PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
+                        _dashVelocity = dashSpeed * direction;
                     }
                     // When enemy is in range
                     else
                     {
-                        // Find enemy object/collider
+                        // Dash TOWARDS enemy in range
                         var enemyHit = _enemiesDetected.FirstOrDefault(c => c != null);
                         var enemy = enemyHit.gameObject;
 
                         var direction = (enemy.transform.position - transform.position).normalized;
 
-                        var distance = Mathf.Abs(Vector3.Distance(enemy.transform.position, transform.position)) - meleeStopDistance;
-                        var targetVelocity = distance / trackingMeleeDuration * direction;
-
-                        PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
+                        var distance = Vector3.Distance(enemy.transform.position, transform.position) - meleeInnerRange;
+                        _dashVelocity = distance / dashDuration * direction;
                     }
                 }                
 
@@ -182,11 +181,27 @@ public class PlayerAttack : MonoBehaviour
                     // Activate animation trigger
                     animator.SetTrigger("MeleeTrigger");
 
-                    // Move Character w/ Attack
-                    var direction = (_state.AttackPosition - transform.position).normalized;
-                    var targetVelocity = dashSpeed * direction;
-                    targetVelocity = hits == 0 ? targetVelocity : Vector3.zero;
-                    PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
+                    // * Melee Movement *
+                    _dashTimer = 0f;
+                    // When enemy is not in range
+                    if (hits == 0)
+                    {
+                        // Simply dash in the direction of cursor
+                        var direction = (_state.AttackPosition - transform.position).normalized;
+                        _dashVelocity = dashSpeed * direction;
+                    }
+                    // When enemy is in range
+                    else
+                    {
+                        // Dash TOWARDS enemy in range
+                        var enemyHit = _enemiesDetected.FirstOrDefault(c => c != null);
+                        var enemy = enemyHit.gameObject;
+
+                        var direction = (enemy.transform.position - transform.position).normalized;
+
+                        var distance = Vector3.Distance(enemy.transform.position, transform.position) - meleeInnerRange;
+                        _dashVelocity = distance / dashDuration * direction;
+                    }
                 }
             }
             // "When holding down the Ranged atack button..."
@@ -212,6 +227,13 @@ public class PlayerAttack : MonoBehaviour
                 }
             }
 
+            // Trigger melee movement
+            if (_comboActive)
+            {
+                _dashVelocity = _dashTimer < dashDuration ? _dashVelocity : Vector3.zero;
+                PlayerMovement.Instance.UpdateVelocity(_dashVelocity, dashAcceleration);
+            }
+
             // Reset combo when timer exceeds input window
             if (_comboTimer > comboBuffer) ResetCombo();
         }
@@ -223,10 +245,10 @@ public class PlayerAttack : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, meleeRange);
+        Gizmos.DrawWireSphere(transform.position, meleeOuterRange);
 
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, meleeStopDistance);
+        Gizmos.DrawWireSphere(transform.position, meleeInnerRange);
     }
 
     private void ResetCombo()

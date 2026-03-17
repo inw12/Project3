@@ -688,10 +688,11 @@ MonoBehaviour:
   meleeTarget:
     serializedVersion: 2
     m_Bits: 64
-  meleeRange: 8
-  dashSpeed: 300
+  meleeOuterRange: 8
+  meleeInnerRange: 2
+  dashSpeed: 100
   dashAcceleration: 50
-  dashDuration: 1
+  dashDuration: 0.05
   comboBuffer: 0.5
 --- !u!1 &829284752
 GameObject:
