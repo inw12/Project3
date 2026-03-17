@@ -1,6 +1,6 @@
 using System;
+using System.Linq;
 using UnityEngine;
-
 public struct AttackState
 {
     public Attack CurrentAttack;
@@ -40,13 +40,16 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Animator animator;
     [Space]
     [SerializeField] private LayerMask meleeTarget;
-    [SerializeField] private float meleeRange = 5f;
-    private readonly Collider[] _overlapBuffer = new Collider[5];
+    [SerializeField] private float meleeRange = 8f;
+    [SerializeField] private float meleeStopDistance = 2f;
+    private readonly Collider[] _enemiesDetected = new Collider[5];
     [Space]
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashAcceleration = 15f;
     [SerializeField] private float dashDuration = 0.5f;
-    private float _dashTimer;
+
+    [Space]
+    [SerializeField] private float trackingMeleeDuration = 0.5f;
     [Space]
     [SerializeField] private float comboBuffer = 0.7f;
     private bool _comboActive;
@@ -99,7 +102,7 @@ public class PlayerAttack : MonoBehaviour
         (
             transform.position,
             meleeRange,
-            _overlapBuffer,
+            _enemiesDetected,
             meleeTarget
         );
 
@@ -114,7 +117,6 @@ public class PlayerAttack : MonoBehaviour
 
             // Melee Attack Timers
             _comboTimer += deltaTime;
-            _dashTimer += deltaTime;
 
             // Ranged Attack Timers
             _fireTimer += deltaTime;
@@ -123,7 +125,6 @@ public class PlayerAttack : MonoBehaviour
             if (_requestedMelee)
             {
                 _comboTimer = 0f;
-                _dashTimer = 0f;
 
                 // Animation State (for checking if current animation is complete)
                 AnimatorStateInfo animState = animator.GetCurrentAnimatorStateInfo(0);
@@ -145,11 +146,28 @@ public class PlayerAttack : MonoBehaviour
                     // Melee Animation Trigger
                     animator.SetTrigger("MeleeTrigger");
 
-                    // Move Character w/ Attack
-                    var direction = (_state.AttackPosition - transform.position).normalized;
-                    var targetVelocity = _dashTimer < dashDuration ? dashSpeed * direction : Vector3.zero;
-                    targetVelocity = hits == 0 ? targetVelocity : Vector3.zero;
-                    PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
+                    // * Melee Movement *
+                    // When enemy is not in range
+                    if (hits == 0)
+                    {
+                        var direction = (_state.AttackPosition - transform.position).normalized;
+                        var targetVelocity = dashSpeed * direction;
+                        PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
+                    }
+                    // When enemy is in range
+                    else
+                    {
+                        // Find enemy object/collider
+                        var enemyHit = _enemiesDetected.FirstOrDefault(c => c != null);
+                        var enemy = enemyHit.gameObject;
+
+                        var direction = (enemy.transform.position - transform.position).normalized;
+
+                        var distance = Mathf.Abs(Vector3.Distance(enemy.transform.position, transform.position)) - meleeStopDistance;
+                        var targetVelocity = distance / trackingMeleeDuration * direction;
+
+                        PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
+                    }
                 }                
 
                 // Only read input for the next combo after the current animation is finished
@@ -166,7 +184,7 @@ public class PlayerAttack : MonoBehaviour
 
                     // Move Character w/ Attack
                     var direction = (_state.AttackPosition - transform.position).normalized;
-                    var targetVelocity = _dashTimer < dashDuration ? dashSpeed * direction : Vector3.zero;
+                    var targetVelocity = dashSpeed * direction;
                     targetVelocity = hits == 0 ? targetVelocity : Vector3.zero;
                     PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
                 }
@@ -206,6 +224,9 @@ public class PlayerAttack : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, meleeRange);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, meleeStopDistance);
     }
 
     private void ResetCombo()

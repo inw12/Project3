@@ -688,7 +688,7 @@ MonoBehaviour:
   meleeTarget:
     serializedVersion: 2
     m_Bits: 64
-  meleeRange: 2
+  meleeRange: 8
   dashSpeed: 300
   dashAcceleration: 50
   dashDuration: 1
