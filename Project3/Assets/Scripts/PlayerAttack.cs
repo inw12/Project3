@@ -5,6 +5,7 @@ public struct AttackState
 {
     public Attack CurrentAttack;
     public Vector3 AttackPosition;
+    public Vector3 MeleeTarget;
 }
 public enum Attack
 {
@@ -21,6 +22,7 @@ public struct AttackInput
 
 public class PlayerAttack : MonoBehaviour
 {
+    // Called by 'PlayerMovement' to rotate character appropriately to attacks
     // Called by 'PlayerAnimationRig' to activate animation rig
     public static PlayerAttack Instance { get; private set; }
 
@@ -44,6 +46,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float meleeInnerRange = 2f;
     private readonly Collider[] _outerHits = new Collider[5];
     private readonly Collider[] _innerHits = new Collider[5];
+    private bool _hasMeleeTarget;
     [Space]
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashAcceleration = 15f;
@@ -113,6 +116,7 @@ public class PlayerAttack : MonoBehaviour
             _innerHits,
             meleeTarget
         );
+        _hasMeleeTarget = outerHits > 0;
 
         if (movementState.CurrentAction != MovementAction.Dodge)
         {
@@ -158,7 +162,7 @@ public class PlayerAttack : MonoBehaviour
                     // * Melee Movement *
                     _dashTimer = 0f;
                     // When enemy is not in range
-                    if (outerHits == 0)
+                    if (!_hasMeleeTarget)
                     {
                         // Simply dash in the direction of cursor
                         var direction = (_state.AttackPosition - transform.position).normalized;
@@ -170,6 +174,8 @@ public class PlayerAttack : MonoBehaviour
                         // Dash TOWARDS enemy in range
                         var enemyHit = _outerHits.FirstOrDefault(c => c != null);
                         var enemy = enemyHit.gameObject;
+
+                        _state.MeleeTarget = enemy.transform.position;
 
                         var targetPos = Vector3.ProjectOnPlane(enemy.transform.position, Vector3.up);
                         var direction = (targetPos - transform.position).normalized;
@@ -194,7 +200,7 @@ public class PlayerAttack : MonoBehaviour
                     // * Melee Movement *
                     _dashTimer = 0f;
                     // When enemy is not in range
-                    if (outerHits == 0)
+                    if (!_hasMeleeTarget)
                     {
                         // Simply dash in the direction of cursor
                         var direction = (_state.AttackPosition - transform.position).normalized;
@@ -206,6 +212,8 @@ public class PlayerAttack : MonoBehaviour
                         // Dash TOWARDS enemy in range
                         var enemyHit = _outerHits.FirstOrDefault(c => c != null);
                         var enemy = enemyHit.gameObject;
+
+                        _state.MeleeTarget = enemy.transform.position;
 
                         var targetPos = Vector3.ProjectOnPlane(enemy.transform.position, Vector3.up);
                         var direction = (targetPos - transform.position).normalized;
@@ -275,4 +283,6 @@ public class PlayerAttack : MonoBehaviour
 
     public AttackState GetState() => _state;
     public AttackState GetPrevState() => _prevState;
+
+    public bool HasMeleeTarget() => _hasMeleeTarget;
 }

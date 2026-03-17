@@ -173,8 +173,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpdateRotation(float deltaTime)
     {
-        // Rotate player towards cursor (if attacking)
-        if (PlayerAttack.Instance.GetState().CurrentAttack != Attack.None)
+        // Ranged Attack Orientation (towards cursor)
+        if (PlayerAttack.Instance.GetState().CurrentAttack is not Attack.None)
         {
             Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
             if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity))
@@ -191,6 +191,18 @@ public class PlayerMovement : MonoBehaviour
                 );
             }
         }
+        // Melee Attack Orientation (when valid target is in range)
+        else if (PlayerAttack.Instance.GetState().CurrentAttack is Attack.Melee && PlayerAttack.Instance.HasMeleeTarget())
+        {
+            var enemy = PlayerAttack.Instance.GetState().MeleeTarget;
+            var targetRotation = Quaternion.LookRotation(enemy);
+            transform.rotation = Quaternion.Lerp
+            (
+                transform.rotation,
+                targetRotation,
+                1f - Mathf.Exp(-moveRotation * 2f * deltaTime)
+            );
+        }
         // Rotate player towards direction of movement
         else if (_requestedMovement.sqrMagnitude > 0f)
         {
@@ -202,6 +214,10 @@ public class PlayerMovement : MonoBehaviour
                 1f - Mathf.Exp(-moveRotation * deltaTime)
             );
         }
+    }
+    public void UpdateRotation(Vector3 targetDirection, float deltaTime)
+    {
+        
     }
 
     public void EnableMovementInput() => _inputEnabled = true;

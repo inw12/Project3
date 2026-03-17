@@ -692,7 +692,7 @@ MonoBehaviour:
   meleeInnerRange: 2
   dashSpeed: 100
   dashAcceleration: 50
-  dashDuration: 0.05
+  dashDuration: 0.08
   comboBuffer: 0.5
 --- !u!1 &829284752
 GameObject:
