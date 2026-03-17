@@ -164,7 +164,6 @@ public class PlayerMovement : MonoBehaviour
 
         // Apply Movement
         _controller.Move(_state.Velocity * deltaTime);
-        Debug.Log(_state.Velocity);
 
         // Update State Machine
         _prevState = _state;
