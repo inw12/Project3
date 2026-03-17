@@ -83,11 +83,8 @@ public class PlayerAttack : MonoBehaviour
             
             // Update Melee Combo
             _comboTimer += Time.deltaTime;
-            if (_comboTimer > comboBuffer)
-            {
-                _comboCounter = 0;
-                _comboActive = false;
-            }
+            if (_comboTimer > comboBuffer) 
+                ResetCombo();
 
             // Perform ranged attack
             if (_state.CurrentAttack is Attack.Ranged)
@@ -98,18 +95,20 @@ public class PlayerAttack : MonoBehaviour
             else if (_requestedMelee)
             {
                 // begin melee routine
-                if (!_comboActive) _comboActive = true;
+                if (!_comboActive) 
+                {
+                    _comboActive = true;
+                    animator.SetBool("ComboActive", _comboActive);
+                    PlayerMovement.Instance.DisableMovementInput();
+                }
                 _comboTimer = 0f;
                 _comboCounter++;
 
                 animator.SetInteger("ComboCounter", _comboCounter);
                 animator.SetTrigger("MeleeTrigger");
 
-                if (_comboCounter >= 3)
-                {
-                    _comboCounter = 0;
-                    _comboActive = false;
-                }
+                if (_comboCounter >= 3) 
+                    ResetCombo();
             }
         }
 
@@ -117,10 +116,12 @@ public class PlayerAttack : MonoBehaviour
         _prevState = _state;
     }
 
-    private void UpdateAnimator()
+    private void ResetCombo()
     {
+        _comboCounter = 0;
+        _comboActive = false;
         animator.SetBool("ComboActive", _comboActive);
-        animator.SetInteger("ComboCounter", _comboCounter);
+        PlayerMovement.Instance.EnableMovementInput();
     }
 
     public AttackState GetState() => _state;

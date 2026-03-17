@@ -22,6 +22,8 @@ public enum MovementAction
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement Instance { get; private set; }
+
     private struct DodgeInfo
     {
         public Vector3 Direction;
@@ -54,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void Initialize()
     {
+        Instance = this;
+
         // CharacterController
         _controller = GetComponent<CharacterController>();
 
@@ -198,7 +202,11 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public void EnableMovementInput() => _inputEnabled = true;
-    public void DisableMovementInput() => _inputEnabled = false;
+    public void DisableMovementInput()
+    {
+        _inputEnabled = false;
+        _state.Velocity = Vector3.zero;
+    } 
     
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
