@@ -529,7 +529,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   animator: {fileID: 5866666020582766721}
-  comboBuffer: 1
+  comboBuffer: 0.5
 --- !u!1 &829284752
 GameObject:
   m_ObjectHideFlags: 0

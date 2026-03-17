@@ -101,14 +101,14 @@ public class PlayerAttack : MonoBehaviour
                 // Melee START
                 if (!_comboActive) 
                 {
+                    PlayerMovement.Instance.DisableMovementInput();
+
                     _comboActive = true;
                     animator.SetBool("ComboActive", _comboActive);
 
                     _comboCounter++;
                     animator.SetInteger("ComboCounter", _comboCounter);
                     animator.SetTrigger("MeleeTrigger");
-
-                    PlayerMovement.Instance.DisableMovementInput();
                 }
 
                 // "With every melee input..."
@@ -120,11 +120,10 @@ public class PlayerAttack : MonoBehaviour
                     _comboCounter++;
                     animator.SetInteger("ComboCounter", _comboCounter);
                     animator.SetTrigger("MeleeTrigger");
+                    if (_comboCounter >= 3) {
+                        ResetCombo();   
+                    }
                 }
-
-                // Reset combo counter when capped
-                if (_comboCounter >= 3) 
-                    ResetCombo();
             }
         }
 

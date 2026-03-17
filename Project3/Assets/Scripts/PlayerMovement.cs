@@ -205,7 +205,7 @@ public class PlayerMovement : MonoBehaviour
     public void DisableMovementInput()
     {
         _inputEnabled = false;
-        _state.Velocity = Vector3.zero;
+        _requestedMovement = _state.Velocity = Vector3.zero;
     } 
     
     public MovementState GetState() => _state;
