@@ -18,7 +18,7 @@ public class EnemyHealth : MonoBehaviour
     }
     public void DecreaseHealth(float amount)
     {
-        _currentHealth = amount;
+        _currentHealth -= amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, health);
         _isAlive = _currentHealth > 0f;
     }

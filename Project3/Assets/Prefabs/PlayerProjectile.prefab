@@ -127,4 +127,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerProjectile
   collidableLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
