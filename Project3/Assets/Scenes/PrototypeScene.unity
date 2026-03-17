@@ -693,6 +693,7 @@ MonoBehaviour:
   dashSpeed: 100
   dashAcceleration: 50
   dashDuration: 0.08
+  targetedDashSpeedMultiplier: 1.5
   comboBuffer: 0.5
 --- !u!1 &829284752
 GameObject:
@@ -929,6 +930,7 @@ GameObject:
   - component: {fileID: 1327077532}
   - component: {fileID: 1327077533}
   - component: {fileID: 1327077534}
+  - component: {fileID: 1327077535}
   m_Layer: 7
   m_Name: Hurtbox
   m_TagString: Untagged
@@ -986,7 +988,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7176836a2277145029cec679ef65350a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  hitFeedback: {fileID: 1327077535}
   health: 5
+--- !u!114 &1327077535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327077531}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ddc0b7f07cc74ae397ee2c982f826ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDummyHitFeedback
+  enemyModel: {fileID: 825494610}
+  hitColor: {r: 0.8867924, g: 0.25536728, b: 0.11294055, a: 0}
+  hitBrightness: 15
+  effectSpeed: 20
+  pulseAmount: 0.4
+  shrinkSpeed: 25
+  growSpeed: 25
+  hitParticles: {fileID: 1974802314843491555, guid: 121c79839706843ccbbab16ad75003ec, type: 3}
+  deathParticles: {fileID: 2184072605107872000, guid: d2143191242f746a4afce3bd1b19f9b3, type: 3}
+  deathSpeed: 25
 --- !u!1 &1440943200
 GameObject:
   m_ObjectHideFlags: 0
