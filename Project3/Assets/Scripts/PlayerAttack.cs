@@ -24,6 +24,14 @@ public class PlayerAttack : MonoBehaviour
     // Called by 'PlayerAnimationRig' to activate animation rig
     public static PlayerAttack Instance { get; private set; }
 
+    [Header("Ranged Attack")]
+    [SerializeField] private float projectileDamage = 1f;
+    [SerializeField] private float projectileSpeed = 20f;
+    [SerializeField] private float projectileRange = 10f;
+    [SerializeField] private float fireRate = 0.2f;
+    private Vector3 _projectileDirection;
+    private float _fireTimer;
+
     [Header("Melee Attack")]
     [SerializeField] private Animator animator;
     [Space]

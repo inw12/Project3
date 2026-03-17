@@ -1,11 +1,19 @@
 using UnityEngine;
+
+public struct PlayerProjectileStats
+{
+    public float Damage;
+    public float Speed;
+    public float Range;
+    public Vector3 Direction;
+}
+
 public class PlayerProjectile : MonoBehaviour
 {
+    [SerializeField] private PlayerProjectilePool pool;
     [SerializeField] private LayerMask collidableLayers;
 
-    private float _speed;
-    private float _range;
-    private Vector3 _direction;
+    private PlayerProjectileStats _stats;
 
     // Orientation
     private Vector3 _origin;
@@ -13,17 +21,23 @@ public class PlayerProjectile : MonoBehaviour
     private float _distanceTraveled;
     private float _distanceThisFrame;
 
-    public void Initialize()
+    public void Initialize(float speed, float range, Vector3 direction)
     {
         _origin = transform.position;
+
+        _stats.Speed = speed;
+        _stats.Range = range;
+        _stats.Direction = direction;
     }
 
     // Raycasts forward for collisions
     void Update()
     {
-        if (Physics.Raycast(transform.position, _direction, out RaycastHit hitInfo, _distanceThisFrame, collidableLayers))
+        if (Physics.Raycast(transform.position, _stats.Direction, out RaycastHit hitInfo, _distanceThisFrame, collidableLayers))
         {
-            
+            // * Damage Enemy logic here *
+
+            PlayerProjectilePool.Instance.Release(gameObject);
         }
     }
 
@@ -31,17 +45,16 @@ public class PlayerProjectile : MonoBehaviour
     void FixedUpdate()
     {
         // Update distance to travel this frame
-        _distanceThisFrame = _speed * Time.deltaTime;
+        _distanceThisFrame = _stats.Speed * Time.deltaTime;
 
         // Travel forward
-        transform.position += _direction * _distanceThisFrame;
+        transform.position += _stats.Direction * _distanceThisFrame;
         
-        // Destroy after travelling a certain distance;
+        // Return to object pool after travelling a certain distance;
         _displacement = transform.position - _origin;
-        _distanceTraveled = Vector3.Dot(_displacement, _direction);
-        if (_distanceTraveled >= _range)
-        {
-            
+        _distanceTraveled = Vector3.Dot(_displacement, _stats.Direction);
+        if (_distanceTraveled >= _stats.Range) {
+            PlayerProjectilePool.Instance.Release(gameObject);
         }
     }
 }
