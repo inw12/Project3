@@ -10,7 +10,6 @@ public struct PlayerProjectileStats
 
 public class PlayerProjectile : MonoBehaviour
 {
-    [SerializeField] private PlayerProjectilePool pool;
     [SerializeField] private LayerMask collidableLayers;
 
     private PlayerProjectileStats _stats;
@@ -21,13 +20,17 @@ public class PlayerProjectile : MonoBehaviour
     private float _distanceTraveled;
     private float _distanceThisFrame;
 
-    public void Initialize(float speed, float range, Vector3 direction)
+    public void Initialize(PlayerProjectileStats stats, Transform spawn)
     {
+        // Spawn position
+        transform.position = spawn.position;
         _origin = transform.position;
 
-        _stats.Speed = speed;
-        _stats.Range = range;
-        _stats.Direction = direction;
+        // Initialize stats
+        _stats.Damage = stats.Damage;
+        _stats.Speed = stats.Speed;
+        _stats.Range = stats.Range;
+        _stats.Direction = stats.Direction;
     }
 
     // Raycasts forward for collisions

@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public struct AttackState
@@ -29,6 +30,9 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float projectileSpeed = 20f;
     [SerializeField] private float projectileRange = 10f;
     [SerializeField] private float fireRate = 0.2f;
+    [Space]
+    [SerializeField] private PlayerProjectilePool projectilePool;
+    [SerializeField] private Transform projectileSpawn;
     private Vector3 _projectileDirection;
     private float _fireTimer;
 
@@ -78,7 +82,7 @@ public class PlayerAttack : MonoBehaviour
         _requestedMelee = input.Melee && !_requestedRanged;
     }
 
-    public void UpdateAttack(MovementState movementState) 
+    public void UpdateAttack(MovementState movementState, float deltaTime) 
     {
         // "WHERE are we attacking?"
         Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
@@ -94,9 +98,15 @@ public class PlayerAttack : MonoBehaviour
                                     ? Attack.Melee : _comboActive
                                     ? Attack.Melee : Attack.None;         
             
+
+            // Melee Attack Timers
+            _comboTimer += deltaTime;
+            _dashTimer += deltaTime;
+
+            // Ranged Attack Timers
+            _fireTimer += deltaTime;
+
             // "When pressing the Melee button..."
-            _comboTimer += Time.deltaTime;
-            _dashTimer += Time.deltaTime;
             if (_requestedMelee)
             {
                 _comboTimer = 0f;
@@ -146,10 +156,27 @@ public class PlayerAttack : MonoBehaviour
                     PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
                 }
             }
-            // RANGED Attack
+            // "When holding down the Ranged atack button..."
             else if (_state.CurrentAttack is Attack.Ranged)
             {
-                // fire projectile
+                // calculate projectile direction
+                var source = Vector3.ProjectOnPlane(projectileSpawn.position, Vector3.up);
+                _projectileDirection = (_state.AttackPosition - source).normalized;
+
+                // only shoot when timer is within fire rate interval
+                if (_fireTimer >= fireRate)
+                {
+                    var stats = new PlayerProjectileStats
+                    {
+                        Damage = projectileDamage,
+                        Speed = projectileSpeed,
+                        Range = projectileRange,
+                        Direction = _projectileDirection
+                    };
+                    projectilePool.Get(stats, projectileSpawn);
+
+                    _fireTimer = 0f;
+                }
             }
 
             // Reset combo when timer exceeds input window

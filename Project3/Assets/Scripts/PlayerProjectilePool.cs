@@ -5,7 +5,6 @@ public class PlayerProjectilePool : MonoBehaviour
     public static PlayerProjectilePool Instance { get; private set; }
 
     [SerializeField] private GameObject projectile;
-    [SerializeField] private Transform spawnPoint;
     [Space]
     [SerializeField] private int defaultCapacity = 20;
     [SerializeField] private int maxCapacity = 100;
@@ -14,12 +13,6 @@ public class PlayerProjectilePool : MonoBehaviour
 
     void Awake()
     {
-        // Instance Control
-        if (!Instance && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
         Instance = this;
 
         // Initialize Pool
@@ -48,16 +41,15 @@ public class PlayerProjectilePool : MonoBehaviour
     {
         
     }
-    private void OnDestroyProjectile(GameObject item)
-    {
-        
-    }
+    private void OnDestroyProjectile(GameObject item) => Destroy(item);
 
-    public void Get()
+    public void Get(PlayerProjectileStats stats, Transform spawn)
     {
         GameObject p = _pool.Get();
-        p.transform.position = spawnPoint.position;
-        p.SetActive(true);
+        if (p.TryGetComponent(out PlayerProjectile q)) {
+            q.Initialize(stats, spawn);
+            q.gameObject.SetActive(true);
+        }
     }
     public void Release(GameObject item)
     {
