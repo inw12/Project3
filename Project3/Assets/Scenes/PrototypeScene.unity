@@ -657,6 +657,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2676564cae1314f9794484e42a4eee60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 8
   projectileDamage: 1
   projectileSpeed: 30
   projectileRange: 25
@@ -760,7 +763,7 @@ GameObject:
   - component: {fileID: 970500958}
   - component: {fileID: 970500957}
   - component: {fileID: 970500956}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Floor
   m_TagString: Untagged
   m_Icon: {fileID: 0}

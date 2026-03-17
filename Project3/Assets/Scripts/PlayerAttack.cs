@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public struct AttackState
@@ -25,6 +24,7 @@ public class PlayerAttack : MonoBehaviour
     // Called by 'PlayerAnimationRig' to activate animation rig
     public static PlayerAttack Instance { get; private set; }
 
+    [SerializeField] private LayerMask targetLayer;
     [Header("Ranged Attack")]
     [SerializeField] private float projectileDamage = 1f;
     [SerializeField] private float projectileSpeed = 20f;
@@ -86,7 +86,7 @@ public class PlayerAttack : MonoBehaviour
     {
         // "WHERE are we attacking?"
         Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
-        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity)) {
+        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, targetLayer)) {
             _state.AttackPosition = hit.point;
         }
 
