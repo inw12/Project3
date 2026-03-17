@@ -153,8 +153,6 @@ public class PlayerAttack : MonoBehaviour
             {
                 _comboTimer = 0f;
 
-                DisableHitbox();
-
                 // Animation State (for checking if current animation is complete)
                 AnimatorStateInfo animState = animator.GetCurrentAnimatorStateInfo(0);
                 bool animFinished = !animState.loop && animState.normalizedTime >= 1f;
@@ -206,7 +204,7 @@ public class PlayerAttack : MonoBehaviour
                 // *** THIS IS THE COMBO LOOP ***
                 if (animFinished)
                 {
-                    EnableHitbox();
+                    _meleeHits.Clear();
 
                     if (_comboCounter == 3) _comboCounter = 0;
 
@@ -276,7 +274,11 @@ public class PlayerAttack : MonoBehaviour
             }
 
             // Reset combo when timer exceeds input window
-            if (_comboTimer > comboBuffer) ResetCombo();
+            if (_comboTimer > comboBuffer) 
+            {
+                ResetCombo();
+                DisableHitbox();
+            }
         }
 
         // Update '_prevState'
