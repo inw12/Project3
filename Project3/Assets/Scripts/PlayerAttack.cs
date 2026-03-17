@@ -162,7 +162,8 @@ public class PlayerAttack : MonoBehaviour
                         var enemyHit = _enemiesDetected.FirstOrDefault(c => c != null);
                         var enemy = enemyHit.gameObject;
 
-                        var direction = (enemy.transform.position - transform.position).normalized;
+                        var targetPos = Vector3.ProjectOnPlane(enemy.transform.position, Vector3.up);
+                        var direction = (targetPos - transform.position).normalized;
 
                         var distance = Vector3.Distance(enemy.transform.position, transform.position) - meleeInnerRange;
                         _dashVelocity = distance / dashDuration * direction;
@@ -197,7 +198,8 @@ public class PlayerAttack : MonoBehaviour
                         var enemyHit = _enemiesDetected.FirstOrDefault(c => c != null);
                         var enemy = enemyHit.gameObject;
 
-                        var direction = (enemy.transform.position - transform.position).normalized;
+                        var targetPos = Vector3.ProjectOnPlane(enemy.transform.position, Vector3.up);
+                        var direction = (targetPos - transform.position).normalized;
 
                         var distance = Vector3.Distance(enemy.transform.position, transform.position) - meleeInnerRange;
                         _dashVelocity = distance / dashDuration * direction;

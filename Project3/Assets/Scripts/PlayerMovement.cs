@@ -104,16 +104,14 @@ public class PlayerMovement : MonoBehaviour
     // Should be called in FIXEDUPDATE() in 'Player'
     public void UpdateMovement(float deltaTime)
     {
-        // Apply mild gravity force while grounded
+        // Gravity
         _state.IsGrounded = _controller.isGrounded;
         if (_state.IsGrounded)
         {
             if (_prevState.Velocity.y < -2f) {
                 _state.Velocity.y = -2f;
             }
-        }
-        else
-        {
+        } else {
             _state.Velocity += 2 * Time.deltaTime * Physics.gravity;
         }
 
