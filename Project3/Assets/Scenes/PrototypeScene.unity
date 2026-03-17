@@ -529,6 +529,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   animator: {fileID: 5866666020582766721}
+  dashSpeed: 300
+  dashAcceleration: 50
+  dashDuration: 1
   comboBuffer: 0.5
 --- !u!1 &829284752
 GameObject:

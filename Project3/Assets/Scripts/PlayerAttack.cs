@@ -27,6 +27,11 @@ public class PlayerAttack : MonoBehaviour
     [Header("Melee Attack")]
     [SerializeField] private Animator animator;
     [Space]
+    [SerializeField] private float dashSpeed = 20f;
+    [SerializeField] private float dashAcceleration = 15f;
+    [SerializeField] private float dashDuration = 0.5f;
+    private float _dashTimer;
+    [Space]
     [SerializeField] private float comboBuffer = 0.7f;
     private bool _comboActive;
     private int _comboCounter;
@@ -83,9 +88,11 @@ public class PlayerAttack : MonoBehaviour
             
             // "When pressing the Melee button..."
             _comboTimer += Time.deltaTime;
+            _dashTimer += Time.deltaTime;
             if (_requestedMelee)
             {
                 _comboTimer = 0f;
+                _dashTimer = 0f;
 
                 // Animation State (for checking if current animation is complete)
                 AnimatorStateInfo animState = animator.GetCurrentAnimatorStateInfo(0);
@@ -106,6 +113,11 @@ public class PlayerAttack : MonoBehaviour
 
                     // Melee Animation Trigger
                     animator.SetTrigger("MeleeTrigger");
+
+                    // Move Character w/ Attack
+                    var direction = (_state.AttackPosition - transform.position).normalized;
+                    var targetVelocity = _dashTimer < dashDuration ? dashSpeed * direction : Vector3.zero;
+                    PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
                 }                
 
                 // Only read input for the next combo after the current animation is finished
@@ -119,6 +131,11 @@ public class PlayerAttack : MonoBehaviour
 
                     // Activate animation trigger
                     animator.SetTrigger("MeleeTrigger");
+
+                    // Move Character w/ Attack
+                    var direction = (_state.AttackPosition - transform.position).normalized;
+                    var targetVelocity = _dashTimer < dashDuration ? dashSpeed * direction : Vector3.zero;
+                    PlayerMovement.Instance.UpdateVelocity(targetVelocity, dashAcceleration);
                 }
             }
             // RANGED Attack

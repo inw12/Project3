@@ -22,6 +22,7 @@ public enum MovementAction
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    // Used by 'PlayerAttack' to toggle player's movement input AND to move the character during melee attacks
     public static PlayerMovement Instance { get; private set; }
 
     private struct DodgeInfo
@@ -163,6 +164,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Apply Movement
         _controller.Move(_state.Velocity * deltaTime);
+        Debug.Log(_state.Velocity);
 
         // Update State Machine
         _prevState = _state;
@@ -211,6 +213,16 @@ public class PlayerMovement : MonoBehaviour
         _requestedMovement = _state.Velocity = Vector3.zero;
     } 
     
+    public void UpdateVelocity(Vector3 velocity, float acceleration)
+    {
+        _state.Velocity = Vector3.Lerp
+        (
+            _state.Velocity,
+            velocity,
+            1f - Mathf.Exp(-acceleration * Time.deltaTime)
+        );
+    }
+
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
 
