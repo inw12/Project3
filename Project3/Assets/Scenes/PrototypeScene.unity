@@ -557,7 +557,6 @@ GameObject:
   - component: {fileID: 825495740}
   - component: {fileID: 825495739}
   - component: {fileID: 825495741}
-  - component: {fileID: 825495742}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -659,31 +658,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   projectileDamage: 1
-  projectileSpeed: 20
-  projectileRange: 10
-  fireRate: 0.2
-  projectilePool: {fileID: 825495742}
+  projectileSpeed: 30
+  projectileRange: 25
+  fireRate: 0.25
+  projectilePool: {fileID: 1566646403}
   projectileSpawn: {fileID: 8494364548069243440}
   animator: {fileID: 5866666020582766721}
   dashSpeed: 300
   dashAcceleration: 50
   dashDuration: 1
   comboBuffer: 0.5
---- !u!114 &825495742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825495736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a885cbc8136f4b03a23d439029bb636, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerProjectilePool
-  projectile: {fileID: 1860350838970000365, guid: 29ceae9a2469a4aaeb7687b615444a21, type: 3}
-  defaultCapacity: 20
-  maxCapacity: 100
 --- !u!1 &829284752
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,6 +1121,53 @@ MonoBehaviour:
       x: 1
       y: 1
       z: 1
+--- !u!1 &1566646402
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1566646404}
+  - component: {fileID: 1566646403}
+  m_Layer: 0
+  m_Name: PlayerProjectilePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1566646403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566646402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a885cbc8136f4b03a23d439029bb636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 29ceae9a2469a4aaeb7687b615444a21, type: 3}
+  defaultCapacity: 20
+  maxCapacity: 100
+--- !u!4 &1566646404
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1566646402}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.39214, y: 0, z: 2.05572}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1809324023
 GameObject:
   m_ObjectHideFlags: 0
@@ -3634,3 +3665,4 @@ SceneRoots:
   - {fileID: 824463753}
   - {fileID: 825495737}
   - {fileID: 825494610}
+  - {fileID: 1566646404}
