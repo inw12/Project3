@@ -39,6 +39,10 @@ public class PlayerProjectile : MonoBehaviour
         if (Physics.Raycast(transform.position, _stats.Direction, out RaycastHit hitInfo, _distanceThisFrame, collidableLayers))
         {
             // * Damage Enemy logic here *
+            if (hitInfo.collider.gameObject.TryGetComponent(out EnemyHealth enemy))
+            {
+                enemy.DecreaseHealth(_stats.Damage);
+            }
 
             PlayerProjectilePool.Instance.Release(gameObject);
         }
