@@ -204,7 +204,10 @@ public class PlayerMovement : MonoBehaviour
     public void EnableMovementInput() => _inputEnabled = true;
     public void DisableMovementInput()
     {
+        // Disable input
         _inputEnabled = false;
+
+        // Stop any character movement
         _requestedMovement = _state.Velocity = Vector3.zero;
     } 
     

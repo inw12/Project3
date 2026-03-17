@@ -67,7 +67,7 @@ public class PlayerAttack : MonoBehaviour
 
     public void UpdateAttack(MovementState movementState) 
     {
-        // ** "Where are we attacking?" **
+        // "WHERE are we attacking?"
         Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
         if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity)) {
             _state.AttackPosition = hit.point;
@@ -75,56 +75,60 @@ public class PlayerAttack : MonoBehaviour
 
         if (movementState.CurrentAction != MovementAction.Dodge)
         {
-            // "What attack are we performing?"
+            // "WHAT attack are we performing?"
             _state.CurrentAttack = _requestedRanged
                                     ? Attack.Ranged : _requestedMelee 
                                     ? Attack.Melee : _comboActive
-                                    ? Attack.Melee : Attack.None;
+                                    ? Attack.Melee : Attack.None;         
             
-            // Update Melee Combo
+            // "When pressing the Melee button..."
             _comboTimer += Time.deltaTime;
-            if (_comboTimer > comboBuffer) 
-                ResetCombo();
+            if (_requestedMelee)
+            {
+                _comboTimer = 0f;
 
-            // Perform ranged attack
-            if (_state.CurrentAttack is Attack.Ranged)
-            {
-                // fire projectile
-            }
-            // Melee combo
-            else if (_requestedMelee)
-            {
                 // Animation State (for checking if current animation is complete)
                 AnimatorStateInfo animState = animator.GetCurrentAnimatorStateInfo(0);
                 bool animFinished = !animState.loop && animState.normalizedTime >= 1f;
 
-                // Melee START
+                // Combo START (0 -> 1)
                 if (!_comboActive) 
                 {
                     PlayerMovement.Instance.DisableMovementInput();
 
+                    // Set combo as Active
                     _comboActive = true;
                     animator.SetBool("ComboActive", _comboActive);
 
+                    // Increment combo counter
                     _comboCounter++;
                     animator.SetInteger("ComboCounter", _comboCounter);
+
+                    // Melee Animation Trigger
                     animator.SetTrigger("MeleeTrigger");
-                }
+                }                
 
-                // "With every melee input..."
-                _comboTimer = 0f;
-
-                // "When pressing melee input at the end of an animation..."
+                // Only read input for the next combo after the current animation is finished
+                // *** THIS IS THE COMBO LOOP ***
                 if (animFinished)
                 {
+                    // Increment Combo Counter
                     _comboCounter++;
+                    _comboCounter = Math.Clamp(_comboCounter, 0, 3);
                     animator.SetInteger("ComboCounter", _comboCounter);
+
+                    // Activate animation trigger
                     animator.SetTrigger("MeleeTrigger");
-                    if (_comboCounter >= 3) {
-                        ResetCombo();   
-                    }
                 }
             }
+            // RANGED Attack
+            else if (_state.CurrentAttack is Attack.Ranged)
+            {
+                // fire projectile
+            }
+
+            // Reset combo when timer exceeds input window
+            if (_comboTimer > comboBuffer) ResetCombo();
         }
 
         // Update '_prevState'
@@ -134,8 +138,10 @@ public class PlayerAttack : MonoBehaviour
     private void ResetCombo()
     {
         _comboCounter = 0;
+
         _comboActive = false;
         animator.SetBool("ComboActive", _comboActive);
+
         PlayerMovement.Instance.EnableMovementInput();
     }
 
