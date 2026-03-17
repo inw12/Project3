@@ -42,7 +42,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private LayerMask meleeTarget;
     [SerializeField] private float meleeOuterRange = 8f;
     [SerializeField] private float meleeInnerRange = 2f;
-    private readonly Collider[] _enemiesDetected = new Collider[5];
+    private readonly Collider[] _outerHits = new Collider[5];
+    private readonly Collider[] _innerHits = new Collider[5];
     [Space]
     [SerializeField] private float dashSpeed = 20f;
     [SerializeField] private float dashAcceleration = 15f;
@@ -96,12 +97,20 @@ public class PlayerAttack : MonoBehaviour
             _state.AttackPosition = hit.point;
         }
 
-        // "Are there enemies in our personal bubble?"
-        var hits = Physics.OverlapSphereNonAlloc
+        // "Are there enemies within the outer bubble?"
+        var outerHits = Physics.OverlapSphereNonAlloc
         (
             transform.position,
             meleeOuterRange,
-            _enemiesDetected,
+            _outerHits,
+            meleeTarget
+        );
+        // "Are there enemies within the inner bubble?"
+        var innerHits = Physics.OverlapSphereNonAlloc
+        (
+            transform.position,
+            meleeInnerRange,
+            _innerHits,
             meleeTarget
         );
 
@@ -149,7 +158,7 @@ public class PlayerAttack : MonoBehaviour
                     // * Melee Movement *
                     _dashTimer = 0f;
                     // When enemy is not in range
-                    if (hits == 0)
+                    if (outerHits == 0)
                     {
                         // Simply dash in the direction of cursor
                         var direction = (_state.AttackPosition - transform.position).normalized;
@@ -159,7 +168,7 @@ public class PlayerAttack : MonoBehaviour
                     else
                     {
                         // Dash TOWARDS enemy in range
-                        var enemyHit = _enemiesDetected.FirstOrDefault(c => c != null);
+                        var enemyHit = _outerHits.FirstOrDefault(c => c != null);
                         var enemy = enemyHit.gameObject;
 
                         var targetPos = Vector3.ProjectOnPlane(enemy.transform.position, Vector3.up);
@@ -185,7 +194,7 @@ public class PlayerAttack : MonoBehaviour
                     // * Melee Movement *
                     _dashTimer = 0f;
                     // When enemy is not in range
-                    if (hits == 0)
+                    if (outerHits == 0)
                     {
                         // Simply dash in the direction of cursor
                         var direction = (_state.AttackPosition - transform.position).normalized;
@@ -195,7 +204,7 @@ public class PlayerAttack : MonoBehaviour
                     else
                     {
                         // Dash TOWARDS enemy in range
-                        var enemyHit = _enemiesDetected.FirstOrDefault(c => c != null);
+                        var enemyHit = _outerHits.FirstOrDefault(c => c != null);
                         var enemy = enemyHit.gameObject;
 
                         var targetPos = Vector3.ProjectOnPlane(enemy.transform.position, Vector3.up);
@@ -233,6 +242,7 @@ public class PlayerAttack : MonoBehaviour
             if (_comboActive)
             {
                 _dashVelocity = _dashTimer < dashDuration ? _dashVelocity : Vector3.zero;
+                _dashVelocity = innerHits == 0 ? _dashVelocity : Vector3.zero;
                 PlayerMovement.Instance.UpdateVelocity(_dashVelocity, dashAcceleration);
             }
 
