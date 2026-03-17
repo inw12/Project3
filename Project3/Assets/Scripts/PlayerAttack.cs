@@ -81,9 +81,8 @@ public class PlayerAttack : MonoBehaviour
                                     ? Attack.Melee : _comboActive
                                     ? Attack.Melee : Attack.None;
             
-            // Update Melee Combo Stats
+            // Update Melee Combo
             _comboTimer += Time.deltaTime;
-            // Reset combo if timer exceeds input buffer window
             if (_comboTimer > comboBuffer)
             {
                 _comboCounter = 0;
@@ -96,7 +95,7 @@ public class PlayerAttack : MonoBehaviour
                 // fire projectile
             }
             // Melee combo
-            else if (_state.CurrentAttack is Attack.Melee)
+            else if (_requestedMelee)
             {
                 // begin melee routine
                 if (!_comboActive) _comboActive = true;
@@ -106,7 +105,6 @@ public class PlayerAttack : MonoBehaviour
                 animator.SetInteger("ComboCounter", _comboCounter);
                 animator.SetTrigger("MeleeTrigger");
 
-                // End of combo
                 if (_comboCounter >= 3)
                 {
                     _comboCounter = 0;
@@ -115,15 +113,14 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        
-
         // Update '_prevState'
         _prevState = _state;
     }
 
-    private void MeleeCombo()
+    private void UpdateAnimator()
     {
-        
+        animator.SetBool("ComboActive", _comboActive);
+        animator.SetInteger("ComboCounter", _comboCounter);
     }
 
     public AttackState GetState() => _state;
