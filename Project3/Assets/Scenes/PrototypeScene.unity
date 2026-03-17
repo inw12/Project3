@@ -743,9 +743,9 @@ MonoBehaviour:
   projectilePool: {fileID: 1566646403}
   projectileSpawn: {fileID: 8494364548069243440}
   projectileDamage: 1
-  projectileSpeed: 30
-  projectileRange: 25
-  fireRate: 0.25
+  projectileSpeed: 45
+  projectileRange: 50
+  fireRate: 0.3
   meleeTarget:
     serializedVersion: 2
     m_Bits: 64
@@ -1057,7 +1057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7176836a2277145029cec679ef65350a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  health: 5
+  health: 10
   hitFeedback: {fileID: 1327077535}
 --- !u!114 &1327077535
 MonoBehaviour:

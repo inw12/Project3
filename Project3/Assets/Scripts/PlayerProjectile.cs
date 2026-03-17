@@ -11,6 +11,7 @@ public struct PlayerProjectileStats
 public class PlayerProjectile : MonoBehaviour
 {
     [SerializeField] private LayerMask collidableLayers;
+    [SerializeField] private float hitboxRadius = 2f;
 
     private PlayerProjectileStats _stats;
 
@@ -19,6 +20,9 @@ public class PlayerProjectile : MonoBehaviour
     private Vector3 _displacement;
     private float _distanceTraveled;
     private float _distanceThisFrame;
+
+    // SphereCast Variables
+    private Vector3 _prev;
 
     public void Initialize(PlayerProjectileStats stats, Transform spawn)
     {
@@ -33,15 +37,25 @@ public class PlayerProjectile : MonoBehaviour
         _stats.Direction = stats.Direction;
     }
 
-    // Raycasts forward for collisions
+    // SphereCast for collisions
     void Update()
     {
-        if (Physics.Raycast(transform.position, _stats.Direction, out RaycastHit hitInfo, _distanceThisFrame, collidableLayers))
+        var current = transform.position;
+        var direction = current - _prev;
+        var distance = direction.magnitude;
+
+        if (distance < 0.001f) return;
+
+        if (Physics.SphereCast(
+            _prev,
+            hitboxRadius,
+            direction.normalized,
+            out RaycastHit hit,
+            distance,
+            collidableLayers))
         {
-            // * Damage Enemy logic here *
-            if (hitInfo.collider.gameObject.TryGetComponent(out EnemyHealth enemy))
-            {
-                enemy.DecreaseHealth(_stats.Damage);
+            if (hit.collider.gameObject.TryGetComponent(out EnemyHealth e)) {
+                e.DecreaseHealth(_stats.Damage);
             }
 
             PlayerProjectilePool.Instance.Release(gameObject);
