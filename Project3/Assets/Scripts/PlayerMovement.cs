@@ -1,10 +1,10 @@
-using System;
 using UnityEngine;
 
 public struct MovementInput
 {
     public Vector2 Movement;
     public bool Dodge;
+    public Vector2 MousePosition;
 }
 public struct MovementState
 {
@@ -22,6 +22,9 @@ public enum MovementAction
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    // Used by 'PlayerAttack' to toggle player's movement input AND to move the character during melee attacks
+    public static PlayerMovement Instance { get; private set; }
+
     private struct DodgeInfo
     {
         public Vector3 Direction;
@@ -33,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float moveAcceleration = 10f;
     [SerializeField] private float moveRotation = 10f;
-    [Space]
     [Space]
     [SerializeField] private CapsuleCollider hurtbox;
     [SerializeField] private float dodgeSpeed= 7f;
@@ -47,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
     // Requested Inputs
     private Vector3 _requestedMovement;
     private bool _requestedDodge;
+    private Vector2 _requestedCursor;
 
     // State Machine
     private MovementState _state;
@@ -54,6 +57,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void Initialize()
     {
+        Instance = this;
+
         // CharacterController
         _controller = GetComponent<CharacterController>();
 
@@ -77,8 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
             // Dodge Input
             _requestedDodge = input.Dodge;
-            // Trigger Dodge (if pressed)
-            if (_requestedDodge && !_dodgeInfo.Triggered && _requestedMovement.sqrMagnitude > 0f)
+            if (_requestedDodge && !_dodgeInfo.Triggered && _requestedMovement.sqrMagnitude > 0f)   // Trigger Dodge (if pressed)
             {
                 // Update dodge info
                 _dodgeInfo.Triggered = true;
@@ -91,6 +95,9 @@ public class PlayerMovement : MonoBehaviour
                 // Disable player inputs
                 _inputEnabled = false;
             }
+
+            // Mouse Input
+            _requestedCursor = input.MousePosition;
         }
     }
 
@@ -164,7 +171,26 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpdateRotation(float deltaTime)
     {
-        if (_requestedMovement.sqrMagnitude > 0f)
+        // Rotate player towards cursor (if attacking)
+        if (PlayerAttack.Instance.GetState().CurrentAttack != Attack.None)
+        {
+            Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
+            if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity))
+            {
+                var targetDirection = (hit.point - transform.position).normalized;
+                targetDirection.y = 0f;
+
+                var targetRotation = Quaternion.LookRotation(targetDirection);
+                transform.rotation = Quaternion.Lerp
+                (
+                    transform.rotation,
+                    targetRotation,
+                    1f - Mathf.Exp(-moveRotation * 2f * deltaTime)
+                );
+            }
+        }
+        // Rotate player towards direction of movement
+        else if (_requestedMovement.sqrMagnitude > 0f)
         {
             var targetRotation = Quaternion.LookRotation(_requestedMovement);
             transform.rotation = Quaternion.Lerp
@@ -176,7 +202,28 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void EnableMovementInput() => _inputEnabled = true;
+    public void DisableMovementInput()
+    {
+        // Disable input
+        _inputEnabled = false;
+
+        // Stop any character movement
+        _requestedMovement = _state.Velocity = Vector3.zero;
+    } 
+    
+    public void UpdateVelocity(Vector3 velocity, float acceleration)
+    {
+        _state.Velocity = Vector3.Lerp
+        (
+            _state.Velocity,
+            velocity,
+            1f - Mathf.Exp(-acceleration * Time.deltaTime)
+        );
+    }
+
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
+
     public Vector3 GetMovementDirection() => _requestedMovement;
 }
