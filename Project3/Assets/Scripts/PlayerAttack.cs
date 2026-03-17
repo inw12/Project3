@@ -26,22 +26,22 @@ public class PlayerAttack : MonoBehaviour
     // Called by 'PlayerAnimationRig' to activate animation rig
     public static PlayerAttack Instance { get; private set; }
 
-    [SerializeField] private LayerMask targetLayer;
     [Header("Ranged Attack")]
+    [SerializeField] private LayerMask rangedTarget;
+    [SerializeField] private PlayerProjectilePool projectilePool;
+    [SerializeField] private Transform projectileSpawn;
+    [Space]
     [SerializeField] private float projectileDamage = 1f;
     [SerializeField] private float projectileSpeed = 20f;
     [SerializeField] private float projectileRange = 10f;
     [SerializeField] private float fireRate = 0.2f;
-    [Space]
-    [SerializeField] private PlayerProjectilePool projectilePool;
-    [SerializeField] private Transform projectileSpawn;
     private Vector3 _projectileDirection;
     private float _fireTimer;
 
     [Header("Melee Attack")]
+    [SerializeField] private LayerMask meleeTarget;
     [SerializeField] private Animator animator;
     [Space]
-    [SerializeField] private LayerMask meleeTarget;
     [SerializeField] private float meleeOuterRange = 8f;
     [SerializeField] private float meleeInnerRange = 2f;
     private readonly Collider[] _outerHits = new Collider[5];
@@ -97,7 +97,7 @@ public class PlayerAttack : MonoBehaviour
     {
         // "WHERE are we attacking?"
         Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
-        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, targetLayer)) {
+        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, rangedTarget)) {
             _state.AttackPosition = hit.point;
         }
 
