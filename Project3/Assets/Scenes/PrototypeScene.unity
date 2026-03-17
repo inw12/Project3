@@ -820,7 +820,7 @@ MonoBehaviour:
   hurtbox: {fileID: 1440943202}
   dodgeSpeed: 12
   dodgeAcceleration: 20
-  dodgeDuration: 0.7
+  dodgeDuration: 0.6
 --- !u!114 &825495740
 MonoBehaviour:
   m_ObjectHideFlags: 0

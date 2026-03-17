@@ -203,6 +203,16 @@ public class PlayerMovement : MonoBehaviour
                 1f - Mathf.Exp(-moveRotation * 2f * deltaTime)
             );
         }
+        else if (_state.CurrentAction is MovementAction.Dodge)
+        {
+            var targetRotation = Quaternion.LookRotation(_dodgeInfo.Direction);
+            transform.rotation = Quaternion.Lerp
+            (
+                transform.rotation,
+                targetRotation,
+                1f - Mathf.Exp(-moveRotation * deltaTime)
+            );
+        }
         // Rotate player towards direction of movement
         else if (_requestedMovement.sqrMagnitude > 0f)
         {
@@ -214,10 +224,6 @@ public class PlayerMovement : MonoBehaviour
                 1f - Mathf.Exp(-moveRotation * deltaTime)
             );
         }
-    }
-    public void UpdateRotation(Vector3 targetDirection, float deltaTime)
-    {
-        
     }
 
     public void EnableMovementInput() => _inputEnabled = true;
