@@ -487,6 +487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 711639825}
   - component: {fileID: 711639826}
+  - component: {fileID: 711639827}
   m_Layer: 10
   m_Name: Parrybox
   m_TagString: Untagged
@@ -532,6 +533,23 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &711639827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 711639824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9562c6f3747194bf1aabbdfc52fb4614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerBlock
+  playerMovement: {fileID: 825495739}
+  playerAttack: {fileID: 825495741}
+  animator: {fileID: 5866666020582766721}
+  parryBox: {fileID: 711639826}
+  blockDuration: 0.5
 --- !u!1 &824463752
 GameObject:
   m_ObjectHideFlags: 0
@@ -710,7 +728,6 @@ GameObject:
   - component: {fileID: 825495740}
   - component: {fileID: 825495739}
   - component: {fileID: 825495741}
-  - component: {fileID: 825495742}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -796,7 +813,7 @@ MonoBehaviour:
   mainCamera: {fileID: 330585545}
   playerMovement: {fileID: 825495739}
   playerAttack: {fileID: 825495741}
-  playerBlock: {fileID: 825495742}
+  playerBlock: {fileID: 711639827}
   playerHealth: {fileID: 1440943203}
   animationController: {fileID: 5866666020582766722}
   animationRig: {fileID: 2105932399}
@@ -841,21 +858,6 @@ MonoBehaviour:
   dashDuration: 0.08
   targetedDashSpeedMultiplier: 1.5
   comboBuffer: 0.5
---- !u!114 &825495742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 825495736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9562c6f3747194bf1aabbdfc52fb4614, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerBlock
-  animator: {fileID: 5866666020582766721}
-  parryBox: {fileID: 711639826}
-  blockDuration: 0.6
 --- !u!1 &829284752
 GameObject:
   m_ObjectHideFlags: 0

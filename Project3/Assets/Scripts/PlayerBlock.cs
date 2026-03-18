@@ -1,27 +1,24 @@
-using Unity.VisualScripting;
 using UnityEngine;
-
-[RequireComponent(typeof(PlayerAttack), typeof(PlayerMovement))]
 public class PlayerBlock : MonoBehaviour
 {
+    [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerAttack playerAttack;
+    [Space]
     [SerializeField] private Animator animator;
+    [Space]
     [SerializeField] private CapsuleCollider parryBox;
     [Space]
-    [SerializeField] private float blockDuration = 1f;
+    [SerializeField] private float blockDuration = 0.6f;
     private float _blockTimer;
 
-    private PlayerMovement _playerMovement;
-    private PlayerAttack _playerAttack;
     private bool _requestedBlock;
 
     // Animator Metrics
     private bool _isBlocking;
+    private bool _parryTriggered;
 
     public void Initialize()
     {
-        _playerMovement = GetComponent<PlayerMovement>();
-        _playerAttack = GetComponent<PlayerAttack>();
-
         parryBox.enabled = false;
     }
 
@@ -31,13 +28,13 @@ public class PlayerBlock : MonoBehaviour
         if (_requestedBlock)
         {
             // We can only block if the player is not attacking and not performing a dodge
-            if (_playerAttack.GetState().CurrentAttack is Attack.None
-                && _playerMovement.GetState().CurrentAction is MovementAction.Idle or MovementAction.Move )
+            if (playerAttack.GetState().CurrentAttack is Attack.None
+                && playerMovement.GetState().CurrentAction is MovementAction.Idle or MovementAction.Move )
             {
                 // Block START
                 _blockTimer = 0f;
-                _playerMovement.DisableMovementInput();
-                _playerAttack.DisableAttackInput();
+                playerMovement.DisableMovementInput();
+                playerAttack.DisableAttackInput();
 
                 _isBlocking = true;
                 animator.SetBool("IsBlocking", _isBlocking);
@@ -57,13 +54,15 @@ public class PlayerBlock : MonoBehaviour
             {
                 _isBlocking = false;
                 animator.SetBool("IsBlocking", _isBlocking);
-                
-                _playerMovement.EnableMovementInput();
-                _playerAttack.EnableAttackInput();
+
+                playerMovement.EnableMovementInput();
+                playerAttack.EnableAttackInput();
             }
         }
     }
 
     public void EnableParryBox() => parryBox.enabled = true;
     public void DisableParryBox() => parryBox.enabled = false;
+
+    public void TriggerParry() => _parryTriggered = true;
 }
