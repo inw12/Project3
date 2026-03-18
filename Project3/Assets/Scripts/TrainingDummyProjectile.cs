@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Linq;
-public struct PlayerProjectileStats
+public struct DummyProjectileStats
 {
     public float Damage;
     public float Speed;
@@ -8,12 +8,12 @@ public struct PlayerProjectileStats
     public Vector3 Direction;
 }
 
-public class PlayerProjectile : MonoBehaviour
+public class TrainingDummyProjectile : MonoBehaviour
 {
     [SerializeField] private LayerMask collidableLayers;
-    [SerializeField] private float hitboxRadius = 1f;
+    [SerializeField] private float hitboxRadius = 0.5f;
 
-    private PlayerProjectileStats _stats;
+    private DummyProjectileStats _stats;
     private readonly Collider[] _hits = new Collider[5];
 
     // Orientation
@@ -22,7 +22,7 @@ public class PlayerProjectile : MonoBehaviour
     private float _distanceTraveled;
     private float _distanceThisFrame;
 
-    public void Initialize(PlayerProjectileStats stats, Transform spawn)
+    public void Initialize(DummyProjectileStats stats, Transform spawn)
     {
         // Spawn position
         transform.position = spawn.position;
@@ -49,11 +49,11 @@ public class PlayerProjectile : MonoBehaviour
         if (hits > 0)
         {
             var hit = _hits.FirstOrDefault(c => c != null);
-            if (hit.gameObject.TryGetComponent(out EnemyHealth e))
+            if (hit.gameObject.TryGetComponent(out PlayerHealth p))
             {
-                e.DecreaseHealth(_stats.Damage);
+                p.DecreaseHealth(_stats.Damage);
             }
-            PlayerProjectilePool.Instance.Release(gameObject);
+            Destroy(gameObject);
         }
     }
 
@@ -70,7 +70,7 @@ public class PlayerProjectile : MonoBehaviour
         _displacement = transform.position - _origin;
         _distanceTraveled = Vector3.Dot(_displacement, _stats.Direction);
         if (_distanceTraveled >= _stats.Range) {
-            PlayerProjectilePool.Instance.Release(gameObject);
+            Destroy(gameObject);
         }
     }
 }

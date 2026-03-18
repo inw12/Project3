@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [Space]
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerAttack playerAttack;
+    [SerializeField] private PlayerHealth playerHealth;
     [Space]
     [SerializeField] private PlayerAnimationController animationController;
     [SerializeField] private PlayerAnimationRig animationRig;
@@ -31,6 +32,7 @@ public class Player : MonoBehaviour
         // Player Actions (Movement/Attacks)
         playerMovement.Initialize();
         playerAttack.Initialize();
+        playerHealth.Initialize();
 
         // Character Animations
         animationController.Initialize();
