@@ -855,7 +855,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerBlock
   animator: {fileID: 5866666020582766721}
   parryBox: {fileID: 711639826}
-  blockDuration: 1
+  blockDuration: 0.6
 --- !u!1 &829284752
 GameObject:
   m_ObjectHideFlags: 0
