@@ -78,6 +78,9 @@ public class Player : MonoBehaviour
         // Trigger Attacks
         playerAttack.UpdateAttack(playerMovement.GetState(), deltaTime);
         playerAttack.UpdateMeleeHitbox();
+        
+        // Update PlayerBlock
+        playerBlock.UpdateBlock(deltaTime);
 
         // Update Animations
         animationController.UpdateAnimation();
