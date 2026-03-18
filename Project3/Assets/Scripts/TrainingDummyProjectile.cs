@@ -11,7 +11,7 @@ public struct DummyProjectileStats
 public class TrainingDummyProjectile : MonoBehaviour
 {
     [SerializeField] private LayerMask collidableLayers;
-    [SerializeField] private float hitboxRadius = 2f;
+    [SerializeField] private float hitboxRadius = 0.5f;
 
     private DummyProjectileStats _stats;
 
