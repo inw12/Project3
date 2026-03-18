@@ -641,7 +641,7 @@ MonoBehaviour:
   speed: 10
   fireRate: 1
   range: 25
-  projectile: {fileID: 0}
+  projectile: {fileID: 1860350838970000365, guid: 4378675d9f81b433f8ac00c482c7c5d7, type: 3}
 --- !u!1 &825495736
 GameObject:
   m_ObjectHideFlags: 0
@@ -739,6 +739,7 @@ MonoBehaviour:
   mainCamera: {fileID: 330585545}
   playerMovement: {fileID: 825495739}
   playerAttack: {fileID: 825495741}
+  playerHealth: {fileID: 1440943203}
   animationController: {fileID: 5866666020582766722}
   animationRig: {fileID: 2105932399}
   cameraHeight: {fileID: 1809324024}

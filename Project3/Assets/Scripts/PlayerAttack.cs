@@ -120,7 +120,8 @@ public class PlayerAttack : MonoBehaviour
             transform.position,
             meleeOuterRange,
             _outerHits,
-            meleeTarget
+            meleeTarget,
+            QueryTriggerInteraction.Ignore
         );
         // "Are there enemies within the inner bubble?"
         var innerHits = Physics.OverlapSphereNonAlloc
@@ -128,7 +129,8 @@ public class PlayerAttack : MonoBehaviour
             transform.position,
             meleeInnerRange,
             _innerHits,
-            meleeTarget
+            meleeTarget,
+            QueryTriggerInteraction.Ignore
         );
         _hasMeleeTarget = outerHits > 0;
 

@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public struct DummyProjectileStats
@@ -14,15 +15,13 @@ public class TrainingDummyProjectile : MonoBehaviour
     [SerializeField] private float hitboxRadius = 0.5f;
 
     private DummyProjectileStats _stats;
+    private readonly Collider[] _hits = new Collider[5];
 
     // Orientation
     private Vector3 _origin;
     private Vector3 _displacement;
     private float _distanceTraveled;
     private float _distanceThisFrame;
-
-    // SphereCast Variables
-    private Vector3 _prev;
 
     public void Initialize(DummyProjectileStats stats, Transform spawn)
     {
@@ -37,29 +36,32 @@ public class TrainingDummyProjectile : MonoBehaviour
         _stats.Direction = stats.Direction;
     }
 
-    // SphereCast for collisions
+    // OverlapSphere for collisions
     void Update()
     {
-        var current = transform.position;
-        var direction = current - _prev;
-        var distance = direction.magnitude;
-
-        if (distance < 0.001f) return;
-
-        if (Physics.SphereCast(
-            _prev,
+        var hits = Physics.OverlapSphereNonAlloc
+        (
+            transform.position,
             hitboxRadius,
-            direction.normalized,
-            out RaycastHit hit,
-            distance,
-            collidableLayers))
+            _hits,
+            collidableLayers
+        );
+
+        if (hits > 0)
         {
-            if (hit.collider.gameObject.TryGetComponent(out PlayerHealth p)) {
+            var hit = _hits.FirstOrDefault(c => c != null);
+            if (hit.gameObject.TryGetComponent(out PlayerHealth p))
+            {
                 p.DecreaseHealth(_stats.Damage);
             }
-
             Destroy(gameObject);
         }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, hitboxRadius);
     }
 
     // Travels in a given direction

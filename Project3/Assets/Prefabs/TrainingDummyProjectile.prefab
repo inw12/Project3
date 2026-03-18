@@ -128,4 +128,4 @@ MonoBehaviour:
   collidableLayers:
     serializedVersion: 2
     m_Bits: 512
-  hitboxRadius: 0.25
+  hitboxRadius: 0.5

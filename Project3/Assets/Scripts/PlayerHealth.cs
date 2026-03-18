@@ -22,5 +22,7 @@ public class PlayerHealth : MonoBehaviour
         _currentHealth -= amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, health);
         _isAlive = _currentHealth > 0f;
+
+        Debug.Log(_currentHealth);
     }
 }
