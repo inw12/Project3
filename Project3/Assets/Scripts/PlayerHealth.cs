@@ -16,6 +16,8 @@ public class PlayerHealth : MonoBehaviour
     {
         _currentHealth += amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, health);
+        
+        Debug.Log("Current HP: " + _currentHealth);
     }
     public void DecreaseHealth(float amount)
     {
@@ -23,6 +25,6 @@ public class PlayerHealth : MonoBehaviour
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, health);
         _isAlive = _currentHealth > 0f;
 
-        Debug.Log(_currentHealth);
+        Debug.Log("Current HP: " + _currentHealth);
     }
 }

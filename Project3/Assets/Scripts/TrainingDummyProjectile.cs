@@ -1,6 +1,5 @@
-using System.Linq;
 using UnityEngine;
-
+using System.Linq;
 public struct DummyProjectileStats
 {
     public float Damage;
@@ -56,12 +55,6 @@ public class TrainingDummyProjectile : MonoBehaviour
             }
             Destroy(gameObject);
         }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, hitboxRadius);
     }
 
     // Travels in a given direction
