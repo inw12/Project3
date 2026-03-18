@@ -55,6 +55,9 @@ public class PlayerBlock : MonoBehaviour
             // Reset back to normal at the end of block duration
             if (_blockTimer >= blockDuration)
             {
+                _isBlocking = false;
+                animator.SetBool("IsBlocking", _isBlocking);
+                
                 _playerMovement.EnableMovementInput();
                 _playerAttack.EnableAttackInput();
             }
