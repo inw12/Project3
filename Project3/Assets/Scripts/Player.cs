@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     [Space]
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerAttack playerAttack;
+    [SerializeField] private PlayerBlock playerBlock;
+    [Space]
     [SerializeField] private PlayerHealth playerHealth;
     [Space]
     [SerializeField] private PlayerAnimationController animationController;
@@ -33,6 +35,7 @@ public class Player : MonoBehaviour
         playerMovement.Initialize();
         playerAttack.Initialize();
         playerHealth.Initialize();
+        playerBlock.Initialize();
 
         // Character Animations
         animationController.Initialize();
@@ -62,6 +65,7 @@ public class Player : MonoBehaviour
             MousePosition   =   input.MousePosition.ReadValue<Vector2>()
         };
         playerAttack.UpdateInput(attackInput);
+        playerBlock.UpdateInput(_inputActions.Combat.Parry.WasPressedThisFrame());
     }
 
     void LateUpdate()
@@ -74,6 +78,9 @@ public class Player : MonoBehaviour
         // Trigger Attacks
         playerAttack.UpdateAttack(playerMovement.GetState(), deltaTime);
         playerAttack.UpdateMeleeHitbox();
+        
+        // Update PlayerBlock
+        playerBlock.UpdateBlock(deltaTime);
 
         // Update Animations
         animationController.UpdateAnimation();

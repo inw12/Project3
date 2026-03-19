@@ -82,6 +82,8 @@ public class PlayerAttack : MonoBehaviour
     private bool _hitboxActive;
     private readonly HashSet<Collider> _meleeHits = new();
 
+    private bool _inputEnabled;
+
     public void Initialize()
     {
         Instance = this;
@@ -91,19 +93,24 @@ public class PlayerAttack : MonoBehaviour
         _comboActive = false;
         _comboCounter = 0;
         _comboTimer = 0f;
+
+        _inputEnabled = true;
     }
 
     public void UpdateInput(AttackInput input)
     {
-        _requestedCursor = input.MousePosition;
+        if (_inputEnabled)
+        {
+            _requestedCursor = input.MousePosition;
 
-        // Ranged attack should only be available if the button is pressed
-        // AND we're not in the middle of a melee attack string
-        _requestedRanged = input.Ranged && !_comboActive;
+            // Ranged attack should only be available if the button is pressed
+            // AND we're not in the middle of a melee attack string
+            _requestedRanged = input.Ranged && !_comboActive;
 
-        // Melee attack should only be available if the button is pressed
-        // AND we're not firing ranged attacks
-        _requestedMelee = input.Melee && !_requestedRanged;
+            // Melee attack should only be available if the button is pressed
+            // AND we're not firing ranged attacks
+            _requestedMelee = input.Melee && !_requestedRanged;
+        }
     }
 
     public void UpdateAttack(MovementState movementState, float deltaTime) 
@@ -276,7 +283,7 @@ public class PlayerAttack : MonoBehaviour
             }
 
             // Reset combo when timer exceeds input window
-            if (_comboTimer > comboBuffer) 
+            if (_comboTimer > comboBuffer && _comboActive) 
             {
                 ResetCombo();
                 DisableHitbox();
@@ -363,6 +370,9 @@ public class PlayerAttack : MonoBehaviour
 
     public AttackState GetState() => _state;
     public AttackState GetPrevState() => _prevState;
+
+    public void EnableAttackInput() => _inputEnabled = true;
+    public void DisableAttackInput() => _inputEnabled = false;
 
     public bool HasMeleeTarget() => _hasMeleeTarget;
 }

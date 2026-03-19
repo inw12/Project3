@@ -234,6 +234,7 @@ public class PlayerMovement : MonoBehaviour
 
         // Stop any character movement
         _requestedMovement = _state.Velocity = Vector3.zero;
+        _state.CurrentAction = MovementAction.Idle;
     } 
     
     public void UpdateVelocity(Vector3 velocity, float acceleration)
