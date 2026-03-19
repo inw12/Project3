@@ -2,6 +2,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TrainingDummyStats", menuName = "EnemyStats/TrainingDummy")]
 public class TrainingDummyStats : ScriptableObject
 {
+    [Header("Game Components")]
+    public GameObject projectile;
+    public LayerMask targetLayer;
     [Header("Basic Ranged Attack")]
     public float basicRangedDamage = 1f;
     public float basicRangedSpeed = 10f;
@@ -11,7 +14,11 @@ public class TrainingDummyStats : ScriptableObject
     public float focusedRangedDamage = 5f;
     public float focusedRangedSpeed = 50f;
     public float focusedRangedRange = 100f;
-    public float focusedRangedChargeTime = 5f;
-    [Header("Game Components")]
-    public GameObject projectile;
+    public float focusedRangedChargeTime = 3f;
+    [Header("Zone Attack")]
+    public float zoneAttackDamage = 5f;
+    public float zoneAttackRadius = 15f;
+    public float zoneAttackChargeTime = 2.5f;
+    public Color zoneBaseColor;
+    public Color zoneFillColor;
 }
