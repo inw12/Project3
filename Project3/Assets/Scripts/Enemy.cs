@@ -12,18 +12,18 @@ public struct EnemyState
 }
 public enum EnemyAction
 {
-    Idle,
-    Move,
-    Attack,
-    Stagger
+    Idle    = 0,
+    Move    = 1,
+    Attack  = 2,
+    Stagger = 3
 }
 public enum EnemyAttack
 {
-    None,
-    Ranged,
-    FocusedRanged,
-    Melee,
-    Zone
+    None            = 0,
+    Ranged          = 1,
+    FocusedRanged   = 2,
+    Melee           = 3,
+    Zone            = 4
 }
 
 public class Enemy : MonoBehaviour
