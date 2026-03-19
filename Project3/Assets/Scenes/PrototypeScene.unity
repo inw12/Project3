@@ -730,7 +730,9 @@ MonoBehaviour:
   playerAttack: {fileID: 825495741}
   animator: {fileID: 5866666020582766721}
   parryBox: {fileID: 711639826}
+  hurtbox: {fileID: 1440943202}
   blockDuration: 0.4
+  parryStartup: 0.1
 --- !u!1 &824463752
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,7 +893,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a49f02a21fd944e99d1240d1800057d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainingDummyAttack
-  attackType: 4
+  attackType: 0
   stats: {fileID: 11400000, guid: 9b524caedbe8d4ae4a9b911d5f8bddec, type: 2}
   projectilePool: {fileID: 979153604}
   attackIndicator: {fileID: 1990647169}

@@ -149,9 +149,10 @@ public class TrainingDummyAttack : MonoBehaviour
             var hit = _hitBuffer.FirstOrDefault(c => c != null);
 
             // Trigger damaging effects
-            if (hit && hit.TryGetComponent(out PlayerHealth player))
+            if (hit && hit.gameObject.layer == LayerMask.NameToLayer("PlayerHurtbox"))
             {
-                player.DecreaseHealth(_runtimeStats.zoneAttackDamage);
+                if (hit.TryGetComponent(out PlayerHealth player))
+                    player.DecreaseHealth(_runtimeStats.zoneAttackDamage);
             }
 
             // Exit 'Zone Attack' State

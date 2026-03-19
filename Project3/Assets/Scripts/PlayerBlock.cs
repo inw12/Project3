@@ -7,8 +7,10 @@ public class PlayerBlock : MonoBehaviour
     [SerializeField] private Animator animator;
     [Space]
     [SerializeField] private CapsuleCollider parryBox;
+    [SerializeField] private CapsuleCollider hurtbox;
     [Space]
     [SerializeField] private float blockDuration = 0.6f;
+    [SerializeField] private float parryStartup = 0.2f;
     private float _blockTimer;
 
     private bool _requestedBlock;
@@ -19,7 +21,7 @@ public class PlayerBlock : MonoBehaviour
 
     public void Initialize()
     {
-        parryBox.enabled = false;
+        DisableParryBox();
     }
 
     public void UpdateInput(bool input)
@@ -49,6 +51,8 @@ public class PlayerBlock : MonoBehaviour
         {
             _blockTimer += deltaTime;
             
+            if (_blockTimer >= parryStartup) EnableParryBox();
+
             // Reset back to normal at the end of block duration
             if (_blockTimer >= blockDuration)
             {
@@ -57,12 +61,22 @@ public class PlayerBlock : MonoBehaviour
 
                 playerMovement.EnableMovementInput();
                 playerAttack.EnableAttackInput();
+
+                DisableParryBox();
             }
         }
     }
 
-    public void EnableParryBox() => parryBox.enabled = true;
-    public void DisableParryBox() => parryBox.enabled = false;
+    public void EnableParryBox()
+    {
+        parryBox.enabled = true;
+        hurtbox.enabled = false;
+    }
+    public void DisableParryBox()
+    {
+        parryBox.enabled = false;
+        hurtbox.enabled = true;
+    }
 
     public void TriggerParry() => _parryTriggered = true;
 }
