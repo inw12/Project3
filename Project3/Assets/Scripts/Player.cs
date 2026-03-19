@@ -5,6 +5,7 @@
 using UnityEngine;
 public class Player : MonoBehaviour
 {
+    // Used by enemy attacks to target player
     public static Player Instance { get; private set; }
 
     [SerializeField] private Camera mainCamera;

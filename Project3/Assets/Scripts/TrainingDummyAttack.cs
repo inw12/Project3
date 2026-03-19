@@ -1,13 +1,16 @@
 using UnityEngine;
 public class TrainingDummyAttack : MonoBehaviour
 {
+    // "Who are we attacking?"
+    private Transform _target;
+
+    [SerializeField] private GameObject projectile;
+    [Header("Basic Ranged")]
     [SerializeField] private float damage = 1f;
     [SerializeField] private float speed = 10f;
     [SerializeField] private float fireRate = 1f;
     [SerializeField] private float range = 25f;
     private float _fireTimer;
-    [Space]
-    [SerializeField] private GameObject projectile;
 
     void Start()
     {
@@ -16,6 +19,12 @@ public class TrainingDummyAttack : MonoBehaviour
 
     void Update()
     {
+        // Get player position
+        if (Player.Instance)
+        {
+            _target = Player.Instance.transform;
+        }
+
         _fireTimer += Time.deltaTime;
 
         if (_fireTimer >= fireRate)
@@ -26,7 +35,7 @@ public class TrainingDummyAttack : MonoBehaviour
                 Damage = damage,
                 Speed = speed,
                 Range = range,
-                Direction = Vector3.back                
+                Direction = (_target.position - transform.position).normalized
             };
 
             // spawn bullet
