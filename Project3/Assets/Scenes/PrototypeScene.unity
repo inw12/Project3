@@ -549,7 +549,7 @@ MonoBehaviour:
   playerAttack: {fileID: 825495741}
   animator: {fileID: 5866666020582766721}
   parryBox: {fileID: 711639826}
-  blockDuration: 0.5
+  blockDuration: 0.4
 --- !u!1 &824463752
 GameObject:
   m_ObjectHideFlags: 0
