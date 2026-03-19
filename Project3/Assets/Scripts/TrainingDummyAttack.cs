@@ -122,7 +122,9 @@ public class TrainingDummyAttack : MonoBehaviour
     {
         if (_previous != _current)
         {
-            attackIndicator.Initialize(_runtimeStats, transform.position);
+            var targetPosition = transform.position;
+            targetPosition.y = 0f;
+            attackIndicator.Initialize(_runtimeStats, targetPosition);
             attackIndicator.Show();
         }
 
@@ -133,7 +135,7 @@ public class TrainingDummyAttack : MonoBehaviour
         if (p >= 1)
         {
             // * trigger attack * 
-            
+
             attackIndicator.Hide();
         }
         

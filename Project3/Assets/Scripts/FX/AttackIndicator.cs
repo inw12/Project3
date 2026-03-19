@@ -24,7 +24,7 @@ public class AttackIndicator : MonoBehaviour
         var diameter = stats.zoneAttackRadius * 2f;
         transform.localScale = new Vector3(diameter, 1f, diameter);
 
-        //transform.position = position;
+        transform.position = position;
     }
 
     public void UpdateIndicator(float p)
@@ -33,7 +33,7 @@ public class AttackIndicator : MonoBehaviour
         // localScale stays within (0,0,0) to (1,1,1) so it
         // never exceeds the base indicator's size
         float scale = Mathf.Clamp01(p);
-        fillTransform.localScale = new Vector3(scale, 1f, scale);
+        fillTransform.localScale = new Vector3(scale, scale, scale);
     }
 
     public void Show()
