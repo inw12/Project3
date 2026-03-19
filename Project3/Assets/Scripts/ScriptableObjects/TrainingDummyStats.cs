@@ -19,6 +19,4 @@ public class TrainingDummyStats : ScriptableObject
     public float zoneAttackDamage = 5f;
     public float zoneAttackRadius = 15f;
     public float zoneAttackChargeTime = 2.5f;
-    public Color zoneBaseColor;
-    public Color zoneFillColor;
 }

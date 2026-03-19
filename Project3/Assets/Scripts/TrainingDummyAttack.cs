@@ -14,10 +14,18 @@ public class TrainingDummyAttack : MonoBehaviour
     [SerializeField] private TrainingDummyStats stats;
     [SerializeField] private TrainingDummyProjectilePool projectilePool;
     private TrainingDummyStats _runtimeStats;
+    [Space]
+    [SerializeField] private AttackIndicator attackIndicator;
 
     private Transform _target;
     private float _fireTimer;       // Basic Ranged Fire Rate Timer
-    private float _chargeTimer;     // Focused Ranged Charge Timer
+    private float _chargeTimer;     // Charge Timer for focused shot and zone attack
+
+    private readonly Collider[] _hitBuffer = new Collider[5];
+
+    // State Machine Control
+    private AttackType _current;
+    private AttackType _previous;
 
     void Start()
     {
@@ -32,19 +40,30 @@ public class TrainingDummyAttack : MonoBehaviour
         _target = Player.Instance ? Player.Instance.transform : _target;
 
         // Attack State Machine
-        switch (attackType)
+        _current = attackType;
+        switch (_current)
         {
             // Basic Ranged Attack
             case AttackType.Basic:
                 BasicRangedAttack();
                 break;
+            // Focused Ranged Attack
             case AttackType.Focused:
                 FocusedRangedAttack();
+                break;
+            // Zone Attack
+            case AttackType.Zone:
+                ZoneAttack();
                 break;
             // No Attack
             default:
                 break;
         }
+    }
+
+    void LateUpdate()
+    {
+        _previous = _current;
     }
 
     private void BasicRangedAttack()
@@ -79,7 +98,7 @@ public class TrainingDummyAttack : MonoBehaviour
         /// 
 
         // Fire Focused Shot
-        if (_chargeTimer >= stats.focusedRangedChargeTime)
+        if (_chargeTimer >= _runtimeStats.focusedRangedChargeTime)
         {
             // initialize stats
             var targetDirection = (Vector3.ProjectOnPlane(_target.position, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
@@ -97,5 +116,26 @@ public class TrainingDummyAttack : MonoBehaviour
             // reset charge timer
             _chargeTimer = 0f;
         }
+    }
+
+    private void ZoneAttack()
+    {
+        if (_previous != _current)
+        {
+            attackIndicator.Initialize(_runtimeStats, transform.position);
+            attackIndicator.Show();
+        }
+
+        _chargeTimer += Time.deltaTime;
+        var p = _chargeTimer / _runtimeStats.zoneAttackChargeTime;
+        attackIndicator.UpdateIndicator(p);
+
+        if (p >= 1)
+        {
+            // * trigger attack * 
+            
+            attackIndicator.Hide();
+        }
+        
     }
 }

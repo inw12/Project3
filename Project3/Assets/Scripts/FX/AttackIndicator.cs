@@ -4,29 +4,27 @@ public class AttackIndicator : MonoBehaviour
 {
     [SerializeField] private Renderer baseRenderer;
     [SerializeField] private Renderer fillRenderer;
-    private Material baseMaterial;
-    private Material fillMaterial;
+    [SerializeField] private Color baseColor;
+    [SerializeField] private Color fillColor;
 
     private Transform fillTransform;
-    private static readonly int BaseColor = Shader.PropertyToID("_Color");
 
     void Awake()
     {
-        baseMaterial = baseRenderer.material;
-        fillMaterial = fillRenderer.material;
+        baseRenderer.material.color = baseColor;
+        fillRenderer.material.color = fillColor;
 
         fillTransform = fillRenderer.transform;
 
         Hide();
     }
 
-    public void Initialize(TrainingDummyStats stats)
+    public void Initialize(TrainingDummyStats stats, Vector3 position)
     {
         var diameter = stats.zoneAttackRadius * 2f;
         transform.localScale = new Vector3(diameter, 1f, diameter);
 
-        baseMaterial.SetColor(BaseColor, stats.zoneBaseColor);
-        fillMaterial.SetColor(BaseColor, stats.zoneFillColor);
+        //transform.position = position;
     }
 
     public void UpdateIndicator(float p)

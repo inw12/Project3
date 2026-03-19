@@ -505,7 +505,7 @@ Transform:
   m_GameObject: {fileID: 519902178}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -595,7 +595,7 @@ Transform:
   m_GameObject: {fileID: 594015815}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.001, z: 0}
+  m_LocalPosition: {x: 0, y: 0.002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -891,9 +891,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a49f02a21fd944e99d1240d1800057d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainingDummyAttack
-  attackType: 1
+  attackType: 4
   stats: {fileID: 11400000, guid: 9b524caedbe8d4ae4a9b911d5f8bddec, type: 2}
   projectilePool: {fileID: 979153604}
+  attackIndicator: {fileID: 1990647169}
 --- !u!1 &825495736
 GameObject:
   m_ObjectHideFlags: 0
@@ -1771,6 +1772,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AttackIndicator
   baseRenderer: {fileID: 519902180}
   fillRenderer: {fileID: 594015817}
+  baseColor: {r: 1, g: 0.2688679, b: 0.2688679, a: 0.2509804}
+  fillColor: {r: 1, g: 0, b: 0, a: 0.5019608}
 --- !u!1 &2105932396
 GameObject:
   m_ObjectHideFlags: 0

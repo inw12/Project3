@@ -27,5 +27,5 @@ MonoBehaviour:
   zoneAttackDamage: 5
   zoneAttackRadius: 15
   zoneAttackChargeTime: 2.5
-  zoneBaseIndicator: {r: 0.8962264, g: 0.32416743, b: 0.2325116, a: 0.29803923}
-  zoneFillIndicator: {r: 0.8962264, g: 0, b: 0, a: 0.6}
+  zoneBaseColor: {r: 1, g: 0.15566039, b: 0.15566039, a: 0.29803923}
+  zoneFillColor: {r: 1, g: 0, b: 0, a: 0.6}
