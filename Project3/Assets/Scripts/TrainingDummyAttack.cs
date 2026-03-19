@@ -16,12 +16,14 @@ public class TrainingDummyAttack : MonoBehaviour
     private TrainingDummyStats _runtimeStats;
 
     private Transform _target;
-    private float _fireTimer;
+    private float _fireTimer;       // Basic Ranged Fire Rate Timer
+    private float _chargeTimer;     // Focused Ranged Charge Timer
 
     void Start()
     {
         _runtimeStats = Instantiate(stats);
         _fireTimer = 0f;
+        _chargeTimer = 0f;
     }
 
     void Update()
@@ -35,6 +37,9 @@ public class TrainingDummyAttack : MonoBehaviour
             // Basic Ranged Attack
             case AttackType.Basic:
                 BasicRangedAttack();
+                break;
+            case AttackType.Focused:
+                FocusedRangedAttack();
                 break;
             // No Attack
             default:
@@ -62,6 +67,35 @@ public class TrainingDummyAttack : MonoBehaviour
 
             // reset fire rate timer
             _fireTimer = 0f;
+        }
+    }
+
+    public void FocusedRangedAttack()
+    {
+        _chargeTimer += Time.deltaTime;
+
+        ///
+        /// ** Focused shot buildup implementation here **
+        /// 
+
+        // Fire Focused Shot
+        if (_chargeTimer >= stats.focusedRangedChargeTime)
+        {
+            // initialize stats
+            var targetDirection = (Vector3.ProjectOnPlane(_target.position, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
+            var stats = new DummyProjectileStats
+            {
+                Damage = _runtimeStats.focusedRangedDamage,
+                Speed = _runtimeStats.focusedRangedSpeed,
+                Range = _runtimeStats.focusedRangedRange,
+                Direction = targetDirection
+            };
+
+            // get bullet from pool
+            projectilePool.Get(stats, transform);
+
+            // reset charge timer
+            _chargeTimer = 0f;
         }
     }
 }

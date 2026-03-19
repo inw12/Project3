@@ -19,4 +19,5 @@ MonoBehaviour:
   focusedRangedDamage: 5
   focusedRangedSpeed: 50
   focusedRangedRange: 100
+  focusedRangedChargeTime: 3
   projectile: {fileID: 1860350838970000365, guid: 4378675d9f81b433f8ac00c482c7c5d7, type: 3}

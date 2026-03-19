@@ -11,6 +11,7 @@ public class TrainingDummyStats : ScriptableObject
     public float focusedRangedDamage = 5f;
     public float focusedRangedSpeed = 50f;
     public float focusedRangedRange = 100f;
+    public float focusedRangedChargeTime = 5f;
     [Header("Game Components")]
     public GameObject projectile;
 }
