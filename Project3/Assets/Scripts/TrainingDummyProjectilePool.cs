@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.Pool;
-public class PlayerProjectilePool : MonoBehaviour
+public class TrainingDummyProjectilePool : MonoBehaviour
 {
-    // Referenced by 'PlayerAttack' to spawn projectiles
-    public static PlayerProjectilePool Instance { get; private set; }
+    // Referenced by 'TrainingDummyAttack' to spawn projectiles
+    public static TrainingDummyProjectilePool Instance { get; private set; }
 
     [SerializeField] private GameObject projectile;
     [Space]
@@ -44,10 +44,10 @@ public class PlayerProjectilePool : MonoBehaviour
     }
     private void OnDestroyProjectile(GameObject item) => Destroy(item);
 
-    public void Get(PlayerProjectileStats stats, Transform spawn)
+    public void Get(DummyProjectileStats stats, Transform spawn)
     {
         GameObject p = _pool.Get();
-        if (p.TryGetComponent(out PlayerProjectile q)) {
+        if (p.TryGetComponent(out TrainingDummyProjectile q)) {
             q.Initialize(stats, spawn);
             q.gameObject.SetActive(true);
         }

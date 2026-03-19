@@ -348,6 +348,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1566646404}
+  - {fileID: 979153603}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
@@ -712,11 +713,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrainingDummyAttack
   attackType: 1
   stats: {fileID: 11400000, guid: 9b524caedbe8d4ae4a9b911d5f8bddec, type: 2}
-  projectile: {fileID: 1860350838970000365, guid: 4378675d9f81b433f8ac00c482c7c5d7, type: 3}
-  damage: 1
-  speed: 15
-  fireRate: 1.25
-  range: 40
+  projectilePool: {fileID: 979153604}
 --- !u!1 &825495736
 GameObject:
   m_ObjectHideFlags: 0
@@ -1053,6 +1050,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 970500954}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &979153602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 979153603}
+  - component: {fileID: 979153604}
+  m_Layer: 0
+  m_Name: TrainingDummyProjectilePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &979153603
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979153602}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 372660377}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &979153604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 979153602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0493638dda3fe49c48c1ff89ab799f95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrainingDummyProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 4378675d9f81b433f8ac00c482c7c5d7, type: 3}
+  defaultCapacity: 25
+  maxCapacity: 100
 --- !u!1 &1111468720
 GameObject:
   m_ObjectHideFlags: 0

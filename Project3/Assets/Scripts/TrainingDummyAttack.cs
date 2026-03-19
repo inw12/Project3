@@ -12,6 +12,7 @@ public class TrainingDummyAttack : MonoBehaviour
     [SerializeField] private AttackType attackType;
     [Space]
     [SerializeField] private TrainingDummyStats stats;
+    [SerializeField] private TrainingDummyProjectilePool projectilePool;
     private TrainingDummyStats _runtimeStats;
 
     private Transform _target;
@@ -56,12 +57,8 @@ public class TrainingDummyAttack : MonoBehaviour
                 Direction = targetDirection
             };
 
-            // spawn bullet
-            var bullet = Instantiate(_runtimeStats.projectile);
-            if (bullet.TryGetComponent(out TrainingDummyProjectile p))
-            {
-                p.Initialize(stats, transform);
-            }
+            // get bullet from pool
+            projectilePool.Get(stats, transform);
 
             // reset fire rate timer
             _fireTimer = 0f;
