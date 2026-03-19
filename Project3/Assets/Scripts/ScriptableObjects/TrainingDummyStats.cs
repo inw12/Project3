@@ -15,6 +15,8 @@ public class TrainingDummyStats : ScriptableObject
     public float focusedRangedSpeed = 50f;
     public float focusedRangedRange = 100f;
     public float focusedRangedChargeTime = 3f;
+    [Header("Melee Attack")]
+    public float meleeDamage = 2f;
     [Header("Zone Attack")]
     public float zoneAttackDamage = 5f;
     public float zoneAttackRadius = 15f;

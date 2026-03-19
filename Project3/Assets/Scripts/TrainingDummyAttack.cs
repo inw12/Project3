@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 public class TrainingDummyAttack : MonoBehaviour
@@ -17,10 +18,26 @@ public class TrainingDummyAttack : MonoBehaviour
     private TrainingDummyStats _runtimeStats;
     [Space]
     [SerializeField] private AttackIndicator attackIndicator;
+    [Space]
+    [SerializeField] private float meleeSpeed = 10f;
+    [SerializeField] private float sweepRadius = 0.1f;
+    [SerializeField] private float meleeDuration = 0.5f;
+    private float _meleeTimer;
+    [SerializeField] private GameObject sword;
+    [SerializeField] private Transform swordPivot;
+    [SerializeField] private Transform swordHitbox;
+    [SerializeField] private float startRotation;
+    [SerializeField] private float endRotation;
+    private readonly HashSet<Collider> _meleeHits = new();
+    private Vector3 _prevSweep;
+    [Space]
+    [SerializeField] private float attackCooldown = 2f;
 
     private Transform _target;
     private float _fireTimer;       // Basic Ranged Fire Rate Timer
     private float _chargeTimer;     // Charge Timer for focused shot and zone attack
+
+    private float _stateTimer; 
 
     private readonly Collider[] _hitBuffer = new Collider[5];
 
@@ -33,6 +50,10 @@ public class TrainingDummyAttack : MonoBehaviour
         _runtimeStats = Instantiate(stats);
         _fireTimer = 0f;
         _chargeTimer = 0f;
+
+        // Melee attack stuff
+        sword.SetActive(false);
+        swordHitbox.gameObject.SetActive(false);
     }
 
     void Update()
@@ -52,12 +73,17 @@ public class TrainingDummyAttack : MonoBehaviour
             case AttackType.Focused:
                 FocusedRangedAttack();
                 break;
+            // Melee Atttack
+            case AttackType.Melee:
+                MeleeAttack();
+                break;
             // Zone Attack
             case AttackType.Zone:
                 ZoneAttack();
                 break;
             // No Attack
             default:
+                SwitchState(AttackType.Melee);
                 break;
         }
     }
@@ -65,6 +91,16 @@ public class TrainingDummyAttack : MonoBehaviour
     void LateUpdate()
     {
         _previous = _current;
+    }
+
+    private void SwitchState(AttackType attack)
+    {
+        _stateTimer += Time.deltaTime;
+        if (_stateTimer >= attackCooldown)
+        {
+            attackType = attack;
+            _stateTimer = 0f;
+        }
     }
 
     private void BasicRangedAttack()
@@ -117,6 +153,74 @@ public class TrainingDummyAttack : MonoBehaviour
             // reset charge timer
             _chargeTimer = 0f;
         }
+    }
+
+    private void MeleeAttack()
+    {
+        // Melee Attack START
+        if (_previous != _current)
+        {
+            _meleeHits.Clear();
+            _meleeTimer = 0f;
+
+            swordPivot.localEulerAngles = startRotation * Vector3.up;
+            _prevSweep = swordHitbox.position;
+
+            sword.SetActive(true);
+            swordHitbox.gameObject.SetActive(true);
+        }
+
+        _meleeTimer += Time.deltaTime;
+
+        // Melee Attack Swing
+        swordPivot.localRotation = Quaternion.Lerp
+        (
+            swordPivot.localRotation,
+            Quaternion.Euler(endRotation * Vector3.up),
+            1f - Mathf.Exp(-meleeSpeed * Time.deltaTime)
+        );
+
+        // Detect hits
+        var direction = swordHitbox.position - _prevSweep;
+        var distance = direction.magnitude;
+
+        if (distance < 0.001f) return;
+
+        var hits = Physics.SphereCastAll
+        (
+            _prevSweep,
+            sweepRadius,
+            direction.normalized,
+            distance,
+            _runtimeStats.targetLayer
+        );
+        foreach (var hit in hits)
+        {
+            if (_meleeHits.Contains(hit.collider) || !hit.collider) continue;
+
+            _meleeHits.Add(hit.collider);
+
+            // Look for player hurtbox/parrybox
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("PlayerHurtbox"))
+            {
+                if (hit.collider.TryGetComponent(out PlayerHealth player))
+                    player.DecreaseHealth(_runtimeStats.meleeDamage);
+            }
+        }
+        _prevSweep = swordHitbox.position;
+
+        if (_meleeTimer > meleeDuration)
+        {
+            attackType = AttackType.None;
+            sword.SetActive(false);
+            swordHitbox.gameObject.SetActive(false);
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(swordHitbox.position, sweepRadius);
     }
 
     private void ZoneAttack()
