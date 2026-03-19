@@ -83,7 +83,6 @@ public class TrainingDummyAttack : MonoBehaviour
                 break;
             // No Attack
             default:
-                SwitchState(AttackType.Melee);
                 break;
         }
     }
@@ -266,6 +265,5 @@ public class TrainingDummyAttack : MonoBehaviour
             _chargeTimer = 0f;
             attackIndicator.Hide();
         }
-        
     }
 }
