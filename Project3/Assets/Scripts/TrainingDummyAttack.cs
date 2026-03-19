@@ -1,6 +1,17 @@
 using UnityEngine;
 public class TrainingDummyAttack : MonoBehaviour
 {
+    #region Attack Types
+    public enum AttackType
+    {
+        None,
+        Basic,
+        Focused,
+        Melee,
+        Zone
+    }
+    [SerializeField] private AttackType attackType;
+    #endregion
     // "Who are we attacking?"
     private Transform _target;
 
@@ -20,22 +31,34 @@ public class TrainingDummyAttack : MonoBehaviour
     void Update()
     {
         // Get player position
-        if (Player.Instance)
+        _target = Player.Instance ? Player.Instance.transform : _target;
+
+        // Attack State Machine
+        switch (attackType)
         {
-            _target = Player.Instance.transform;
+            // Basic Ranged Attack
+            case AttackType.Basic:
+                BasicRangedAttack();
+                break;
+            // No Attack
+            default:
+                break;
         }
+    }
 
+    private void BasicRangedAttack()
+    {
         _fireTimer += Time.deltaTime;
-
         if (_fireTimer >= fireRate)
         {
             // initialize stats
+            var targetDirection = (Vector3.ProjectOnPlane(_target.position, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
             var stats = new DummyProjectileStats
             {
                 Damage = damage,
                 Speed = speed,
                 Range = range,
-                Direction = (_target.position - transform.position).normalized
+                Direction = targetDirection
             };
 
             // spawn bullet
