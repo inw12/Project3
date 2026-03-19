@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class AttackIndicator : MonoBehaviour
 {
     [SerializeField] private Renderer baseRenderer;
@@ -29,9 +28,6 @@ public class AttackIndicator : MonoBehaviour
 
     public void UpdateIndicator(float p)
     {
-        // Scale from 0 to 1 relative to the parent's scale
-        // localScale stays within (0,0,0) to (1,1,1) so it
-        // never exceeds the base indicator's size
         float scale = Mathf.Clamp01(p);
         fillTransform.localScale = new Vector3(scale, scale, scale);
     }

@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 public class TrainingDummyAttack : MonoBehaviour
 {
@@ -120,6 +121,7 @@ public class TrainingDummyAttack : MonoBehaviour
 
     private void ZoneAttack()
     {
+        // Zone Attack START
         if (_previous != _current)
         {
             var targetPosition = transform.position;
@@ -128,14 +130,35 @@ public class TrainingDummyAttack : MonoBehaviour
             attackIndicator.Show();
         }
 
+        // Update timer + attack indicator
         _chargeTimer += Time.deltaTime;
         var p = _chargeTimer / _runtimeStats.zoneAttackChargeTime;
         attackIndicator.UpdateIndicator(p);
 
+        // Execute attack once charge time reached
         if (p >= 1)
         {
-            // * trigger attack * 
+            // "Is the player within range?"
+            var hits = Physics.OverlapSphereNonAlloc
+            (
+                transform.position,
+                _runtimeStats.zoneAttackRadius,
+                _hitBuffer,
+                _runtimeStats.targetLayer
+            );
+            var hit = _hitBuffer.FirstOrDefault(c => c != null);
 
+            // Trigger damaging effects
+            if (hit && hit.TryGetComponent(out PlayerHealth player))
+            {
+                player.DecreaseHealth(_runtimeStats.zoneAttackDamage);
+            }
+
+            // Exit 'Zone Attack' State
+            attackType = AttackType.None;
+
+            // Reset everything
+            _chargeTimer = 0f;
             attackIndicator.Hide();
         }
         
