@@ -1,7 +1,6 @@
 using UnityEngine;
 public class TrainingDummyAttack : MonoBehaviour
 {
-    #region Attack Types
     public enum AttackType
     {
         None,
@@ -11,20 +10,16 @@ public class TrainingDummyAttack : MonoBehaviour
         Zone
     }
     [SerializeField] private AttackType attackType;
-    #endregion
-    // "Who are we attacking?"
-    private Transform _target;
+    [Space]
+    [SerializeField] private TrainingDummyStats stats;
+    private TrainingDummyStats _runtimeStats;
 
-    [SerializeField] private GameObject projectile;
-    [Header("Basic Ranged")]
-    [SerializeField] private float damage = 1f;
-    [SerializeField] private float speed = 10f;
-    [SerializeField] private float fireRate = 1f;
-    [SerializeField] private float range = 25f;
+    private Transform _target;
     private float _fireTimer;
 
     void Start()
     {
+        _runtimeStats = Instantiate(stats);
         _fireTimer = 0f;
     }
 
@@ -49,20 +44,20 @@ public class TrainingDummyAttack : MonoBehaviour
     private void BasicRangedAttack()
     {
         _fireTimer += Time.deltaTime;
-        if (_fireTimer >= fireRate)
+        if (_fireTimer >= _runtimeStats.basicRangedFireRate)
         {
             // initialize stats
             var targetDirection = (Vector3.ProjectOnPlane(_target.position, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
             var stats = new DummyProjectileStats
             {
-                Damage = damage,
-                Speed = speed,
-                Range = range,
+                Damage = _runtimeStats.basicRangedDamage,
+                Speed = _runtimeStats.basicRangedSpeed,
+                Range = _runtimeStats.basicRangedRange,
                 Direction = targetDirection
             };
 
             // spawn bullet
-            var bullet = Instantiate(projectile);
+            var bullet = Instantiate(_runtimeStats.projectile);
             if (bullet.TryGetComponent(out TrainingDummyProjectile p))
             {
                 p.Initialize(stats, transform);

@@ -710,6 +710,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a49f02a21fd944e99d1240d1800057d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TrainingDummyAttack
+  attackType: 1
+  stats: {fileID: 11400000, guid: 9b524caedbe8d4ae4a9b911d5f8bddec, type: 2}
   projectile: {fileID: 1860350838970000365, guid: 4378675d9f81b433f8ac00c482c7c5d7, type: 3}
   damage: 1
   speed: 15
