@@ -18,9 +18,9 @@ public class AttackIndicator : MonoBehaviour
         Hide();
     }
 
-    public void Initialize(TrainingDummyStats stats, Vector3 position)
+    public void Initialize(float radius, Vector3 position)
     {
-        var diameter = stats.zoneAttackRadius * 2f;
+        var diameter = radius * 2f;
         transform.localScale = new Vector3(diameter, 1f, diameter);
 
         transform.position = position;

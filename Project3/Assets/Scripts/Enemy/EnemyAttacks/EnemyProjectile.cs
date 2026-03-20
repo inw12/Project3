@@ -21,7 +21,7 @@ public class EnemyProjectile : MonoBehaviour
     private float _distanceTraveled;
     private float _distanceThisFrame;
 
-    public void Initialize(PlayerProjectileStats stats, Transform spawn)
+    public void Initialize(EnemyProjectileStats stats, Transform spawn)
     {
         // Spawn position
         transform.position = spawn.position;
