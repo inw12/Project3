@@ -28,6 +28,8 @@ public enum EnemyAttack
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private EnemyAction currentAction;
+    [SerializeField] private EnemyAttack currentAttack;
     [Header("Enemy Components")]
     [SerializeField] private EnemyMovement enemyMovement;
     [Header("Basic Stats")]
@@ -57,7 +59,8 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        
+        _state.CurrentAction = currentAction;
+        _state.CurrentAttack = currentAttack;
     }
 
     void LateUpdate()
