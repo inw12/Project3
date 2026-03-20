@@ -1,8 +1,6 @@
 using UnityEngine;
 public class ScatterShot : EnemyRangedAttack
 {
-    [SerializeField] private Transform projectileSpawn;
-
     public override void Attack(Transform target)
     {
         _fireTimer += Time.deltaTime;

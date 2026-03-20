@@ -2,7 +2,7 @@ using UnityEngine;
 public abstract class EnemyAttack : MonoBehaviour
 {
     // Attack ID (identification for state machine and animator control)
-    protected int attackID;
+    [SerializeField] protected int attackID;
 
     protected int playerHurtbox;
     protected int playerParrybox;
