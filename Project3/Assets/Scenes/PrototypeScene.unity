@@ -1124,6 +1124,63 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
   hurtbox: {fileID: 1440943202}
   health: 10
+--- !u!1001 &1506073653
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7516555721694659840, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503304585552219348, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
+      propertyPath: m_Name
+      value: AttackIndicator-CIRCLE
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ba96b706f23ad4a67986bbe3662b5686, type: 3}
 --- !u!1 &1506194583
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1482,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d85f02b8d61f143fca7f84854bc1d9b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  currentAction: 0
+  currentAttack: 0
   enemyMovement: {fileID: 1995691657}
   health: 100
   moveSpeed: 15
@@ -5901,3 +5960,4 @@ SceneRoots:
   - {fileID: 372660377}
   - {fileID: 825495737}
   - {fileID: 1995691654}
+  - {fileID: 1506073653}

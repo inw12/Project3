@@ -216,12 +216,6 @@ public class TrainingDummyAttack : MonoBehaviour
         }
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(swordHitbox.position, sweepRadius);
-    }
-
     private void ZoneAttack()
     {
         // Zone Attack START
