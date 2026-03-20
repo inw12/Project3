@@ -8,7 +8,7 @@ using UnityEngine;
 public struct EnemyState
 {
     public EnemyAction CurrentAction;
-    public EnemyAttack CurrentAttack;
+    public EnemyAttackType CurrentAttack;
 }
 public enum EnemyAction
 {
@@ -17,7 +17,7 @@ public enum EnemyAction
     Attack  = 2,
     Stagger = 3
 }
-public enum EnemyAttack
+public enum EnemyAttackType
 {
     None            = 0,
     Ranged          = 1,
@@ -29,7 +29,7 @@ public enum EnemyAttack
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private EnemyAction currentAction;
-    [SerializeField] private EnemyAttack currentAttack;
+    [SerializeField] private EnemyAttackType currentAttack;
     [Header("Enemy Components")]
     [SerializeField] private EnemyMovement enemyMovement;
     [Header("Basic Stats")]
@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
 
         // Initialize State Machine
         _state.CurrentAction = EnemyAction.Idle;
-        _state.CurrentAttack = EnemyAttack.None;
+        _state.CurrentAttack = EnemyAttackType.None;
         _prevState = _state;
     }
 
