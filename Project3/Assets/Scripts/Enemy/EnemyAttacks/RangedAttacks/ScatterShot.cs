@@ -1,16 +1,7 @@
 using UnityEngine;
-
-public class ScatterShot : MonoBehaviour
+public class ScatterShot : EnemyRangedAttack
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void Attack()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
