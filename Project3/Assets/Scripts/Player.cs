@@ -93,7 +93,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        var deltaTime = Time.deltaTime;
+        var deltaTime = Time.fixedDeltaTime;
         playerMovement.UpdateMovement(deltaTime);
     }
 

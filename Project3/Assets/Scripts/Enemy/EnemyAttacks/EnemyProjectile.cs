@@ -23,7 +23,7 @@ public class EnemyProjectile : MonoBehaviour
     private float _distanceTraveled;
     private float _distanceThisFrame;
 
-    public void Initialize(EnemyRangedAttack attack, Transform spawn, Transform target)
+    public void Initialize(EnemyRangedAttack attack, Transform spawn, Vector3 direction)
     {
         enemyAttack = attack;
 
@@ -35,9 +35,6 @@ public class EnemyProjectile : MonoBehaviour
         _stats.Damage = attack.Damage();
         _stats.Speed = attack.ProjectileSpeed();
         _stats.Range = attack.Range();
-
-        // Calculate target direction
-        var direction = (Vector3.ProjectOnPlane(target.position, Vector3.up) - Vector3.ProjectOnPlane(spawn.position, Vector3.up)).normalized;
         _stats.Direction = direction;
     }
 
@@ -67,7 +64,7 @@ public class EnemyProjectile : MonoBehaviour
     void FixedUpdate()
     {
         // Update distance to travel this frame
-        _distanceThisFrame = _stats.Speed * Time.deltaTime;
+        _distanceThisFrame = _stats.Speed * Time.fixedDeltaTime;
 
         // Travel forward
         transform.position += _stats.Direction * _distanceThisFrame;
