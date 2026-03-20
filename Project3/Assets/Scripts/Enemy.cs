@@ -7,8 +7,9 @@ using UnityEngine;
 
 public struct EnemyState
 {
-    public EnemyAction CurrentAction;
-    public EnemyAttackType CurrentAttack;
+    public EnemyAction CurrentAction;       // what action is CURRENTLY happening
+    public EnemyAction IntendedAction;      // what action the enemy WANTS to do
+    public EnemyAttackType CurrentAttack;   // what ATTACK is the enemy currently performing?
 }
 public enum EnemyAction
 {
@@ -30,6 +31,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private EnemyAction currentAction;
     [SerializeField] private EnemyAttackType currentAttack;
+    [SerializeField] private float stateSwitchTimer = 3f;
     [Header("Enemy Components")]
     [SerializeField] private EnemyMovement enemyMovement;
     [Header("Basic Stats")]

@@ -1,18 +1,18 @@
-using UnityEngine;
 using System.Linq;
-public struct DummyProjectileStats
+using UnityEngine;
+public struct EnemyProjectileStats
 {
     public float Damage;
     public float Speed;
     public float Range;
     public Vector3 Direction;
 }
-public class TrainingDummyProjectile : MonoBehaviour
+public class EnemyProjectile : MonoBehaviour
 {
     [SerializeField] private LayerMask collidableLayers;
     [SerializeField] private float hitboxRadius = 0.5f;
 
-    private DummyProjectileStats _stats;
+    private EnemyProjectileStats _stats;
     private readonly Collider[] _hits = new Collider[5];
 
     // Orientation
@@ -21,7 +21,7 @@ public class TrainingDummyProjectile : MonoBehaviour
     private float _distanceTraveled;
     private float _distanceThisFrame;
 
-    public void Initialize(DummyProjectileStats stats, Transform spawn)
+    public void Initialize(PlayerProjectileStats stats, Transform spawn)
     {
         // Spawn position
         transform.position = spawn.position;
@@ -48,11 +48,10 @@ public class TrainingDummyProjectile : MonoBehaviour
         if (hits > 0)
         {
             var hit = _hits.FirstOrDefault(c => c != null);
-            if (hit.gameObject.TryGetComponent(out PlayerHealth p))
-            {
-                p.DecreaseHealth(_stats.Damage);
-            }
-            Destroy(gameObject);
+            
+            // ** Collision Logic Here **
+
+            EnemyProjectilePool.Instance.Release(gameObject);
         }
     }
 
@@ -65,11 +64,11 @@ public class TrainingDummyProjectile : MonoBehaviour
         // Travel forward
         transform.position += _stats.Direction * _distanceThisFrame;
         
-        // Return to object pool after travelling a certain distance;
+        // Return to object pool after travelling a certain distance
         _displacement = transform.position - _origin;
         _distanceTraveled = Vector3.Dot(_displacement, _stats.Direction);
         if (_distanceTraveled >= _stats.Range) {
-            Destroy(gameObject);
+            EnemyProjectilePool.Instance.Release(gameObject);
         }
     }
 }
