@@ -4,7 +4,7 @@ public class EnemyProjectilePool : MonoBehaviour
 {
     [SerializeField] private GameObject projectile;
     [Space]
-    [SerializeField] private int defaultCapacity = 30;
+    [SerializeField] private int defaultCapacity = 50;
     [SerializeField] private int maxCapacity = 100;
 
     private ObjectPool<GameObject> _pool;

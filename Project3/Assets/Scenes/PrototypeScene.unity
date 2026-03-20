@@ -477,6 +477,39 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &615797852
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 615797853}
+  m_Layer: 6
+  m_Name: Projectile Pools
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &615797853
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 615797852}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 858055561}
+  - {fileID: 771055549}
+  m_Father: {fileID: 1270214757}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &711639824
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,6 +585,53 @@ MonoBehaviour:
   hurtbox: {fileID: 1440943202}
   blockDuration: 0.4
   parryStartup: 0.1
+--- !u!1 &771055548
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 771055549}
+  - component: {fileID: 771055550}
+  m_Layer: 6
+  m_Name: Curved Projectile Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &771055549
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771055548}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 615797853}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &771055550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 771055548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d671e4e713304972bee5a4700a94f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 1185f9ba4476540c6b74011e43c666a6, type: 3}
+  defaultCapacity: 50
+  maxCapacity: 100
 --- !u!1 &824463752
 GameObject:
   m_ObjectHideFlags: 0
@@ -807,6 +887,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &858055560
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 858055561}
+  - component: {fileID: 858055562}
+  m_Layer: 6
+  m_Name: Basic Projectile Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &858055561
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858055560}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 615797853}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &858055562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858055560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d671e4e713304972bee5a4700a94f7c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 4378675d9f81b433f8ac00c482c7c5d7, type: 3}
+  defaultCapacity: 50
+  maxCapacity: 100
 --- !u!1 &970500954
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,6 +1143,7 @@ Transform:
   - {fileID: 1831834761}
   - {fileID: 1850073938}
   - {fileID: 1748971224}
+  - {fileID: 615797853}
   m_Father: {fileID: 1995691654}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1301213100
@@ -1328,7 +1456,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1557014340}
-  - component: {fileID: 1557014342}
   - component: {fileID: 1557014341}
   m_Layer: 6
   m_Name: ScatterShot
@@ -1367,26 +1494,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScatterShot
   attackID: 1
   damage: 1
-  fireRate: 0.2
-  projectileSpeed: 12
-  range: 60
+  fireRate: 0.1
+  projectileSpeed: 17.5
+  range: 50
   projectileSpawn: {fileID: 1913926793}
-  projectilePool: {fileID: 1557014342}
---- !u!114 &1557014342
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1557014339}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d671e4e713304972bee5a4700a94f7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectilePool
-  projectile: {fileID: 1860350838970000365, guid: 1185f9ba4476540c6b74011e43c666a6, type: 3}
-  defaultCapacity: 50
-  maxCapacity: 100
+  projectilePool: {fileID: 858055562}
+  min: 1
+  max: 4
+  burstProjectileSpeed: 13.5
+  burstRange: 40
+  extraProjectilePool: {fileID: 771055550}
+  burstProjectileCount: 30
+  shotsToBurst: 15
 --- !u!1 &1566646402
 GameObject:
   m_ObjectHideFlags: 0
