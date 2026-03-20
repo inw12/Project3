@@ -321,11 +321,7 @@ public class PlayerAttack : MonoBehaviour
                 // update hit list
                 _meleeHits.Add(hit.collider);
 
-                // damage enemy
-                if (hit.collider.TryGetComponent(out EnemyHealth e))
-                {
-                    e.DecreaseHealth(meleeDamage);
-                }
+                // ** Damage Effect Goes Here **
             }
         }
 
