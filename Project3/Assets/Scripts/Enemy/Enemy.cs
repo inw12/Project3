@@ -3,6 +3,7 @@
 ///     - State machine control
 ///     - Determining what actions to do depending on the state
 /// 
+using System.Collections.Generic;
 using UnityEngine;
 
 public struct EnemyState
@@ -39,10 +40,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float health = 100f;
     [SerializeField] private float moveSpeed = 15f;
     [Header("Attacks")]
-    [SerializeField] private EnemyAttack[] rangedAttacks;
-    [SerializeField] private EnemyAttack[] focusAttacks;
-    [SerializeField] private EnemyAttack[] meleeAttacks;
-    [SerializeField] private EnemyAttack[] zoneAttacks;
+    [SerializeField] private List<EnemyAttack> rangedAttacks;
+    [SerializeField] private List<EnemyAttack> focusAttacks;
+    [SerializeField] private List<EnemyAttack> meleeAttacks;
+    [SerializeField] private List<EnemyAttack> zoneAttacks;
 
     // "Who are we fighting?"
     private Transform _target;    
@@ -69,6 +70,19 @@ public class Enemy : MonoBehaviour
     {
         _state.CurrentAction = currentAction;
         _state.CurrentAttack = currentAttack;
+
+        // Attack State
+        if (_state.CurrentAction is EnemyAction.Attack)
+        {
+            switch(_state.CurrentAttack)
+            {
+                case EnemyAttackType.Ranged:
+                    GetRangedAttack();
+                    break;
+                default:
+                    break;
+            };
+        }
     }
 
     void LateUpdate()
@@ -79,5 +93,11 @@ public class Enemy : MonoBehaviour
     void FixedUpdate()
     {
         
+    }
+
+    private void GetRangedAttack()
+    {
+        var attack = rangedAttacks[Random.Range(0, rangedAttacks.Count)];
+        attack.Attack(_target);
     }
 }

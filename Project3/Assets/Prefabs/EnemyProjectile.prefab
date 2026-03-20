@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2559590347628954890}
   - component: {fileID: 6824982619028581361}
   - component: {fileID: 1516057337678909603}
-  - component: {fileID: -9143230367965227910}
+  - component: {fileID: 7733796288762343617}
   m_Layer: 0
   m_Name: EnemyProjectile
   m_TagString: Untagged
@@ -113,7 +113,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-9143230367965227910
+--- !u!114 &7733796288762343617
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,10 +122,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1860350838970000365}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9588b69a538a04d9a87d79ad164510de, type: 3}
+  m_Script: {fileID: 11500000, guid: d13b6b1b31a7d405089841ea8f8bda10, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TrainingDummyProjectile
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectile
   collidableLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1536
   hitboxRadius: 0.5

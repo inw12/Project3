@@ -17,20 +17,29 @@ public abstract class EnemyAttack : MonoBehaviour
         playerLayerMask = (1 << playerHurtbox) | (1 << playerParrybox);
     }
 
-    protected void HandleHit(Collider hit, float damage)
+    public void HandleHit(Collider hit, float damage)
     {
         var layer = hit.gameObject.layer;
         if (layer == playerParrybox)
             OnParryboxHit();
         else if (layer == playerHurtbox)
-            OnHurtboxHit();
+            OnHurtboxHit(hit.gameObject, damage);
     }
 
-    protected virtual void OnHurtboxHit() {}    // "What happens when I hit the player's hurtbox?"
+    // "What happens when I hit the player's hurtbox?"
+    protected virtual void OnHurtboxHit(GameObject other, float damage)
+    {
+        if (other.TryGetComponent(out PlayerHealth p))
+        {
+            p.DecreaseHealth(damage);
+        }
+    }    
     protected virtual void OnParryboxHit() {}   // "What happens when I hit the player's parrybox?"
 
-    public abstract void Attack(Transform target);      // child classes MUST implement this method
-    public virtual void Cancel() {}     // child classes MAY implement this method
+    // Called in 'Update()' in 'Enemy.cs'
+    public abstract void Attack(Transform target);  
+
+    public virtual void Cancel() {}
 
     public int GetAttackID() => attackID;
 }

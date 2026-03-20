@@ -9,6 +9,8 @@ public struct EnemyProjectileStats
 }
 public class EnemyProjectile : MonoBehaviour
 {
+    private EnemyAttack enemyAttack;
+
     [SerializeField] private LayerMask collidableLayers;
     [SerializeField] private float hitboxRadius = 0.5f;
 
@@ -21,17 +23,22 @@ public class EnemyProjectile : MonoBehaviour
     private float _distanceTraveled;
     private float _distanceThisFrame;
 
-    public void Initialize(EnemyProjectileStats stats, Transform spawn)
+    public void Initialize(EnemyRangedAttack attack, Transform spawn, Transform target)
     {
+        enemyAttack = attack;
+
         // Spawn position
         transform.position = spawn.position;
         _origin = transform.position;
 
         // Initialize stats
-        _stats.Damage = stats.Damage;
-        _stats.Speed = stats.Speed;
-        _stats.Range = stats.Range;
-        _stats.Direction = stats.Direction;
+        _stats.Damage = attack.Damage();
+        _stats.Speed = attack.ProjectileSpeed();
+        _stats.Range = attack.Range();
+
+        // Calculate target direction
+        var direction = (Vector3.ProjectOnPlane(target.position, Vector3.up) - Vector3.ProjectOnPlane(spawn.position, Vector3.up)).normalized;
+        _stats.Direction = direction;
     }
 
     // OverlapSphere for collisions
@@ -45,11 +52,12 @@ public class EnemyProjectile : MonoBehaviour
             collidableLayers
         );
 
+        // "If a hit is detected..."
         if (hits > 0)
         {
             var hit = _hits.FirstOrDefault(c => c != null);
-            
-            // ** Collision Logic Here **
+
+            enemyAttack.HandleHit(hit, _stats.Damage);
 
             EnemyProjectilePool.Instance.Release(gameObject);
         }

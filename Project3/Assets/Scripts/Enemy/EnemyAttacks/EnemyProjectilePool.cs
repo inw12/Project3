@@ -44,11 +44,11 @@ public class EnemyProjectilePool : MonoBehaviour
 
     private void OnDestroyProjectile(GameObject item) => Destroy(item);
 
-    public void Get(EnemyProjectileStats stats, Transform spawn)
+    public void Get(EnemyRangedAttack attack, Transform spawn, Transform target)
     {
         GameObject p = _pool.Get();
         if (p.TryGetComponent(out EnemyProjectile q)) {
-            q.Initialize(stats, spawn);
+            q.Initialize(attack, spawn, target);
             q.gameObject.SetActive(true);
         }
     }
