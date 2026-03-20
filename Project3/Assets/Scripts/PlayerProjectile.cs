@@ -49,10 +49,9 @@ public class PlayerProjectile : MonoBehaviour
         if (hits > 0)
         {
             var hit = _hits.FirstOrDefault(c => c != null);
-            if (hit.gameObject.TryGetComponent(out EnemyHealth e))
-            {
-                e.DecreaseHealth(_stats.Damage);
-            }
+            
+            // ** Collision Effect goes here **
+
             PlayerProjectilePool.Instance.Release(gameObject);
         }
     }

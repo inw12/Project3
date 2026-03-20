@@ -1,0 +1,70 @@
+using UnityEngine;
+public class ScatterShot : EnemyRangedAttack
+{
+    [Header("Num of Projectiles per Attack")]
+    [SerializeField] private int min = 1;
+    [SerializeField] private int max = 3;
+    [Header("AoE Burst")]
+    [SerializeField] protected float burstProjectileSpeed;
+    [SerializeField] protected float burstRange;
+    [Space]
+    [SerializeField] private EnemyProjectilePool extraProjectilePool;
+    [SerializeField] private int burstProjectileCount = 25;
+    [SerializeField] private int shotsToBurst = 10;
+    private int _shotCount;
+
+    // buffer variables to change stats for burst attack
+    private float _tempSpeed;
+    private float _tempRange;
+
+    public override void Attack(Transform target)
+    {
+        _fireTimer += Time.deltaTime;
+        if (_fireTimer >= fireRate)
+        {
+            var amount = Random.Range(min, max + 1);
+            for (int i = 0; i < amount; i++)
+            {
+                // Get Random Direction
+                Vector2 randomCircle = Random.insideUnitCircle;
+                Vector3 randomPoint = new(randomCircle.x, 0f, randomCircle.y);
+                randomPoint = randomPoint.normalized;
+
+                // Spawn bullet
+                projectilePool.Get(this, projectileSpawn, randomPoint);
+            }
+
+            _shotCount++;
+
+            // Trigger burst shot
+            if (_shotCount >= shotsToBurst)
+            {
+                CircleBurst();
+                _shotCount = 0;
+            }
+
+            _fireTimer = 0f;
+        }
+    }
+
+    private void CircleBurst()
+    {
+        _tempSpeed = projectileSpeed;
+        _tempRange = range;
+
+        projectileSpeed = burstProjectileSpeed;
+        range = burstRange;
+
+        var angleStep = 360f / burstProjectileCount;
+        for (int i = 0; i < burstProjectileCount; i++)
+        {
+            var angle = i * angleStep;
+            var rad = angle * Mathf.Deg2Rad;
+            var direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad));
+            extraProjectilePool.Get(this, projectileSpawn, direction.normalized);
+        }
+
+        projectileSpeed = _tempSpeed;
+        range = _tempRange;
+    }
+}

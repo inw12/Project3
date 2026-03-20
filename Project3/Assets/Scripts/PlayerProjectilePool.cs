@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Pool;
 public class PlayerProjectilePool : MonoBehaviour
 {
+    // Referenced by 'PlayerAttack' to spawn projectiles
     public static PlayerProjectilePool Instance { get; private set; }
 
     [SerializeField] private GameObject projectile;
@@ -33,15 +34,12 @@ public class PlayerProjectilePool : MonoBehaviour
         var p = Instantiate(projectile, transform);
         return p;
     }
-    private void OnGetProjectile(GameObject item)
-    {
-        
-    }
-    private void OnReleaseProjectile(GameObject item)
-    {
-        
-    }
-    private void OnDestroyProjectile(GameObject item) => Destroy(item);
+
+    private void OnGetProjectile(GameObject item) {}
+
+    private void OnReleaseProjectile(GameObject item) {}
+
+    private void OnDestroyProjectile(GameObject item) => DestroyImmediate(item);
 
     public void Get(PlayerProjectileStats stats, Transform spawn)
     {
