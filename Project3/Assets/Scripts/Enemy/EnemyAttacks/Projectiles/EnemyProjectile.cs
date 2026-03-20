@@ -1,46 +1,46 @@
 using System.Linq;
 using UnityEngine;
-public struct EnemyProjectileStats
+public abstract class EnemyProjectile : MonoBehaviour
 {
-    public float Damage;
-    public float Speed;
-    public float Range;
-    public Vector3 Direction;
-}
-public class EnemyProjectile : MonoBehaviour
-{
-    private EnemyAttack enemyAttack;
+    [SerializeField] protected LayerMask collidableLayers;
+    [Space]
+    [SerializeField] protected float hitboxRadius;
 
-    [SerializeField] private LayerMask collidableLayers;
-    [SerializeField] private float hitboxRadius = 0.5f;
+    protected EnemyAttack _enemyAttack;
 
-    private EnemyProjectileStats _stats;
-    private readonly Collider[] _hits = new Collider[5];
+    // Projectile Stats
+    protected float _damage;
+    protected float _range;
+    protected float _projectileSpeed;
+    protected Vector3 _direction;
+
+    protected readonly Collider[] _hits = new Collider[5];
 
     // Orientation
-    private Vector3 _origin;
-    private Vector3 _displacement;
-    private float _distanceTraveled;
-    private float _distanceThisFrame;
+    protected Vector3 _origin;
+    protected Vector3 _displacement;
+    protected float _distanceTraveled;
+    protected float _distanceThisFrame;
 
-    public void Initialize(EnemyRangedAttack attack, Transform spawn, Vector3 direction)
+    public virtual void Initialize(EnemyRangedAttack attack, Transform spawn, Vector3 direction)
     {
-        enemyAttack = attack;
+        _enemyAttack = attack;
 
         // Spawn position
         transform.position = spawn.position;
         _origin = transform.position;
 
         // Initialize stats
-        _stats.Damage = attack.Damage();
-        _stats.Speed = attack.ProjectileSpeed();
-        _stats.Range = attack.Range();
-        _stats.Direction = direction;
+        _damage = attack.Damage();
+        _projectileSpeed = attack.ProjectileSpeed();
+        _range = attack.Range();
+        _direction = direction;
     }
 
-    // OverlapSphere for collisions
-    void Update()
+    // Collision Detection
+    protected virtual void Update()
     {
+        // OverlapSphere to detect collisions
         var hits = Physics.OverlapSphereNonAlloc
         (
             transform.position,
@@ -53,27 +53,30 @@ public class EnemyProjectile : MonoBehaviour
         if (hits > 0)
         {
             var hit = _hits.FirstOrDefault(c => c != null);
-
-            enemyAttack.HandleHit(hit, _stats.Damage);
-
+            _enemyAttack.HandleHit(hit, _damage);
+            OnProjectileEnd();
             EnemyProjectilePool.Instance.Release(gameObject);
         }
     }
 
     // Travels in a given direction
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         // Update distance to travel this frame
-        _distanceThisFrame = _stats.Speed * Time.fixedDeltaTime;
+        _distanceThisFrame = _projectileSpeed * Time.fixedDeltaTime;
 
-        // Travel forward
-        transform.position += _stats.Direction * _distanceThisFrame;
+        Move();
         
         // Return to object pool after travelling a certain distance
         _displacement = transform.position - _origin;
-        _distanceTraveled = Vector3.Dot(_displacement, _stats.Direction);
-        if (_distanceTraveled >= _stats.Range) {
+        _distanceTraveled = Vector3.Dot(_displacement, _direction);
+        if (_distanceTraveled >= _range)
+        {
+            OnProjectileEnd();
             EnemyProjectilePool.Instance.Release(gameObject);
         }
     }
+
+    protected abstract void Move();
+    protected virtual void OnProjectileEnd() {}
 }

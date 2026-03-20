@@ -9,6 +9,7 @@ public abstract class EnemyRangedAttack : EnemyAttack
     [SerializeField] protected float range;
     [Space]
     [SerializeField] protected Transform projectileSpawn;
+    [SerializeField] protected EnemyProjectilePool projectilePool;
     protected float _fireTimer;
 
     public override abstract void Attack(Transform target);

@@ -1,16 +1,16 @@
+///
+/// * Projectile Behavior:
+///     - Moves straight towards given direction
+///     - Returns to object pool when...
+///         - Range distance reached
+///         - Collides with specified collision layer
+/// 
 using UnityEngine;
-
-public class EnemyProjectile_Basic : MonoBehaviour
+public class EnemyProjectile_Basic : EnemyProjectile
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    protected override void Move()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        // Move straight towards target position
+        transform.position += _direction * _distanceThisFrame;
     }
 }

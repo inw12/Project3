@@ -12,7 +12,7 @@ public class ScatterShot : EnemyRangedAttack
             randomPoint = randomPoint.normalized;
 
             // Get projectile from 'EnemyProjectilePool'
-            EnemyProjectilePool.Instance.Get(this, projectileSpawn, randomPoint);
+            projectilePool.Get(this, projectileSpawn, randomPoint);
 
             _fireTimer = 0f;
         }
