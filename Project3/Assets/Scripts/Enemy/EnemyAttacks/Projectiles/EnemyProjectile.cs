@@ -7,6 +7,8 @@ public abstract class EnemyProjectile : MonoBehaviour
     [SerializeField] protected float hitboxRadius;
 
     protected EnemyAttack _enemyAttack;
+    protected EnemyProjectilePool _source;
+    protected readonly Collider[] _hits = new Collider[5];
 
     // Projectile Stats
     protected float _damage;
@@ -14,27 +16,27 @@ public abstract class EnemyProjectile : MonoBehaviour
     protected float _projectileSpeed;
     protected Vector3 _direction;
 
-    protected readonly Collider[] _hits = new Collider[5];
-
     // Orientation
-    protected Vector3 _origin;
-    protected Vector3 _displacement;
     protected float _distanceTraveled;
     protected float _distanceThisFrame;
 
-    public virtual void Initialize(EnemyRangedAttack attack, Transform spawn, Vector3 direction)
+    public virtual void Initialize(EnemyProjectilePool pool, EnemyRangedAttack attack, Transform spawn, Vector3 direction)
     {
-        _enemyAttack = attack;
+        // Object Pool
+        _source = pool;
 
         // Spawn position
         transform.position = spawn.position;
-        _origin = transform.position;
 
         // Initialize stats
+        _enemyAttack = attack;
         _damage = attack.Damage();
         _projectileSpeed = attack.ProjectileSpeed();
         _range = attack.Range();
         _direction = direction;
+
+        // Reset range
+        _distanceTraveled = 0f;
     }
 
     // Collision Detection
@@ -55,7 +57,7 @@ public abstract class EnemyProjectile : MonoBehaviour
             var hit = _hits.FirstOrDefault(c => c != null);
             _enemyAttack.HandleHit(hit, _damage);
             OnProjectileEnd();
-            EnemyProjectilePool.Instance.Release(gameObject);
+            _source.Release(gameObject);
         }
     }
 
@@ -68,12 +70,11 @@ public abstract class EnemyProjectile : MonoBehaviour
         Move();
         
         // Return to object pool after travelling a certain distance
-        _displacement = transform.position - _origin;
-        _distanceTraveled = Vector3.Dot(_displacement, _direction);
+        _distanceTraveled += _distanceThisFrame;
         if (_distanceTraveled >= _range)
         {
             OnProjectileEnd();
-            EnemyProjectilePool.Instance.Release(gameObject);
+            _source.Release(gameObject);
         }
     }
 

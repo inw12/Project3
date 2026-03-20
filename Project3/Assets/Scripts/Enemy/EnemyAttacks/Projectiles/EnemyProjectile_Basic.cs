@@ -5,7 +5,6 @@
 ///         - Range distance reached
 ///         - Collides with specified collision layer
 /// 
-using UnityEngine;
 public class EnemyProjectile_Basic : EnemyProjectile
 {
     protected override void Move()

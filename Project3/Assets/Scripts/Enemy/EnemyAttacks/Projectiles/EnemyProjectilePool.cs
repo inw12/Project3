@@ -1,13 +1,7 @@
-///
-/// * This is an object pool to manage projectiles fired by the enemy
-/// 
 using UnityEngine;
 using UnityEngine.Pool;
 public class EnemyProjectilePool : MonoBehaviour
 {
-    // Referenced by 'EnemyProjectile' to release object after collision
-    public static EnemyProjectilePool Instance { get; private set; }
-
     [SerializeField] private GameObject projectile;
     [Space]
     [SerializeField] private int defaultCapacity = 30;
@@ -17,8 +11,6 @@ public class EnemyProjectilePool : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
-
         // Initialize Pool
         _pool = new ObjectPool<GameObject>
         (
@@ -42,14 +34,14 @@ public class EnemyProjectilePool : MonoBehaviour
 
     private void OnReleaseProjectile(GameObject item) {}
 
-    private void OnDestroyProjectile(GameObject item) => Destroy(item);
+    private void OnDestroyProjectile(GameObject item) => DestroyImmediate(item);
 
     public void Get(EnemyRangedAttack attack, Transform spawn, Vector3 direction)
     {
         GameObject p = _pool.Get();
         if (p.TryGetComponent(out EnemyProjectile q))
         {
-            q.Initialize(attack, spawn, direction);
+            q.Initialize(this, attack, spawn, direction);
             q.gameObject.SetActive(true);
         }
     }
