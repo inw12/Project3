@@ -1693,10 +1693,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   currentAction: 0
   currentAttack: 0
-  stateSwitchTimer: 3
+  stateSwitchCooldown: 3
   enemyMovement: {fileID: 1995691657}
   health: 100
   moveSpeed: 15
+  rangedAttacks:
+  - {fileID: 1557014341}
+  focusAttacks: []
+  meleeAttacks: []
+  zoneAttacks: []
 --- !u!143 &1995691656
 CharacterController:
   m_ObjectHideFlags: 0

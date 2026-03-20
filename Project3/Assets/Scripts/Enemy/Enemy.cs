@@ -31,12 +31,18 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private EnemyAction currentAction;
     [SerializeField] private EnemyAttackType currentAttack;
-    [SerializeField] private float stateSwitchTimer = 3f;
+    [SerializeField] private float stateSwitchCooldown = 3f;
+    private float _stateTimer;
     [Header("Enemy Components")]
     [SerializeField] private EnemyMovement enemyMovement;
     [Header("Basic Stats")]
     [SerializeField] private float health = 100f;
     [SerializeField] private float moveSpeed = 15f;
+    [Header("Attacks")]
+    [SerializeField] private EnemyAttack[] rangedAttacks;
+    [SerializeField] private EnemyAttack[] focusAttacks;
+    [SerializeField] private EnemyAttack[] meleeAttacks;
+    [SerializeField] private EnemyAttack[] zoneAttacks;
 
     // "Who are we fighting?"
     private Transform _target;    

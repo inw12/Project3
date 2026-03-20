@@ -1,6 +1,9 @@
 using UnityEngine;
 public abstract class EnemyAttack : MonoBehaviour
 {
+    // Attack ID (identification for state machine and animator control)
+    protected int attackID;
+
     protected int playerHurtbox;
     protected int playerParrybox;
     protected LayerMask playerLayerMask;
@@ -17,15 +20,17 @@ public abstract class EnemyAttack : MonoBehaviour
     protected void HandleHit(Collider hit, float damage)
     {
         var layer = hit.gameObject.layer;
-        if (layer == playerHurtbox)
-            OnHurtboxHit();
-        else if (layer == playerParrybox)
+        if (layer == playerParrybox)
             OnParryboxHit();
+        else if (layer == playerHurtbox)
+            OnHurtboxHit();
     }
 
     protected virtual void OnHurtboxHit() {}    // "What happens when I hit the player's hurtbox?"
     protected virtual void OnParryboxHit() {}   // "What happens when I hit the player's parrybox?"
 
-    public abstract void Attack();      // child classes MUST implement this method
+    public abstract void Attack(Transform target);      // child classes MUST implement this method
     public virtual void Cancel() {}     // child classes MAY implement this method
+
+    public int GetAttackID() => attackID;
 }
