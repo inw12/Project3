@@ -9,7 +9,6 @@ using UnityEngine;
 public struct EnemyState
 {
     public EnemyAction CurrentAction;       // what action is CURRENTLY happening
-    public EnemyAction IntendedAction;      // what action the enemy WANTS to do
     public EnemyAttackType CurrentAttack;   // what ATTACK is the enemy currently performing?
 }
 public enum EnemyAction
@@ -36,6 +35,7 @@ public class Enemy : MonoBehaviour
     private float _stateTimer;
     [Header("Enemy Components")]
     [SerializeField] private EnemyMovement enemyMovement;
+    [SerializeField] private EnemyAnimationController animationController;
     [Header("Basic Stats")]
     [SerializeField] private float health = 100f;
     [SerializeField] private float moveSpeed = 15f;
@@ -48,9 +48,20 @@ public class Enemy : MonoBehaviour
     // "Who are we fighting?"
     private Transform _target;    
 
+    // "What action do we want to do?"
+    private EnemyAttackType _requestedAttack;
+    private EnemyAttack _currentAttack;
+
     // State Machine Control
     private EnemyState _state;
     private EnemyState _prevState;
+
+    private bool _attackActive;
+
+    /// Animation Controller Variables
+    /// * CurrentAction (int)
+    /// * CurrentAttack (int)
+    /// * AttackID      (int)
 
     void Start()
     {
@@ -59,19 +70,23 @@ public class Enemy : MonoBehaviour
 
         // Initialize Enemy Components
         enemyMovement.Initialize(moveSpeed);
+        animationController.Initialize(this);
 
         // Initialize State Machine
         _state.CurrentAction = EnemyAction.Idle;
         _state.CurrentAttack = EnemyAttackType.None;
         _prevState = _state;
+
+        _attackActive = false;
     }
 
     void Update()
     {
+        // Manual state change from the editor
         _state.CurrentAction = currentAction;
-        _state.CurrentAttack = currentAttack;
+        _state.CurrentAttack = currentAttack;       
 
-        // Attack State
+        // Update Attack State
         if (_state.CurrentAction is EnemyAction.Attack)
         {
             switch(_state.CurrentAttack)
@@ -83,6 +98,31 @@ public class Enemy : MonoBehaviour
                     break;
             };
         }
+
+        // Update Animator Controller
+        // * only update the animator on state change
+        if (_prevState.CurrentAction != _state.CurrentAction || _prevState.CurrentAttack != _state.CurrentAttack)
+        {
+            var current = new EnemyAnimatorVariables
+            {
+                CurrentAction = (int)_state.CurrentAction,
+                CurrentAttack = (int)_state.CurrentAttack,
+                AttackID = _currentAttack ? _currentAttack.GetAttackID() : 0
+            };
+            animationController.UpdateAnimator(current);
+        }
+
+        //#region Randomized State Machine Control
+        //// Request a new attack after duration
+        //_stateTimer += Time.deltaTime;
+        //if (_stateTimer >= stateSwitchCooldown && _state.CurrentAction is EnemyAction.Idle)
+        //{
+        //    // 1. Request an attack type
+        //    _requestedAttack = (EnemyAttackType)Random.Range(1, 5);
+        //    // 2. Check to see if this attack type is doable
+        //    // 3. Select an attack from that attack type
+        //}
+        //#endregion
     }
 
     void LateUpdate()
@@ -97,7 +137,13 @@ public class Enemy : MonoBehaviour
 
     private void GetRangedAttack()
     {
-        var attack = rangedAttacks[Random.Range(0, rangedAttacks.Count)];
-        attack.Attack(_target);
+        _currentAttack = rangedAttacks[Random.Range(0, rangedAttacks.Count)];
+        if (_attackActive)
+        {
+            _currentAttack.Attack(_target);
+        }
     }
+
+    public void ActivateAttack() => _attackActive = true;
+    public void DeactivateAttack() => _attackActive = false;
 }
