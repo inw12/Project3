@@ -855,6 +855,10 @@ PrefabInstance:
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 6298060116003609574, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
+      propertyPath: duration
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6298060116003609574, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
       propertyPath: projectilePool
       value: 
       objectReference: {fileID: 7802004302755546759}

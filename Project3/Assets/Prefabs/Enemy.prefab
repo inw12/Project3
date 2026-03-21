@@ -527,6 +527,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7106394876401754106}
   - component: {fileID: 9150914357412454923}
+  - component: {fileID: 3780269326064393409}
   m_Layer: 6
   m_Name: Root
   m_TagString: Untagged
@@ -573,6 +574,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3780269326064393409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2445414382740686334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef8f5e03b5c0e4c8080cf2b82c229acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimationController
 --- !u!1 &2491216347925208726
 GameObject:
   m_ObjectHideFlags: 0
@@ -906,6 +919,7 @@ MonoBehaviour:
   currentAttack: 1
   stateSwitchCooldown: 3
   enemyMovement: {fileID: 4914450793600856035}
+  animationController: {fileID: 3780269326064393409}
   health: 100
   moveSpeed: 15
   rangedAttacks:
