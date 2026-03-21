@@ -1,6 +1,9 @@
 using UnityEngine;
 public class ScatterShot : EnemyRangedAttack
 {
+    [Space]
+    [SerializeField] protected float duration;
+    private float _durationTimer;
     [Header("Num of Projectiles per Attack")]
     [SerializeField] private int min = 1;
     [SerializeField] private int max = 3;
@@ -19,6 +22,8 @@ public class ScatterShot : EnemyRangedAttack
 
     public override void Attack(Transform target)
     {
+        _durationTimer += Time.deltaTime;
+
         _fireTimer += Time.deltaTime;
         if (_fireTimer >= fireRate)
         {
@@ -44,6 +49,11 @@ public class ScatterShot : EnemyRangedAttack
             }
 
             _fireTimer = 0f;
+        }
+
+        if (_durationTimer >= duration)
+        {
+            if (Enemy.Instance) Enemy.Instance.SetToIdle();
         }
     }
 

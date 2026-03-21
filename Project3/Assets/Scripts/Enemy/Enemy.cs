@@ -29,6 +29,9 @@ public enum EnemyAttackType
 
 public class Enemy : MonoBehaviour
 {
+    // Called by all 'EnemyAttack' variants to exit attack state
+    public static Enemy Instance { get; private set; }
+
     [SerializeField] private EnemyAction currentAction;
     [SerializeField] private EnemyAttackType currentAttack;
     [SerializeField] private float stateSwitchCooldown = 3f;
@@ -63,6 +66,11 @@ public class Enemy : MonoBehaviour
     /// * CurrentAttack (int)
     /// * AttackID      (int)
 
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         // Set target to be the player
@@ -73,11 +81,9 @@ public class Enemy : MonoBehaviour
         animationController.Initialize(this);
 
         // Initialize State Machine
-        _state.CurrentAction = EnemyAction.Idle;
-        _state.CurrentAttack = EnemyAttackType.None;
-        _prevState = _state;
+        SetToIdle();
 
-        _attackActive = false;
+        _prevState = _state;
     }
 
     void Update()
@@ -137,7 +143,11 @@ public class Enemy : MonoBehaviour
 
     private void GetRangedAttack()
     {
+        // Randomly select ranged attack type
         _currentAttack = rangedAttacks[Random.Range(0, rangedAttacks.Count)];
+
+        // Only trigger attack effects when '_attackActive' is true
+        // '_attackActive' only toggled to 'true' when attack animation plays
         if (_attackActive)
         {
             _currentAttack.Attack(_target);
@@ -145,5 +155,15 @@ public class Enemy : MonoBehaviour
     }
 
     public void ActivateAttack() => _attackActive = true;
+
+    // Called @ the end of attack or movement functions to reset enemy state
+    public void SetToIdle()
+    {
+        _state.CurrentAction = EnemyAction.Idle;
+        _state.CurrentAttack = EnemyAttackType.None;
+
+        _attackActive = false;
+    }
+
     public void DeactivateAttack() => _attackActive = false;
 }
