@@ -82,15 +82,17 @@ public class Enemy : MonoBehaviour
 
         // Initialize State Machine
         SetToIdle();
-
         _prevState = _state;
+
+        // Manual state change from the editor
+        _state.CurrentAction = currentAction;
+        _state.CurrentAttack = currentAttack;
     }
 
     void Update()
     {
-        // Manual state change from the editor
-        _state.CurrentAction = currentAction;
-        _state.CurrentAttack = currentAttack;       
+        currentAction = _state.CurrentAction;
+        currentAttack = _state.CurrentAttack;
 
         // Update Attack State
         if (_state.CurrentAction is EnemyAction.Attack)
