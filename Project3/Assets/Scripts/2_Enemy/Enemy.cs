@@ -3,9 +3,9 @@
 ///     - State machine control
 ///     - Determining what actions to do depending on the state
 /// 
-using System.Collections.Generic;
 using UnityEngine;
-
+using System.Linq;
+using System.Collections.Generic;
 public struct EnemyState
 {
     public EnemyAction CurrentAction;       // what action is CURRENTLY happening
@@ -34,14 +34,17 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private EnemyAction currentAction;
     [SerializeField] private EnemyAttackType currentAttack;
-    [SerializeField] private float stateSwitchCooldown = 3f;
-    private float _stateTimer;
+    [Space]
+    [SerializeField] private LayerMask playerLayer;
+
     [Header("Enemy Components")]
     [SerializeField] private EnemyMovement enemyMovement;
     [SerializeField] private EnemyAnimationController animationController;
+
     [Header("Basic Stats")]
     [SerializeField] private float health = 100f;
     [SerializeField] private float moveSpeed = 15f;
+
     [Header("Attacks")]
     [SerializeField] private List<EnemyAttack> rangedAttacks;
     [SerializeField] private List<EnemyAttack> focusAttacks;
@@ -54,12 +57,14 @@ public class Enemy : MonoBehaviour
     // "What action do we want to do?"
     private EnemyAttackType _requestedAttack;
     private EnemyAttack _currentAttack;
+    private bool _attackActive;
 
     // State Machine Control
     private EnemyState _state;
     private EnemyState _prevState;
 
-    private bool _attackActive;
+    // Player Detection
+    private readonly Collider[] _hitBuffer = new Collider[10];
 
     /// Animation Controller Variables
     /// * CurrentAction (int)
@@ -73,9 +78,6 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
-        // Set target to be the player
-        if (Player.Instance) _target = Player.Instance.transform;
-
         // Initialize Enemy Components
         enemyMovement.Initialize(moveSpeed);
         animationController.Initialize(this);
@@ -168,4 +170,19 @@ public class Enemy : MonoBehaviour
     }
 
     public void DeactivateAttack() => _attackActive = false;
+
+    public void ScanForPlayer(float detectionRadius)
+    {
+        int hitCount = Physics.OverlapSphereNonAlloc(
+            transform.position,
+            detectionRadius,
+            _hitBuffer,
+            playerLayer
+        );
+        if (hitCount > 0)
+        {
+            var hit = _hitBuffer.FirstOrDefault(c => c != null);
+            _target = hit.transform;
+        }
+    }
 }

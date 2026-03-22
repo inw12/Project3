@@ -81,12 +81,12 @@ public class ScatterShot : EnemyRangedAttack
             var direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad));
 
             var stats = new ProjectileStats
-                {
-                    Damage = damage,
-                    Speed = projectileSpeed,
-                    Range = range,
-                    Direction = direction.normalized
-                };
+            {
+                Damage = damage,
+                Speed = projectileSpeed,
+                Range = range,
+                Direction = direction.normalized
+            };
 
             extraProjectilePool.Get(stats, projectileSpawn);
         }

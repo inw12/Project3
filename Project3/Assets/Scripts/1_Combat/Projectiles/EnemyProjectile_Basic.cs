@@ -5,7 +5,7 @@ public class EnemyProjectile_Basic : Projectile
     protected override void Move()
     {
         // Update distance to travel this frame
-        _distanceThisFrame = _stats.Speed * Time.deltaTime;
+        _distanceThisFrame = _stats.Speed * Time.fixedDeltaTime;
 
         // Travel forward
         transform.position += _stats.Direction * _distanceThisFrame;

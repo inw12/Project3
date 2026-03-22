@@ -917,7 +917,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   currentAction: 2
   currentAttack: 1
-  stateSwitchCooldown: 3
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 256
   enemyMovement: {fileID: 4914450793600856035}
   animationController: {fileID: 3780269326064393409}
   health: 100
@@ -1154,6 +1156,7 @@ MonoBehaviour:
   range: 70
   projectileSpawn: {fileID: 84515683811886393}
   projectilePool: {fileID: 0}
+  duration: 7
   min: 1
   max: 4
   burstProjectileSpeed: 13.5

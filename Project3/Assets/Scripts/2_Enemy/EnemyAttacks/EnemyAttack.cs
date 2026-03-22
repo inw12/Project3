@@ -27,14 +27,10 @@ public abstract class EnemyAttack : MonoBehaviour
     }
 
     // "What happens when I hit the player's hurtbox?"
-    protected virtual void OnHurtboxHit(GameObject other, float damage)
-    {
-        if (other.TryGetComponent(out PlayerHealth p))
-        {
-            p.DecreaseHealth(damage);
-        }
-    }    
-    protected virtual void OnParryboxHit() {}   // "What happens when I hit the player's parrybox?"
+    protected virtual void OnHurtboxHit(GameObject other, float damage) {}    
+
+    // "What happens when I hit the player's parrybox?"
+    protected virtual void OnParryboxHit() {}   
 
     // Called in 'Update()' in 'Enemy.cs'
     public abstract void Attack(Transform target);  

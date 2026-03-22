@@ -735,7 +735,7 @@ PrefabInstance:
     - target: {fileID: 2028008089070362740, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
       propertyPath: projectilePool
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 7003397382392103176}
     - target: {fileID: 3396559964683894450, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
       propertyPath: m_Name
       value: Player
@@ -870,17 +870,13 @@ PrefabInstance:
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 6298060116003609574, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
-      propertyPath: duration
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6298060116003609574, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
       propertyPath: projectilePool
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8797307911038995540}
     - target: {fileID: 6298060116003609574, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
       propertyPath: extraProjectilePool
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 70864319}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
