@@ -1,5 +1,6 @@
 ﻿<Solution>
   <Project Path="Core.csproj" />
+  <Project Path="Combat.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
 </Solution>
