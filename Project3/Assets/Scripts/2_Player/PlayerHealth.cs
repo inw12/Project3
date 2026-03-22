@@ -1,10 +1,14 @@
 using UnityEngine;
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : MonoBehaviour, IDamageable
 {
     [SerializeField] private CapsuleCollider hurtbox;
+    [Space]
     [SerializeField] private float health = 10f;
     private float _currentHealth;
     private bool _isAlive;
+
+    public float MaxHealth => health;
+    public float CurrentHealth => _currentHealth;
 
     public void Initialize()
     {
@@ -19,6 +23,7 @@ public class PlayerHealth : MonoBehaviour
         
         Debug.Log("Current HP: " + _currentHealth);
     }
+
     public void DecreaseHealth(float amount)
     {
         _currentHealth -= amount;
@@ -26,5 +31,10 @@ public class PlayerHealth : MonoBehaviour
         _isAlive = _currentHealth > 0f;
 
         Debug.Log("Current HP: " + _currentHealth);
+    }
+
+    public void Death()
+    {
+        throw new System.NotImplementedException();
     }
 }

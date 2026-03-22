@@ -165,7 +165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Combat::ProjectilePool
   projectile: {fileID: 1860350838970000365, guid: 1185f9ba4476540c6b74011e43c666a6, type: 3}
   defaultCapacity: 50
-  maxCapacity: 100
+  maxCapacity: 150
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,7 +913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Combat::ProjectilePool
   projectile: {fileID: 1860350838970000365, guid: 4378675d9f81b433f8ac00c482c7c5d7, type: 3}
   defaultCapacity: 50
-  maxCapacity: 100
+  maxCapacity: 250
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
