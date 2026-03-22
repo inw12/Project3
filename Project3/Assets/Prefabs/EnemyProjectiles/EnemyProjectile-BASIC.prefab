@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37df2678036b44c7fb2b99bd40dc9343, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectile_Basic
-  collidableLayers:
+  hitboxRadius: 0.7
+  hitLayers:
     serializedVersion: 2
     m_Bits: 1536
-  hitboxRadius: 0.7

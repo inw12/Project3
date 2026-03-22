@@ -125,8 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb0a0c58fdb7f47f0baf125e3d125465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectile_Curved
-  collidableLayers:
+  hitboxRadius: 1
+  hitLayers:
     serializedVersion: 2
     m_Bits: 1536
-  hitboxRadius: 1
   curveAngle: 35

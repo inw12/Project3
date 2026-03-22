@@ -119,6 +119,53 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &70864317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 70864318}
+  - component: {fileID: 70864319}
+  m_Layer: 6
+  m_Name: Curved Projectile Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &70864318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70864317}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1541122181272990309}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &70864319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70864317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9462d1975940a45f4a25060a3dd3fcdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Combat::ProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 1185f9ba4476540c6b74011e43c666a6, type: 3}
+  defaultCapacity: 50
+  maxCapacity: 150
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,21 +657,6 @@ Transform:
   - {fileID: 1541122181272990309}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &42181930430825486
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1948906327385428818}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1541122181272990309}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1541122181272990309
 Transform:
   m_ObjectHideFlags: 0
@@ -639,26 +671,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3106064987858090785}
-  - {fileID: 42181930430825486}
+  - {fileID: 70864318}
   m_Father: {fileID: 1606205926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1948906327385428818
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 42181930430825486}
-  - component: {fileID: 4117916851561761377}
-  m_Layer: 6
-  m_Name: Curved Projectile Pool
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!4 &2890657793875711896
 Transform:
   m_ObjectHideFlags: 0
@@ -689,21 +704,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1541122181272990309}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4117916851561761377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1948906327385428818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d671e4e713304972bee5a4700a94f7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectilePool
-  projectile: {fileID: 1860350838970000365, guid: 1185f9ba4476540c6b74011e43c666a6, type: 3}
-  defaultCapacity: 50
-  maxCapacity: 100
 --- !u!1 &6940556245658543488
 GameObject:
   m_ObjectHideFlags: 0
@@ -735,7 +735,7 @@ PrefabInstance:
     - target: {fileID: 2028008089070362740, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
       propertyPath: projectilePool
       value: 
-      objectReference: {fileID: 7802848357046513148}
+      objectReference: {fileID: 7003397382392103176}
     - target: {fileID: 3396559964683894450, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
       propertyPath: m_Name
       value: Player
@@ -794,7 +794,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2890657793875711896}
-  - component: {fileID: 7802848357046513148}
+  - component: {fileID: 7003397382392103176}
   m_Layer: 0
   m_Name: Player Projectile Pool
   m_TagString: Untagged
@@ -802,6 +802,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7003397382392103176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7003397382392103175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9462d1975940a45f4a25060a3dd3fcdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Combat::ProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 29ceae9a2469a4aaeb7687b615444a21, type: 3}
+  defaultCapacity: 50
+  maxCapacity: 100
 --- !u!1001 &7057040264344384288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -855,52 +870,18 @@ PrefabInstance:
       value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 6298060116003609574, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
-      propertyPath: duration
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6298060116003609574, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
       propertyPath: projectilePool
       value: 
-      objectReference: {fileID: 7802004302755546759}
+      objectReference: {fileID: 8797307911038995540}
     - target: {fileID: 6298060116003609574, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
       propertyPath: extraProjectilePool
       value: 
-      objectReference: {fileID: 4117916851561761377}
+      objectReference: {fileID: 70864319}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
---- !u!114 &7802004302755546759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8797307911038995539}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8d671e4e713304972bee5a4700a94f7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyProjectilePool
-  projectile: {fileID: 1860350838970000365, guid: 4378675d9f81b433f8ac00c482c7c5d7, type: 3}
-  defaultCapacity: 50
-  maxCapacity: 100
---- !u!114 &7802848357046513148
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7003397382392103175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a885cbc8136f4b03a23d439029bb636, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerProjectilePool
-  projectile: {fileID: 1860350838970000365, guid: 29ceae9a2469a4aaeb7687b615444a21, type: 3}
-  defaultCapacity: 25
-  maxCapacity: 100
 --- !u!1 &8797307911038995539
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,7 +891,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3106064987858090785}
-  - component: {fileID: 7802004302755546759}
+  - component: {fileID: 8797307911038995540}
   m_Layer: 6
   m_Name: Basic Projectile Pool
   m_TagString: Untagged
@@ -918,6 +899,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8797307911038995540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8797307911038995539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9462d1975940a45f4a25060a3dd3fcdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Combat::ProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 4378675d9f81b433f8ac00c482c7c5d7, type: 3}
+  defaultCapacity: 50
+  maxCapacity: 250
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
