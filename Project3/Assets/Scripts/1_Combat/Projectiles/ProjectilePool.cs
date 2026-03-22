@@ -38,11 +38,17 @@ public class ProjectilePool : MonoBehaviour
         return p;
     }
 
-    private void OnGetProjectile(GameObject item) {}
+    private void OnGetProjectile(GameObject item)
+    {
+        item.SetActive(true);
+    }
 
-    private void OnReleaseProjectile(GameObject item) {}
+    private void OnReleaseProjectile(GameObject item)
+    {
+        item.SetActive(false);
+    }
 
-    private void OnDestroyProjectile(GameObject item) => DestroyImmediate(item);
+    private void OnDestroyProjectile(GameObject item) => Destroy(item);
 
     public void Get(ProjectileStats stats, Transform spawn)
     {
@@ -50,13 +56,8 @@ public class ProjectilePool : MonoBehaviour
         if (item.TryGetComponent(out Projectile p))
         {
             p.Initialize(this, stats, spawn);
-            p.gameObject.SetActive(true);
         }
     }
     
-    public void Release(GameObject item)
-    {
-        item.SetActive(false);
-        _pool.Release(item);
-    }
+    public void Release(GameObject item) => _pool.Release(item);
 }

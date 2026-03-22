@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Linq;
 public abstract class Projectile : MonoBehaviour, IHitbox
 {
     [SerializeField] protected float hitboxRadius;
@@ -25,6 +24,8 @@ public abstract class Projectile : MonoBehaviour, IHitbox
 
         // Spawn Position
         transform.position = spawn.position;
+
+        _distanceTraveled = 0f;
     }
 
     // Collision Detection
@@ -42,8 +43,7 @@ public abstract class Projectile : MonoBehaviour, IHitbox
         // Handle hit if detected
         if (hits > 0)
         {
-            var hit = _hits.FirstOrDefault(c => c != null);
-            OnHit(hit);
+            OnHit(_hits[0]);
         }
     }
 
