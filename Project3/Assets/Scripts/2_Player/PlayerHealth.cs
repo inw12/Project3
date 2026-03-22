@@ -21,7 +21,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         _currentHealth += amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, health);
         
-        Debug.Log("Current HP: " + _currentHealth);
+        Debug.Log("Current HP: " + CurrentHealth);
     }
 
     public void DecreaseHealth(float amount)
@@ -30,7 +30,7 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, health);
         _isAlive = _currentHealth > 0f;
 
-        Debug.Log("Current HP: " + _currentHealth);
+        Debug.Log("Current HP: " + CurrentHealth);
     }
 
     public void Death()
