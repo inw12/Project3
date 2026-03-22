@@ -11,7 +11,7 @@ public class ScatterShot : EnemyRangedAttack
     [SerializeField] protected float burstProjectileSpeed;
     [SerializeField] protected float burstRange;
     [Space]
-    [SerializeField] private EnemyProjectilePool extraProjectilePool;
+    [SerializeField] private ProjectilePool extraProjectilePool;
     [SerializeField] private int burstProjectileCount = 25;
     [SerializeField] private int shotsToBurst = 10;
     private int _shotCount;
@@ -35,8 +35,16 @@ public class ScatterShot : EnemyRangedAttack
                 Vector3 randomPoint = new(randomCircle.x, 0f, randomCircle.y);
                 randomPoint = randomPoint.normalized;
 
+                var stats = new ProjectileStats
+                {
+                    Damage = damage,
+                    Speed = projectileSpeed,
+                    Range = range,
+                    Direction = randomPoint
+                };
+
                 // Spawn bullet
-                projectilePool.Get(this, projectileSpawn, randomPoint);
+                projectilePool.Get(stats, projectileSpawn);
             }
 
             _shotCount++;
@@ -71,7 +79,16 @@ public class ScatterShot : EnemyRangedAttack
             var angle = i * angleStep;
             var rad = angle * Mathf.Deg2Rad;
             var direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad));
-            extraProjectilePool.Get(this, projectileSpawn, direction.normalized);
+
+            var stats = new ProjectileStats
+                {
+                    Damage = damage,
+                    Speed = projectileSpeed,
+                    Range = range,
+                    Direction = direction.normalized
+                };
+
+            extraProjectilePool.Get(stats, projectileSpawn);
         }
 
         projectileSpeed = _tempSpeed;

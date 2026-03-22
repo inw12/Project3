@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.Pool;
-public class PlayerProjectilePool : MonoBehaviour
+public class ProjectilePool : MonoBehaviour
 {
-    // Referenced by 'PlayerAttack' to spawn projectiles
-    public static PlayerProjectilePool Instance { get; private set; }
+    /// * Referenced by:
+    ///     - 'Projectile.cs'   (release)
+    ///     - 'PlayerAttack.cs' (get)
+    ///     - 'EnemyAttack.cs'  (get)
+    public static ProjectilePool Instance { get; private set; }
 
     [SerializeField] private GameObject projectile;
     [Space]
-    [SerializeField] private int defaultCapacity = 20;
+    [SerializeField] private int defaultCapacity = 50;
     [SerializeField] private int maxCapacity = 100;
 
     private ObjectPool<GameObject> _pool;
@@ -41,14 +44,16 @@ public class PlayerProjectilePool : MonoBehaviour
 
     private void OnDestroyProjectile(GameObject item) => DestroyImmediate(item);
 
-    public void Get(PlayerProjectileStats stats, Transform spawn)
+    public void Get(ProjectileStats stats, Transform spawn)
     {
-        GameObject p = _pool.Get();
-        if (p.TryGetComponent(out PlayerProjectile q)) {
-            q.Initialize(stats, spawn);
-            q.gameObject.SetActive(true);
+        GameObject item = _pool.Get();
+        if (item.TryGetComponent(out Projectile p))
+        {
+            p.Initialize(this, stats, spawn);
+            p.gameObject.SetActive(true);
         }
     }
+    
     public void Release(GameObject item)
     {
         item.SetActive(false);

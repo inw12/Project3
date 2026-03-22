@@ -29,7 +29,7 @@ public class PlayerAttack : MonoBehaviour
 
     [Header("Ranged Attack")]
     [SerializeField] private LayerMask rangedTarget;
-    [SerializeField] private PlayerProjectilePool projectilePool;
+    [SerializeField] private ProjectilePool projectilePool;
     [SerializeField] private Transform projectileSpawn;
     [Space]
     [SerializeField] private float projectileDamage = 1f;
@@ -261,7 +261,7 @@ public class PlayerAttack : MonoBehaviour
                 // only shoot when timer is within fire rate interval
                 if (_fireTimer >= fireRate)
                 {
-                    var stats = new PlayerProjectileStats
+                    var stats = new ProjectileStats
                     {
                         Damage = projectileDamage,
                         Speed = projectileSpeed,

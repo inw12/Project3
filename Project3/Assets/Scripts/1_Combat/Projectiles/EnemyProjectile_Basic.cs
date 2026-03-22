@@ -1,15 +1,20 @@
-///
-/// * Projectile Behavior:
-///     - Moves straight towards given direction
-///     - Returns to object pool when...
-///         - Range distance reached
-///         - Collides with specified collision layer
-/// 
-public class EnemyProjectile_Basic : EnemyProjectile
+/// * A straight-flying projectile owned by Enemy *
+using UnityEngine;
+public class EnemyProjectile_Basic : Projectile
 {
     protected override void Move()
     {
-        // Move straight towards target position
-        transform.position += _direction * _distanceThisFrame;
+        // Update distance to travel this frame
+        _distanceThisFrame = _stats.Speed * Time.deltaTime;
+
+        // Travel forward
+        transform.position += _stats.Direction * _distanceThisFrame;
+        
+        // Return to object pool after travelling a certain distance;
+        _distanceTraveled += _distanceThisFrame;
+        if (_distanceTraveled >= _stats.Range)
+        {
+            _pool.Release(gameObject);
+        }
     }
 }

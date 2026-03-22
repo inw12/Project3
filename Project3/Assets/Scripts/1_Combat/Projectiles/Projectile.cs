@@ -2,29 +2,39 @@ using UnityEngine;
 using System.Linq;
 public abstract class Projectile : MonoBehaviour, IHitbox
 {
+    [SerializeField] protected float hitboxRadius;
+    [Space]
     [SerializeField] protected LayerMask hitLayers;
     public LayerMask HittableLayers => hitLayers;
 
     protected ProjectileStats _stats;
+    protected ProjectilePool _pool;
     protected readonly Collider[] _hits = new Collider[10];
 
-    public virtual void Initialize(ProjectileStats stats, Transform spawn)
-    {
-        // Initial Spawn Position
-        transform.position = spawn.position;
+    // Range Management
+    protected float _distanceThisFrame;
+    protected float _distanceTraveled;
 
-        // Initialize Bullet Stats
+    public virtual void Initialize(ProjectilePool pool, ProjectileStats stats, Transform spawn)
+    {
+        // Object Pool
+        _pool = pool;
+
+        // Projectile Stats
         _stats = stats;
+
+        // Spawn Position
+        transform.position = spawn.position;
     }
 
     // Collision Detection
     protected virtual void Update()
     {
-        // OverlapSphere to detect collisions
+        // OverlapSphere to detect collisions in 'HittableLayers'
         var hits = Physics.OverlapSphereNonAlloc
         (
             transform.position,
-            _stats.HitboxRadius,
+            hitboxRadius,
             _hits,
             HittableLayers
         );
@@ -38,9 +48,16 @@ public abstract class Projectile : MonoBehaviour, IHitbox
     }
 
     // Projectile Movement
-    protected virtual void FixedUpdate() => Travel();
+    protected virtual void FixedUpdate() => Move();
+    
+    public virtual void OnHit(Collider other)
+    {
+        if (other.gameObject.TryGetComponent(out IDamageable e))
+        {
+            e.DecreaseHealth(_stats.Damage);
+            _pool.Release(gameObject);
+        }
+    }
 
-    // * MUST be implemented by child classes
-    public abstract void OnHit(Collider other); // "what happens when this projectile hits something?"
-    public abstract void Travel();              // "how does this projectile travel?"
+    protected abstract void Move();
 }

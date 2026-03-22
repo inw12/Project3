@@ -1,26 +1,20 @@
-///
-/// * Projectile Behavior:
-///     - Fires in a given direction
-///     - Curves as it travels over time
-///     - Returns to object pool when...
-///         - Range distance reached
-///         - Collides with specified collision layer
-///
+/// * Projectile travels along a curve with given angle *
 using UnityEngine;
-public class EnemyProjectile_Curved : EnemyProjectile
+public class EnemyProjectile_Curved : Projectile
 {
     [SerializeField] private float curveAngle;
 
     protected override void Move()
     {
         // Calculate curve offset
-        _direction = Quaternion.AngleAxis
+        _stats.Direction = Quaternion.AngleAxis
         (
             curveAngle * Time.fixedDeltaTime,
             Vector3.up
-        ) * _direction;
+        ) * _stats.Direction;
 
-        transform.position += _direction * _distanceThisFrame;
-        transform.rotation = Quaternion.LookRotation(_direction);
+        // Move in curved direction
+        transform.position += _stats.Direction * _distanceThisFrame;
+        transform.rotation = Quaternion.LookRotation(_stats.Direction);
     }
 }
