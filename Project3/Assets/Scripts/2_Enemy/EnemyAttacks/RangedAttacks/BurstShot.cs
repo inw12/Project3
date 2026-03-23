@@ -7,6 +7,8 @@ public class BurstShot : EnemyRangedAttack
     [SerializeField] private float duration;
     private float _durationTimer;
 
+    void Start() => _fireTimer = fireRate;
+
     public override void Attack(Transform target)
     {
         _durationTimer += Time.deltaTime;
@@ -27,7 +29,7 @@ public class BurstShot : EnemyRangedAttack
             };
 
             // Spawn bullet
-            projectilePool.Get(stats, projectileSpawn);
+            projectilePool.Get(stats, projectileSpawn, basicProjectilePool);
 
             // Reset fire rate timer
             _fireTimer = 0f;

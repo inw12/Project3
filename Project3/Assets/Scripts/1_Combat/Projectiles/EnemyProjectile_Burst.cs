@@ -1,8 +1,11 @@
+/// * Projectile Behavior:
+///     - Lightly tracks target location
+///     - Spawns basic projectiles in a circle shooting outward
 using UnityEngine;
 public class EnemyProjectile_Burst : Projectile
 {
     [SerializeField] private int burstProjectileCount;
-    [SerializeField] private float burstProjectileSpeedMultiplier;
+    [SerializeField] [Range(1f, 10f)] private float burstProjectileSpeedMultiplier;
 
     protected override void Move()
     {
@@ -29,22 +32,25 @@ public class EnemyProjectile_Burst : Projectile
 
     private void Burst()
     {
-        var angleStep = 360f / burstProjectileCount;
-        for (int i = 0; i < burstProjectileCount; i++)
+        if (_poolSecondary)
         {
-            var angle = i * angleStep;
-            var rad = angle * Mathf.Deg2Rad;
-            var direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad));
-
-            var stats = new ProjectileStats
+            var angleStep = 360f / burstProjectileCount;
+            for (int i = 0; i < burstProjectileCount; i++)
             {
-                Damage = _stats.Damage / 2f,
-                Speed = _stats.Speed * burstProjectileSpeedMultiplier,
-                Range = _stats.Range / 2f,
-                Direction = direction.normalized
-            };
+                var angle = i * angleStep;
+                var rad = angle * Mathf.Deg2Rad;
+                var direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad));
 
-            _pool.Get(stats, transform);
+                var stats = new ProjectileStats
+                {
+                    Damage = _stats.Damage / 2f,
+                    Speed = _stats.Speed * burstProjectileSpeedMultiplier,
+                    Range = _stats.Range * 2f,
+                    Direction = direction.normalized
+                };
+
+                _poolSecondary.Get(stats, transform);
+            }
         }
     }
 }

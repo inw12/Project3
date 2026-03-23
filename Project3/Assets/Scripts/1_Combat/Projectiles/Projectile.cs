@@ -9,6 +9,7 @@ public abstract class Projectile : MonoBehaviour, IHitbox
     protected ProjectileStats _stats;
 
     protected ProjectilePool _pool;
+    protected ProjectilePool _poolSecondary;
 
     protected readonly Collider[] _hits = new Collider[10];
 
@@ -16,10 +17,27 @@ public abstract class Projectile : MonoBehaviour, IHitbox
     protected float _distanceThisFrame;
     protected float _distanceTraveled;
 
+    // Simple Projectiles
     public virtual void Initialize(ProjectilePool pool, ProjectileStats stats, Transform spawn)
     {
         // Object Pool
         _pool = pool;
+
+        // Projectile Stats
+        _stats = stats;
+
+        // Spawn Position
+        transform.position = spawn.position;
+
+        _distanceTraveled = 0f;
+    }
+
+    // Projectiles that spawn other projectiles
+    public virtual void Initialize(ProjectilePool pool, ProjectilePool poolSecondary, ProjectileStats stats, Transform spawn)
+    {
+        // Object Pool
+        _pool = pool;
+        _poolSecondary = poolSecondary;
 
         // Projectile Stats
         _stats = stats;
