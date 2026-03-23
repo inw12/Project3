@@ -430,6 +430,11 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!4 &505612888 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 768561636846748876, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
+  m_PrefabInstance: {fileID: 7057040264344384288}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &824463752
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,6 +629,57 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 970500954}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1032249113
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1032249114}
+  - component: {fileID: 1032249115}
+  m_Layer: 6
+  m_Name: BurstShot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1032249114
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032249113}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 505612888}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1032249115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032249113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91578b172c0c14b3982c8066320b97b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Enemy::BurstShot
+  attackID: 2
+  damage: 1
+  fireRate: 1
+  projectileSpeed: 15
+  range: 25
+  projectileSpawn: {fileID: 0}
+  projectilePool: {fileID: 2016430193}
 --- !u!1 &1606205925
 GameObject:
   m_ObjectHideFlags: 0
@@ -927,7 +983,10 @@ PrefabInstance:
       objectReference: {fileID: 70864319}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 768561636846748876, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1032249114}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
 --- !u!1 &8797307911038995539
