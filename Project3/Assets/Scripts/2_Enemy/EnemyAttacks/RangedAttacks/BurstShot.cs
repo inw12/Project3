@@ -44,6 +44,7 @@ public class BurstShot : EnemyRangedAttack
         if (_durationTimer >= duration)
         {
             if (Enemy.Instance) Enemy.Instance.SetToIdle();
+            _durationTimer = 0f;
         }
     }
 }

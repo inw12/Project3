@@ -32,6 +32,9 @@ public class Enemy : MonoBehaviour
     // Called by all 'EnemyAttack' variants to exit attack state
     public static Enemy Instance { get; private set; }
 
+    [SerializeField] private float attackCooldown;
+    private float _cooldownTimer;
+    [Space]
     [SerializeField] private EnemyAction currentAction;
     [SerializeField] private EnemyAttackType currentAttack;
     [Space]
@@ -96,6 +99,20 @@ public class Enemy : MonoBehaviour
     {
         currentAction = _state.CurrentAction;
         currentAttack = _state.CurrentAttack;
+
+        _cooldownTimer += Time.deltaTime;
+        if (_cooldownTimer >= attackCooldown)
+        {
+            // Request the next attack
+            // _requestedAttack = (EnemyAttackType)Random.Range(1, 5);
+            
+            // Transition from Idle -> Attack
+            if (_state.CurrentAction is EnemyAction.Idle)
+            {
+                _state.CurrentAction = EnemyAction.Attack;
+                _state.CurrentAttack = EnemyAttackType.Ranged;
+            }
+        }
 
         // Update Attack State
         if (_state.CurrentAction is EnemyAction.Attack)
@@ -176,6 +193,8 @@ public class Enemy : MonoBehaviour
 
         _attackActive = false;
         _attackSelected = false;
+
+        _cooldownTimer = 0f;
     }
 
     public void DeactivateAttack() => _attackActive = false;
