@@ -58,6 +58,7 @@ public class Enemy : MonoBehaviour
     private EnemyAttackType _requestedAttack;
     private EnemyAttack _currentAttack;
     private bool _attackActive;
+    private bool _attackSelected;
 
     // State Machine Control
     private EnemyState _state;
@@ -147,11 +148,15 @@ public class Enemy : MonoBehaviour
 
     private void GetRangedAttack()
     {
-        ScanForPlayer(100);
-        _attackActive = true;
+        if (!_target) ScanForPlayer(100);
+        //_attackActive = true;
 
         // Randomly select ranged attack type
-        _currentAttack = rangedAttacks[Random.Range(0, rangedAttacks.Count)];
+        if (!_attackSelected)
+        {
+            _currentAttack = rangedAttacks[Random.Range(0, rangedAttacks.Count)];
+            _attackSelected = true;
+        }
 
         // Only trigger attack effects when '_attackActive' is true
         // '_attackActive' only toggled to 'true' when attack animation plays
@@ -170,6 +175,7 @@ public class Enemy : MonoBehaviour
         _state.CurrentAttack = EnemyAttackType.None;
 
         _attackActive = false;
+        _attackSelected = false;
     }
 
     public void DeactivateAttack() => _attackActive = false;

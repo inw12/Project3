@@ -18,6 +18,9 @@ public class BurstShot : EnemyRangedAttack
         if (_fireTimer >= fireRate)
         {
             // Projectile #1
+            var spawn = projectileSpawn.position;
+            spawn.y = 1f;
+            projectileSpawn.position = spawn;
             var stats = new ProjectileStats
             {
                 Damage = damage,
@@ -28,6 +31,9 @@ public class BurstShot : EnemyRangedAttack
             projectilePool.Get(stats, projectileSpawn, basicProjectilePool, target);    // Projectile "D"
 
             // Projectile #2
+            spawn = secondProjectileSpawn.position;
+            spawn.y = 1f;
+            secondProjectileSpawn.position = spawn;
             stats.Direction *= -1;
             projectilePool.Get(stats, secondProjectileSpawn, basicProjectilePool, target);
 

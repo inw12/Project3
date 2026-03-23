@@ -131,4 +131,4 @@ MonoBehaviour:
     m_Bits: 1536
   burstProjectileCount: 40
   burstProjectileSpeedMultiplier: 1.35
-  trackingStrength: 0.45
+  trackingStrength: 0.5

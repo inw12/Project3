@@ -430,6 +430,16 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!4 &415712742 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8806207031036795610, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
+  m_PrefabInstance: {fileID: 7057040264344384288}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &474246834 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1358023960534642463, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
+  m_PrefabInstance: {fileID: 7057040264344384288}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &505612888 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 768561636846748876, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
@@ -675,14 +685,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Enemy::BurstShot
   attackID: 2
   damage: 2
-  fireRate: 2.5
-  projectileSpeed: 13.5
-  range: 20
-  projectileSpawn: {fileID: 2066584181}
+  fireRate: 1.75
+  projectileSpeed: 14
+  range: 19
+  projectileSpawn: {fileID: 474246834}
   projectilePool: {fileID: 2016430193}
-  secondProjectileSpawn: {fileID: 2066584181}
+  secondProjectileSpawn: {fileID: 415712742}
   basicProjectilePool: {fileID: 8797307911038995540}
-  duration: 10
+  duration: 7
 --- !u!1 &1606205925
 GameObject:
   m_ObjectHideFlags: 0
@@ -763,11 +773,6 @@ MonoBehaviour:
   projectile: {fileID: 1860350838970000365, guid: 34b6c889ded49433fb5e12b712074c64, type: 3}
   defaultCapacity: 20
   maxCapacity: 50
---- !u!4 &2066584181 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 84515683811886393, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
-  m_PrefabInstance: {fileID: 7057040264344384288}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1541122181272990309
 Transform:
   m_ObjectHideFlags: 0
