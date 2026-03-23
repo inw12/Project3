@@ -675,11 +675,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Enemy::BurstShot
   attackID: 2
   damage: 2
-  fireRate: 1.75
-  projectileSpeed: 10
-  range: 17.5
+  fireRate: 2.5
+  projectileSpeed: 13.5
+  range: 20
   projectileSpawn: {fileID: 2066584181}
   projectilePool: {fileID: 2016430193}
+  secondProjectileSpawn: {fileID: 2066584181}
   basicProjectilePool: {fileID: 8797307911038995540}
   duration: 10
 --- !u!1 &1606205925

@@ -1,8 +1,9 @@
-/// * Shoots a 'BurstProjectile' at a target direction *
+/// * Shoots 2 'BurstProjectiles' to the left & right of the enemy *
 using UnityEngine;
 public class BurstShot : EnemyRangedAttack
 {
     [Space]
+    [SerializeField] private Transform secondProjectileSpawn;
     [SerializeField] private ProjectilePool basicProjectilePool;
     [SerializeField] private float duration;
     private float _durationTimer;
@@ -16,20 +17,19 @@ public class BurstShot : EnemyRangedAttack
 
         if (_fireTimer >= fireRate)
         {
-            // Calculate Target Direction
-            var direction = (Vector3.ProjectOnPlane(target.position, Vector3.up) - Vector3.ProjectOnPlane(projectileSpawn.position, Vector3.up)).normalized;
-
-            // Initialize Stats
+            // Projectile #1
             var stats = new ProjectileStats
             {
                 Damage = damage,
                 Speed = projectileSpeed,
                 Range = range,
-                Direction = direction
+                Direction = transform.right
             };
+            projectilePool.Get(stats, projectileSpawn, basicProjectilePool, target);    // Projectile "D"
 
-            // Spawn bullet (D)
-            projectilePool.Get(stats, projectileSpawn, basicProjectilePool, target);
+            // Projectile #2
+            stats.Direction *= -1;
+            projectilePool.Get(stats, secondProjectileSpawn, basicProjectilePool, target);
 
             // Reset fire rate timer
             _fireTimer = 0f;

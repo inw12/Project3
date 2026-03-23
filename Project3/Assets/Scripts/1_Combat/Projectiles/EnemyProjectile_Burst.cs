@@ -8,7 +8,7 @@ public class EnemyProjectile_Burst : Projectile
     [SerializeField] private int burstProjectileCount;
     [SerializeField] [Range(0f, 2f)] private float burstProjectileSpeedMultiplier;
     [Header("Target Tracking")]
-    [SerializeField] [Range(0f, 1f)] private float trackingStrength;
+    [SerializeField] [Range(0f, 5f)] private float trackingStrength;
 
     protected override void Move()
     {
@@ -31,12 +31,12 @@ public class EnemyProjectile_Burst : Projectile
         _distanceTraveled += _distanceThisFrame;
         if (_distanceTraveled >= _stats.Range)
         {
-            Burst();
+            ScatterBurst();
             _pool.Release(gameObject);
         }
     }
 
-    private void Burst()
+    private void CircleBurst()
     {
         if (_poolSecondary)
         {
@@ -57,6 +57,27 @@ public class EnemyProjectile_Burst : Projectile
 
                 _poolSecondary.Get(stats, transform);
             }
+        }
+    }
+
+    private void ScatterBurst()
+    {
+        for (int i = 0; i < burstProjectileCount; i++)
+        {
+            // Get Random Direction
+            Vector2 randomCircle = Random.insideUnitCircle;
+            Vector3 randomPoint = new(randomCircle.x, 0f, randomCircle.y);
+            randomPoint = randomPoint.normalized;
+
+            var stats = new ProjectileStats
+            {
+                Damage = _stats.Damage / 2f,
+                Speed = _stats.Speed * Random.Range(0.5f, 2f),
+                Range = _stats.Range * 2f,
+                Direction = randomPoint
+            };
+
+            _poolSecondary.Get(stats, transform);
         }
     }
 }
