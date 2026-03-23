@@ -657,6 +657,53 @@ Transform:
   - {fileID: 1541122181272990309}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2016430191
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2016430192}
+  - component: {fileID: 2016430193}
+  m_Layer: 6
+  m_Name: Burst Projectile Pool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2016430192
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016430191}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1541122181272990309}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2016430193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016430191}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9462d1975940a45f4a25060a3dd3fcdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Combat::ProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 34b6c889ded49433fb5e12b712074c64, type: 3}
+  defaultCapacity: 20
+  maxCapacity: 50
 --- !u!4 &1541122181272990309
 Transform:
   m_ObjectHideFlags: 0
@@ -672,6 +719,7 @@ Transform:
   m_Children:
   - {fileID: 3106064987858090785}
   - {fileID: 70864318}
+  - {fileID: 2016430192}
   m_Father: {fileID: 1606205926}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &2890657793875711896

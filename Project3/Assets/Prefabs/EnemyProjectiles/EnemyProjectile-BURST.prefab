@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2559590347628954890}
   - component: {fileID: 6824982619028581361}
   - component: {fileID: 1516057337678909603}
+  - component: {fileID: 5612830397767189516}
   m_Layer: 0
   m_Name: EnemyProjectile-BURST
   m_TagString: Untagged
@@ -112,3 +113,21 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5612830397767189516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860350838970000365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7351f73ff2e0423ba48f5e30bfee7a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Combat::EnemyProjectile_Burst
+  hitboxRadius: 1.4
+  hitLayers:
+    serializedVersion: 2
+    m_Bits: 1536
+  burstProjectileCount: 20
+  burstProjectileSpeedMultiplier: 20
