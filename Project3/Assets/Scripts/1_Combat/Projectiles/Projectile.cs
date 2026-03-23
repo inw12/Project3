@@ -7,7 +7,9 @@ public abstract class Projectile : MonoBehaviour, IHitbox
     public LayerMask HittableLayers => hitLayers;
 
     protected ProjectileStats _stats;
+
     protected ProjectilePool _pool;
+
     protected readonly Collider[] _hits = new Collider[10];
 
     // Range Management
@@ -49,7 +51,7 @@ public abstract class Projectile : MonoBehaviour, IHitbox
 
     // Projectile Movement
     protected virtual void FixedUpdate() => Move();
-    
+
     public virtual void OnHit(Collider other)
     {
         if (other.gameObject.TryGetComponent(out IDamageable e))

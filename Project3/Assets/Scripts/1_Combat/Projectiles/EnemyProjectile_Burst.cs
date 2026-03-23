@@ -3,23 +3,6 @@ public class EnemyProjectile_Burst : Projectile
 {
     [SerializeField] private int burstProjectileCount;
     [SerializeField] private float burstProjectileSpeedMultiplier;
-    private ProjectilePool _pool2;
-
-    // Overloaded 'Initialize()' method to take another 'ProjectilePool' as a parameter
-    public void Initialize(ProjectilePool burstPool, ProjectilePool basicPool, ProjectileStats stats, Transform spawn)
-    {
-        // Object Pool
-        _pool = burstPool;  // burst projectile object pool
-        _pool2 = basicPool; // basic projectile object pool
-
-        // Projectile Stats
-        _stats = stats;
-
-        // Spawn Position
-        transform.position = spawn.position;
-
-        _distanceTraveled = 0f;
-    }
 
     protected override void Move()
     {
@@ -33,8 +16,8 @@ public class EnemyProjectile_Burst : Projectile
         _distanceTraveled += _distanceThisFrame;
         if (_distanceTraveled >= _stats.Range)
         {
-            _pool.Release(gameObject);
             Burst();
+            _pool.Release(gameObject);
         }
     }
 
@@ -55,13 +38,13 @@ public class EnemyProjectile_Burst : Projectile
 
             var stats = new ProjectileStats
             {
-                Damage = _stats.Damage,
+                Damage = _stats.Damage / 2f,
                 Speed = _stats.Speed * burstProjectileSpeedMultiplier,
-                Range = _stats.Range,
+                Range = _stats.Range / 2f,
                 Direction = direction.normalized
             };
 
-            _pool2.Get(stats, transform);
+            _pool.Get(stats, transform);
         }
     }
 }

@@ -680,7 +680,6 @@ MonoBehaviour:
   range: 25
   projectileSpawn: {fileID: 2066584181}
   projectilePool: {fileID: 2016430193}
-  basicProjectilePool: {fileID: 0}
   duration: 3
 --- !u!1 &1606205925
 GameObject:
@@ -987,7 +986,7 @@ PrefabInstance:
     - target: {fileID: 5513232919020672035, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
       propertyPath: 'rangedAttacks.Array.data[0]'
       value: 
-      objectReference: {fileID: 7057040264344384289}
+      objectReference: {fileID: 1032249115}
     - target: {fileID: 5513232919020672035, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
       propertyPath: 'rangedAttacks.Array.data[1]'
       value: 
@@ -1008,17 +1007,6 @@ PrefabInstance:
       addedObject: {fileID: 1032249114}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
---- !u!114 &7057040264344384289 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6298060116003609574, guid: 45d92cfed469844c7b20cf67763ea9f2, type: 3}
-  m_PrefabInstance: {fileID: 7057040264344384288}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c24b68051da84251ba98fcbb104807b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ScatterShot
 --- !u!1 &8797307911038995539
 GameObject:
   m_ObjectHideFlags: 0

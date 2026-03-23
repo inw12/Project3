@@ -130,4 +130,4 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1536
   burstProjectileCount: 20
-  burstProjectileSpeedMultiplier: 20
+  burstProjectileSpeedMultiplier: 1.5

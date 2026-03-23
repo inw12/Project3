@@ -147,6 +147,9 @@ public class Enemy : MonoBehaviour
 
     private void GetRangedAttack()
     {
+        ScanForPlayer(100);
+        _attackActive = true;
+
         // Randomly select ranged attack type
         _currentAttack = rangedAttacks[Random.Range(0, rangedAttacks.Count)];
 
