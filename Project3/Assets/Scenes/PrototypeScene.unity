@@ -674,14 +674,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Enemy::BurstShot
   attackID: 2
-  damage: 1
-  fireRate: 1.5
-  projectileSpeed: 12
-  range: 20
+  damage: 2
+  fireRate: 1.75
+  projectileSpeed: 10
+  range: 17.5
   projectileSpawn: {fileID: 2066584181}
   projectilePool: {fileID: 2016430193}
   basicProjectilePool: {fileID: 8797307911038995540}
-  duration: 6
+  duration: 10
 --- !u!1 &1606205925
 GameObject:
   m_ObjectHideFlags: 0

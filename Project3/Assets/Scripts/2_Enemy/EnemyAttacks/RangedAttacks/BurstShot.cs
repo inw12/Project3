@@ -28,8 +28,8 @@ public class BurstShot : EnemyRangedAttack
                 Direction = direction
             };
 
-            // Spawn bullet
-            projectilePool.Get(stats, projectileSpawn, basicProjectilePool);
+            // Spawn bullet (D)
+            projectilePool.Get(stats, projectileSpawn, basicProjectilePool, target);
 
             // Reset fire rate timer
             _fireTimer = 0f;

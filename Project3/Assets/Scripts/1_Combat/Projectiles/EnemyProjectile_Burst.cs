@@ -4,15 +4,27 @@
 using UnityEngine;
 public class EnemyProjectile_Burst : Projectile
 {
+    [Header("Burst Effect")]
     [SerializeField] private int burstProjectileCount;
-    [SerializeField] [Range(1f, 10f)] private float burstProjectileSpeedMultiplier;
+    [SerializeField] [Range(0f, 2f)] private float burstProjectileSpeedMultiplier;
+    [Header("Target Tracking")]
+    [SerializeField] [Range(0f, 1f)] private float trackingStrength;
 
     protected override void Move()
     {
         // Update distance to travel this frame
         _distanceThisFrame = _stats.Speed * Time.fixedDeltaTime;
 
-        // Travel forward
+        // "Where is our target?"
+        var targetDirection = (Vector3.ProjectOnPlane(_target.position, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
+
+        // "What direction should I steer towards?"
+        var steerDirection = Vector3.Slerp(_stats.Direction, targetDirection, trackingStrength);
+
+        // Calculate steer force
+        _stats.Direction = Vector3.Slerp(_stats.Direction, steerDirection, 1f - Mathf.Exp(-(trackingStrength * 2f) * Time.fixedDeltaTime));
+
+        // Apply Movement
         transform.position += _stats.Direction * _distanceThisFrame;
         
         // Return to object pool after travelling a certain distance;
@@ -22,12 +34,6 @@ public class EnemyProjectile_Burst : Projectile
             Burst();
             _pool.Release(gameObject);
         }
-    }
-
-    public override void OnHit(Collider other)
-    {
-        base.OnHit(other);
-        Burst();
     }
 
     private void Burst()

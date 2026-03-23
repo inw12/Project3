@@ -129,5 +129,6 @@ MonoBehaviour:
   hitLayers:
     serializedVersion: 2
     m_Bits: 1536
-  burstProjectileCount: 25
-  burstProjectileSpeedMultiplier: 2
+  burstProjectileCount: 40
+  burstProjectileSpeedMultiplier: 1.35
+  trackingStrength: 1
