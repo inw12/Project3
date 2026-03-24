@@ -22,13 +22,17 @@ public class PlayerAnimationController : MonoBehaviour
     
     private Animator _animator;
 
-    private static readonly int currentAction = Animator.StringToHash("CurrentAction");
+    private static readonly int movementAction = Animator.StringToHash("MovementAction");
+    private static readonly int combatAction = Animator.StringToHash("CombatAction");
     private MovementState _prevState;
 
     public void Initialize()
     {
         _animator = GetComponent<Animator>();
-        _animator.SetInteger(currentAction, (int)playerMovement.GetState().CurrentAction);
+
+        // Initialize Animator Values
+        _animator.SetInteger(movementAction, (int)playerMovement.GetState().CurrentAction);
+        _animator.SetInteger(combatAction, (int)playerCombat.GetState().CurrentAttack);
     }
 
     public void UpdateAnimation()
@@ -41,7 +45,7 @@ public class PlayerAnimationController : MonoBehaviour
 
         if (_prevState.CurrentAction != state.CurrentAction)
         {
-            _animator.SetInteger(currentAction, (int)state.CurrentAction);
+            _animator.SetInteger(movementAction, (int)state.CurrentAction);
         }
 
         _prevState = state;

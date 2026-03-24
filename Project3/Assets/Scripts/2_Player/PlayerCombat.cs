@@ -8,12 +8,14 @@ public struct CombatInput
 }
 public struct CombatState
 {
-    public AttackType CurrentAttack;
+    public CombatAction CurrentAttack;
     public Vector3 Target;
 }
-public enum AttackType
+public enum CombatAction
 {
-    None, Ranged, Melee
+    None    = 0,
+    Ranged  = 1,
+    Melee   = 2
 }
 public class PlayerCombat : MonoBehaviour
 {
@@ -59,7 +61,7 @@ public class PlayerCombat : MonoBehaviour
         _combatInputEnabled = true;
 
         // State Machine Initialization
-        _state.CurrentAttack = AttackType.None;
+        _state.CurrentAttack = CombatAction.None;
         _state.Target = Vector3.zero;
         _prevState = _state;
 
@@ -94,7 +96,7 @@ public class PlayerCombat : MonoBehaviour
     {
         if (_requestedRanged)
         {
-            _state.CurrentAttack = AttackType.Ranged;
+            _state.CurrentAttack = CombatAction.Ranged;
             rangedAttack.Attack(ref _state, _requestedMousePos, deltaTime);
         }
         else
@@ -105,7 +107,7 @@ public class PlayerCombat : MonoBehaviour
 
     public void CancelCurrentAction()
     {
-        _state.CurrentAttack = AttackType.None;
+        _state.CurrentAttack = CombatAction.None;
     }
 
     // Public methods to enable/disable combat inputs

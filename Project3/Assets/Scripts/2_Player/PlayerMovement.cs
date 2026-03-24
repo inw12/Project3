@@ -167,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
         var combatState = PlayerCombat.Instance.GetState();
 
         // Rotate character towards MOUSE POSITION ------------ (Ranged Attack)
-        if (combatState.CurrentAttack is AttackType.Ranged)
+        if (combatState.CurrentAttack is CombatAction.Ranged)
         {
             targetRotation = Quaternion.LookRotation(combatState.Target);
         }
