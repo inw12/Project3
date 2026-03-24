@@ -3351,7 +3351,8 @@ MonoBehaviour:
   dashSpeed: 20
   dashAcceleration: 50
   dashDuration: 0.6
-  comboBuffer: 0.5
+  comboBuffer: 1
+  animationController: {fileID: 1782681039542158505}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64

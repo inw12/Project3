@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class PlayerAttackMelee : MonoBehaviour
 {
@@ -66,7 +67,11 @@ public class PlayerAttackMelee : MonoBehaviour
         _comboTimer = 0f;
         _dashTimer = 0f;
 
+        if (_comboCounter == 3) _comboCounter = 0;
         _comboCounter++;
+        _comboCounter = Math.Clamp(_comboCounter, 0, 3);
+
+        animationController.UpdateMeleeAnimation(_comboCounter);
     }
 
     private void ResetMeleeCombo()

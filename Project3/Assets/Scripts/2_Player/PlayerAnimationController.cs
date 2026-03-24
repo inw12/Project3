@@ -61,5 +61,9 @@ public class PlayerAnimationController : MonoBehaviour
         _prevCombatState = _combatState;
     }
 
-    private void TriggerMelee() => _animator.SetTrigger("MeleeTrigger");
+    public void UpdateMeleeAnimation(int comboCount)
+    {
+        _animator.SetTrigger("MeleeTrigger");
+        _animator.SetInteger("ComboCount", comboCount);
+    }
 }

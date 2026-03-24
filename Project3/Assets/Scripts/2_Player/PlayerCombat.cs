@@ -136,17 +136,20 @@ public class PlayerCombat : MonoBehaviour
     }
     private void OnMeleeAttack(float deltaTime)
     {
+        // Melee Combo START
         if (!_meleeStarted)
         {
             _meleeStarted = true;
             meleeAttack.TriggerAttack();
         }
 
+        // Melee Combo CONTINUE
         if (_requestedMelee)
         {
             meleeAttack.TriggerAttack();
         }
 
+        // Update Melee Data
         meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, deltaTime);
     }
     private void OnRangedAttack(float deltaTime)
