@@ -20,6 +20,8 @@ public enum MovementAction
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    /// * Referenced by:
+    ///     - 'PlayerCombat.cs' (to control movement during certain combat actions)
     public static PlayerMovement Instance { get; private set; }
 
     [Header("Movement")]

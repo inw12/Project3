@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public static Player Instance { get; private set; }
 
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerCombat playerCombat;
     [Space]
     [SerializeField] private PlayerAnimationController animationController;
     [SerializeField] private PlayerAnimationRig animationRig;
@@ -38,6 +39,7 @@ public class Player : MonoBehaviour
 
         // Player Actions
         playerMovement.Initialize();
+        playerCombat.Initialize();
 
         // Character Animations
         animationController.Initialize();
@@ -47,22 +49,36 @@ public class Player : MonoBehaviour
         mainCamera.transform.position = cameraHeight.position;
     }
 
-    void Update()
+    void Update()       // Read player INPUT
     {
         // Read Movement Input
-        var input = _inputActions.Movement;
+        var moveInputActions = _inputActions.Movement;
         var movementInput = new MovementInput
         {
-            Movement        = input.Move.ReadValue<Vector2>(),
-            Dodge           = input.Dodge.WasPressedThisFrame(),
-            MousePosition   = input.MousePosition.ReadValue<Vector2>()
+            Movement        = moveInputActions.Move.ReadValue<Vector2>(),
+            Dodge           = moveInputActions.Dodge.WasPressedThisFrame(),
+            MousePosition   = moveInputActions.MousePosition.ReadValue<Vector2>()
         };
         playerMovement.UpdateInput(movementInput);
+
+        // Read Combat Input
+        var combatInputActions = _inputActions.Combat;
+        var combatInput = new CombatInput
+        {
+            Ranged          = combatInputActions.RangedAttack.IsPressed(),
+            Melee           = combatInputActions.MeleeAttack.WasPressedThisFrame(),
+            Parry           = combatInputActions.Parry.WasPressedThisFrame(),
+            MousePosition   = moveInputActions.MousePosition.ReadValue<Vector2>()        
+        };
+        playerCombat.UpdateInput(combatInput);
     }
 
-    void LateUpdate()
+    void LateUpdate()   // Update components IN RESPONSE to player action
     {
         var deltaTime = Time.deltaTime;
+
+        // Update Combat Actions
+        playerCombat.UpdateCombatAction();
 
         // Rotate character
         playerMovement.UpdateRotation(deltaTime);
@@ -75,7 +91,7 @@ public class Player : MonoBehaviour
         mainCamera.transform.position = cameraHeight.position + cameraOffset;
     }
 
-    void FixedUpdate()
+    void FixedUpdate()  // Trigger CHARACTER MOVEMENT
     {
         var deltaTime = Time.fixedDeltaTime;
         playerMovement.UpdateMovement(deltaTime);

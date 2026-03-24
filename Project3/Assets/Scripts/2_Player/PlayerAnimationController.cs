@@ -18,6 +18,7 @@ public class PlayerAnimationController : MonoBehaviour
 
     [Header("Components Requiring Animation Control")]
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerCombat playerCombat;
     
     private Animator _animator;
 

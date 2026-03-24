@@ -17,7 +17,7 @@ public class PlayerAnimationRig : MonoBehaviour
     [SerializeField] private float animationSpeed = 10f;
     [SerializeField] private Vector3 elbowOffset;
 
-    private AttackState _state;
+    private CombatState _state;
     private bool _rigActive;
 
     public void Initialize()
@@ -31,13 +31,14 @@ public class PlayerAnimationRig : MonoBehaviour
         _rigActive = false;
     }
 
-    // This rig will toggle between ON and OFF depending
-    //  on if the player is currently performing a ranged attack
+    // * This rig will toggle between ON and OFF depending on
+    //   if the player is currently performing a RANGED ATTACK
     public void UpdateRig()
     {
-        //_state = PlayerAttack.Instance.GetState();
+        _state = PlayerCombat.Instance.GetState();
 
-        _rigActive = _state.CurrentAttack == Attack.Ranged;
+        _rigActive = _state.CurrentAttack is AttackType.Ranged;
+
         if (_rigActive)
             RaiseArm();
         else 
@@ -47,7 +48,7 @@ public class PlayerAnimationRig : MonoBehaviour
     private void RaiseArm()
     {
         // Update TARGET position
-        target.position = _state.AttackPosition;
+        target.position = _state.Target;
 
         // Update HINT position
         var shoulder = shoulderAim.data.constrainedObject.transform;

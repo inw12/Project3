@@ -810,6 +810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   playerMovement: {fileID: 6919512216168060266}
+  playerCombat: {fileID: 8283323078812855506}
   animationController: {fileID: 1782681039542158505}
   animationRig: {fileID: 3792633376001949084}
   mainCamera: {fileID: 330585545}
@@ -1384,7 +1385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerAnimationController
   playerMovement: {fileID: 6919512216168060266}
-  animator: {fileID: 1369266986940211655}
+  playerCombat: {fileID: 8283323078812855506}
 --- !u!1 &1804928451474217398
 GameObject:
   m_ObjectHideFlags: 0
@@ -3294,6 +3295,10 @@ GameObject:
   - component: {fileID: 701664072667675252}
   - component: {fileID: 275767040727412815}
   - component: {fileID: 6919512216168060266}
+  - component: {fileID: 8283323078812855506}
+  - component: {fileID: 8283323078812855509}
+  - component: {fileID: 8283323078812855508}
+  - component: {fileID: 8283323078812855507}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -3301,6 +3306,66 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8283323078812855506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8283323078812855505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6af0bc6120a4480583162d1e9c42099, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerCombat
+  rangedAttack: {fileID: 8283323078812855509}
+  meleeAttack: {fileID: 8283323078812855508}
+  parry: {fileID: 8283323078812855507}
+--- !u!114 &8283323078812855507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8283323078812855505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49908c2b376e64eae9ae2359ca693c18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerParry
+--- !u!114 &8283323078812855508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8283323078812855505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435e25864f50e425cbd759be984615c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerAttackMelee
+--- !u!114 &8283323078812855509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8283323078812855505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29700bb9cb71f4b688927fe3f173342e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerAttackRanged
+  damage: 1
+  fireRate: 0.24
+  projectileSpeed: 25
+  projectileRange: 50
+  projectilePool: {fileID: 7003397382392103176}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  projectileSpawn: {fileID: 6215441363599116621}
 --- !u!1 &8284233274241165930
 GameObject:
   m_ObjectHideFlags: 0
