@@ -12,10 +12,10 @@ public class PlayerAnimationController : MonoBehaviour
     public void UpdateAnimation()
     {
         var state = playerMovement.GetState();
+        var velocity = transform.InverseTransformDirection(state.Velocity.normalized);
 
-        var input = playerMovement.GetMovementDirection();
-        animator.SetFloat("xInput", input.x);
-        animator.SetFloat("yInput", input.z);
+        animator.SetFloat("xVelocity", velocity.x);
+        animator.SetFloat("yVelocity", velocity.z);
 
         if (_prevState.CurrentAction != state.CurrentAction)
         {

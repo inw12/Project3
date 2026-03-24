@@ -249,6 +249,4 @@ public class PlayerMovement : MonoBehaviour
 
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
-
-    public Vector3 GetMovementDirection() => _requestedMovement;
 }
