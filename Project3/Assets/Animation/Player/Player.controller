@@ -105,6 +105,18 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-7538171995158246716
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d21bbcb2f8bd44c8bb18769305739c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerMeleeTrigger
 --- !u!1101 &-7369638155669858419
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -191,7 +203,7 @@ BlendTree:
     m_Motion: {fileID: -203655887218126122, guid: 2beacb73683d44450bf9f4e187f62211, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 1}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: xInput
     m_Mirror: 0
@@ -199,7 +211,7 @@ BlendTree:
     m_Motion: {fileID: -203655887218126122, guid: 2beacb73683d44450bf9f4e187f62211, type: 3}
     m_Threshold: 0.14285715
     m_Position: {x: 0.71, y: 0.71}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: xInput
     m_Mirror: 0
@@ -207,7 +219,7 @@ BlendTree:
     m_Motion: {fileID: -203655887218126122, guid: 2beacb73683d44450bf9f4e187f62211, type: 3}
     m_Threshold: 0.2857143
     m_Position: {x: -0.71, y: 0.71}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: xInput
     m_Mirror: 0
@@ -215,7 +227,7 @@ BlendTree:
     m_Motion: {fileID: -203655887218126122, guid: dc2c02187a4794ec289cb068cfe86c33, type: 3}
     m_Threshold: 0.42857143
     m_Position: {x: -1, y: 0}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: xInput
     m_Mirror: 0
@@ -223,7 +235,7 @@ BlendTree:
     m_Motion: {fileID: -203655887218126122, guid: e31213e321ab84599953c7d10f3ccfe4, type: 3}
     m_Threshold: 0.5714286
     m_Position: {x: 1, y: 0}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: xInput
     m_Mirror: 0
@@ -231,7 +243,7 @@ BlendTree:
     m_Motion: {fileID: -203655887218126122, guid: 13d187164bf1c49a79088b98d2816c9c, type: 3}
     m_Threshold: 0.71428573
     m_Position: {x: 0, y: -1}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: xInput
     m_Mirror: 0
@@ -239,7 +251,7 @@ BlendTree:
     m_Motion: {fileID: -203655887218126122, guid: 13d187164bf1c49a79088b98d2816c9c, type: 3}
     m_Threshold: 0.85714287
     m_Position: {x: -0.71, y: -0.71}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: xInput
     m_Mirror: 0
@@ -247,7 +259,7 @@ BlendTree:
     m_Motion: {fileID: -203655887218126122, guid: 13d187164bf1c49a79088b98d2816c9c, type: 3}
     m_Threshold: 1
     m_Position: {x: 0.71, y: -0.71}
-    m_TimeScale: 1
+    m_TimeScale: 1.5
     m_CycleOffset: 0
     m_DirectBlendParameter: xInput
     m_Mirror: 0
@@ -529,6 +541,18 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-1596330162800579060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d21bbcb2f8bd44c8bb18769305739c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerMeleeTrigger
 --- !u!1102 &-745432624339100277
 AnimatorState:
   serializedVersion: 6
@@ -726,7 +750,7 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: InHitstun
+  - m_Name: HitstunActive
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -957,7 +981,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: InHitstun
+    m_ConditionEvent: HitstunActive
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3480995400220646184}
@@ -1265,7 +1289,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: InHitstun
+    m_ConditionEvent: HitstunActive
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8196362324035641317}
@@ -1306,6 +1330,18 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &7451472613536465824
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d21bbcb2f8bd44c8bb18769305739c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerMeleeTrigger
 --- !u!1101 &7502788157048700773
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -1337,7 +1373,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: InHitstun
+    m_ConditionEvent: HitstunActive
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6388989113214174434}

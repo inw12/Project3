@@ -22,6 +22,8 @@ public enum MovementAction
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    public static PlayerMovement Instance { get; private set; }
+
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float moveAcceleration = 10f;
@@ -52,6 +54,18 @@ public class PlayerMovement : MonoBehaviour
     // State Machine
     private MovementState _state;
     private MovementState _prevState;
+
+    void Awake()
+    {
+        // Singleton Initialization
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     public void Initialize()
     {
