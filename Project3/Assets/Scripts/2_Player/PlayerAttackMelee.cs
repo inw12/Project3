@@ -29,17 +29,24 @@ public class PlayerAttackMelee : MonoBehaviour
     private readonly Collider[] _outerHits = new Collider[5];
     private Vector3 _target;
 
+    private bool _meleeInputEnabled;
+
     public void Initialize()
     {
         ResetMeleeCombo();
     }
 
     // Called every frame in "PlayerCombat" when in the "Melee" state
-    public void UpdateMeleeAttack(ref CombatState state, ref bool meleeStarted, float deltaTime)
+    public void UpdateMeleeAttack(ref CombatState state, ref bool meleeStarted, ref bool meleeInputEnabled, float deltaTime)
     {
-        // Increment Timers
-        _dashTimer += deltaTime;
-        _comboTimer += deltaTime;
+        _meleeInputEnabled = meleeInputEnabled;
+
+        if (_meleeInputEnabled)
+        {
+            // Increment Timers
+            _dashTimer += deltaTime;
+            _comboTimer += deltaTime;
+        }
 
         // Scan for enemies
         var outerHits = Physics.OverlapSphereNonAlloc
@@ -58,20 +65,24 @@ public class PlayerAttackMelee : MonoBehaviour
             ResetMeleeCombo();
             state.CurrentAction = CombatAction.None;
             meleeStarted = false;
+            PlayerMovement.Instance.EnableMovementInput();
         }
     }
 
     // Called whenever "melee" button is pressed
     public void TriggerAttack()
     {
-        _comboTimer = 0f;
-        _dashTimer = 0f;
+        if (_meleeInputEnabled)
+        {
+            _comboTimer = 0f;
+            _dashTimer = 0f;
 
-        if (_comboCounter == 3) _comboCounter = 0;
-        _comboCounter++;
-        _comboCounter = Math.Clamp(_comboCounter, 0, 3);
+            if (_comboCounter == 3) _comboCounter = 0;
+            _comboCounter++;
+            _comboCounter = Math.Clamp(_comboCounter, 0, 3);
 
-        animationController.UpdateMeleeAnimation(_comboCounter);
+            animationController.UpdateMeleeAnimation(_comboCounter);
+        }
     }
 
     private void ResetMeleeCombo()

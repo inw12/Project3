@@ -21,8 +21,9 @@ public struct CombatInput
 public class PlayerCombat : MonoBehaviour
 {
     /// * Referenced by:
-    ///     - 'PlayerMovement.cs'       (handles character rotation depending on current attack)
-    ///     - 'PlayerAnimationRig.cs'   (triggers ranged attack animation rig)
+    ///     - 'PlayerMovement.cs'                   (handles character rotation depending on current attack)
+    ///     - 'PlayerAnimationRig.cs'               (triggers ranged attack animation rig)
+    ///     - 'OnMeleeStart.cs' & 'OnMeleeEnd.cs'   (StateMachineBehaviors for syncronizing melee logic and animations)
     public static PlayerCombat Instance { get; private set; }
 
     [SerializeField] private PlayerAttackRanged rangedAttack;
@@ -43,6 +44,7 @@ public class PlayerCombat : MonoBehaviour
 
     // Melee Attack Stuff
     private bool _meleeStarted; // used to trigger the first hit of the melee attack combo
+    private bool _meleeInputEnabled;
 
     void Awake()
     {
@@ -71,6 +73,7 @@ public class PlayerCombat : MonoBehaviour
         meleeAttack.Initialize();
 
         _meleeStarted = false;
+        _meleeInputEnabled = true;
     }
 
     public void UpdateInput(CombatInput input)
@@ -140,6 +143,7 @@ public class PlayerCombat : MonoBehaviour
         if (!_meleeStarted)
         {
             _meleeStarted = true;
+            PlayerMovement.Instance.DisableMovementInput();
             meleeAttack.TriggerAttack();
         }
 
@@ -150,7 +154,7 @@ public class PlayerCombat : MonoBehaviour
         }
 
         // Update Melee Data
-        meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, deltaTime);
+        meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, ref _meleeInputEnabled, deltaTime);
     }
     private void OnRangedAttack(float deltaTime)
     {
@@ -175,4 +179,8 @@ public class PlayerCombat : MonoBehaviour
     // State Getters
     public CombatState GetState() => _state;
     public CombatState GetPrevState() => _prevState;
+
+    // Bool setters for 'OnMeleeStart.cs' & 'OnMeleeEnd.cs' StateMachineBehaviors
+    public void MeleeAnimationStart() => _meleeInputEnabled = false;
+    public void MeleeAnimationEnd() => _meleeInputEnabled = true;
 }
