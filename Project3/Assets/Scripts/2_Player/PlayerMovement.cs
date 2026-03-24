@@ -166,22 +166,23 @@ public class PlayerMovement : MonoBehaviour
         Quaternion targetRotation;
         var combatState = PlayerCombat.Instance.GetState();
 
-        // Rotate character towards MOUSE POSITION (Ranged Attack)
+        // Rotate character towards MOUSE POSITION ------------ (Ranged Attack)
         if (combatState.CurrentAttack is AttackType.Ranged)
         {
             targetRotation = Quaternion.LookRotation(combatState.Target);
         }
-        // Rotate character towards DIRECTION OF MOVEMENT (Basic Movement)
+        // Rotate character towards DIRECTION OF MOVEMENT ----- (Basic Movement)
         else if (_requestedMovement.sqrMagnitude > 0f)
         {
             targetRotation = Quaternion.LookRotation(_requestedMovement);
         }
+        // No Rotation ---------------------------------------- (No Action)
         else
         {
             targetRotation = Quaternion.LookRotation(transform.forward);
         }
 
-        // Apply Rotation
+        // * Apply Rotation *
         transform.rotation = Quaternion.Lerp
         (
             transform.rotation,
