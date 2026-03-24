@@ -30,7 +30,7 @@ public class PlayerAnimationController : MonoBehaviour
 
         // Initialize Animator Values
         _animator.SetInteger("MovementAction", (int)playerMovement.GetState().CurrentAction);
-        _animator.SetInteger("CombatAction", (int)playerCombat.GetState().CurrentAttack);
+        _animator.SetInteger("CombatAction", (int)playerCombat.GetState().CurrentAction);
     }
 
     public void UpdateAnimation()
@@ -51,9 +51,9 @@ public class PlayerAnimationController : MonoBehaviour
         }
 
         // * Combat Action
-        if (_prevCombatState.CurrentAttack != _combatState.CurrentAttack)
+        if (_prevCombatState.CurrentAction != _combatState.CurrentAction)
         {
-            _animator.SetInteger("CombatAction", (int)_combatState.CurrentAttack);
+            _animator.SetInteger("CombatAction", (int)_combatState.CurrentAction);
         }
 
 

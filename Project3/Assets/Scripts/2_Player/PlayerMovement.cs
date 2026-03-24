@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
     {
         ApplyGravity();        
 
-        // * DODGE Movement
+        // DODGE Movement
         if (_dodgeData.Triggered)
         {
             _state.CurrentAction = MovementAction.Dodge;
@@ -128,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
                 hurtbox.enabled = true;
             }
         }
-        // * REGULAR Movement
+        // REGULAR Movement
         else if (_requestedMovement.sqrMagnitude > 0f)
         {
             _state.CurrentAction = MovementAction.Move;
@@ -141,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
                 1f - Mathf.Exp(-moveAcceleration * deltaTime)
             );
         }
-        // * IDLE
+        // IDLE
         else if (_requestedMovement.sqrMagnitude == 0f && _movementInputEnabled)
         {
             _state.CurrentAction = MovementAction.Idle;
@@ -152,7 +152,6 @@ public class PlayerMovement : MonoBehaviour
                 1f - Mathf.Exp(-moveAcceleration * deltaTime)
             );
         }
-
 
         // Apply Movement
         _controller.Move(_state.Velocity * deltaTime);
@@ -167,7 +166,7 @@ public class PlayerMovement : MonoBehaviour
         var combatState = PlayerCombat.Instance.GetState();
 
         // Rotate character towards MOUSE POSITION ------------ (Ranged Attack)
-        if (combatState.CurrentAttack is CombatAction.Ranged)
+        if (combatState.CurrentAction is CombatAction.Ranged)
         {
             targetRotation = Quaternion.LookRotation(combatState.Target);
         }

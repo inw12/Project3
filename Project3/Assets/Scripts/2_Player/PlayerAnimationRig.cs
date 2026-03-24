@@ -37,7 +37,7 @@ public class PlayerAnimationRig : MonoBehaviour
     {
         _state = PlayerCombat.Instance.GetState();
 
-        _rigActive = _state.CurrentAttack is CombatAction.Ranged;
+        _rigActive = _state.CurrentAction is CombatAction.Ranged;
 
         if (_rigActive)
             RaiseArm();

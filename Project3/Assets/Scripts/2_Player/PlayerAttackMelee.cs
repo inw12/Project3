@@ -1,16 +1,19 @@
 using UnityEngine;
-
 public class PlayerAttackMelee : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [Header("Stats")]
+    [SerializeField] private float damage;
+    [SerializeField] private float meleeOuterRange;
+    [SerializeField] private float meleeInnerRange;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Dash Movement")]
+    [SerializeField] private float dashSpeed;
+    [SerializeField] private float dashAcceleration;
+    [SerializeField] private float dashDuration;
+    private float _dashTimer;
+
+    [Header("Combo")]
+    [SerializeField] private float comboExtensionWindow;
+    private int _comboCounter;
+    private float _comboTimer;
 }
