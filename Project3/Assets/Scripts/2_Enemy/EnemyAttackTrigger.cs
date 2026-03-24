@@ -9,6 +9,6 @@ public class EnemyAttackTrigger : StateMachineBehaviour
     }
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (_enemy) _enemy.DeactivateAttack();
+        if (_enemy) _enemy.SetToIdle();
     }
 }

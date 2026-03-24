@@ -50,12 +50,40 @@ public class ProjectilePool : MonoBehaviour
 
     private void OnDestroyProjectile(GameObject item) => Destroy(item);
 
+    // (A) Simple Projectiles
     public void Get(ProjectileStats stats, Transform spawn)
     {
         GameObject item = _pool.Get();
         if (item.TryGetComponent(out Projectile p))
         {
             p.Initialize(this, stats, spawn);
+        }
+    }
+    // (B) Projectiles that spawn other projectiles
+    public void Get(ProjectileStats stats, Transform spawn, ProjectilePool secondaryPool)
+    {
+        GameObject item = _pool.Get();
+        if (item.TryGetComponent(out Projectile p))
+        {
+            p.Initialize(this, secondaryPool, stats, spawn);
+        }
+    }
+    // (C) Projectiles that track a target
+    public void Get(ProjectileStats stats, Transform spawn, Transform target)
+    {
+        GameObject item = _pool.Get();
+        if (item.TryGetComponent(out Projectile p))
+        {
+            p.Initialize(this, stats, spawn, target);
+        }
+    }
+    // (D) Projectiles that track a target AND spawn other projectiles
+    public void Get(ProjectileStats stats, Transform spawn, ProjectilePool secondaryPool, Transform target)
+    {
+        GameObject item = _pool.Get();
+        if (item.TryGetComponent(out Projectile p))
+        {
+            p.Initialize(this, secondaryPool, stats, spawn, target);
         }
     }
     

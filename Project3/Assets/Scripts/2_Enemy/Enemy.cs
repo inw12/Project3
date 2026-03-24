@@ -32,6 +32,9 @@ public class Enemy : MonoBehaviour
     // Called by all 'EnemyAttack' variants to exit attack state
     public static Enemy Instance { get; private set; }
 
+    [SerializeField] private float attackCooldown;
+    private float _cooldownTimer;
+    [Space]
     [SerializeField] private EnemyAction currentAction;
     [SerializeField] private EnemyAttackType currentAttack;
     [Space]
@@ -58,6 +61,7 @@ public class Enemy : MonoBehaviour
     private EnemyAttackType _requestedAttack;
     private EnemyAttack _currentAttack;
     private bool _attackActive;
+    private bool _attackSelected;
 
     // State Machine Control
     private EnemyState _state;
@@ -95,6 +99,20 @@ public class Enemy : MonoBehaviour
     {
         currentAction = _state.CurrentAction;
         currentAttack = _state.CurrentAttack;
+
+        _cooldownTimer += Time.deltaTime;
+        if (_cooldownTimer >= attackCooldown)
+        {
+            // Request the next attack
+            // _requestedAttack = (EnemyAttackType)Random.Range(1, 5);
+            
+            // Transition from Idle -> Attack
+            if (_state.CurrentAction is EnemyAction.Idle)
+            {
+                _state.CurrentAction = EnemyAction.Attack;
+                _state.CurrentAttack = EnemyAttackType.Ranged;
+            }
+        }
 
         // Update Attack State
         if (_state.CurrentAction is EnemyAction.Attack)
@@ -147,8 +165,15 @@ public class Enemy : MonoBehaviour
 
     private void GetRangedAttack()
     {
+        if (!_target) ScanForPlayer(100);
+        //_attackActive = true;
+
         // Randomly select ranged attack type
-        _currentAttack = rangedAttacks[Random.Range(0, rangedAttacks.Count)];
+        if (!_attackSelected)
+        {
+            _currentAttack = rangedAttacks[Random.Range(0, rangedAttacks.Count)];
+            _attackSelected = true;
+        }
 
         // Only trigger attack effects when '_attackActive' is true
         // '_attackActive' only toggled to 'true' when attack animation plays
@@ -167,6 +192,9 @@ public class Enemy : MonoBehaviour
         _state.CurrentAttack = EnemyAttackType.None;
 
         _attackActive = false;
+        _attackSelected = false;
+
+        _cooldownTimer = 0f;
     }
 
     public void DeactivateAttack() => _attackActive = false;

@@ -7,13 +7,19 @@ public abstract class Projectile : MonoBehaviour, IHitbox
     public LayerMask HittableLayers => hitLayers;
 
     protected ProjectileStats _stats;
+
     protected ProjectilePool _pool;
+    protected ProjectilePool _poolSecondary;
+    protected Transform _target;
+
     protected readonly Collider[] _hits = new Collider[10];
 
     // Range Management
     protected float _distanceThisFrame;
     protected float _distanceTraveled;
 
+    #region * Initialization Methods *
+    // (A) Simple Projectiles
     public virtual void Initialize(ProjectilePool pool, ProjectileStats stats, Transform spawn)
     {
         // Object Pool
@@ -27,6 +33,57 @@ public abstract class Projectile : MonoBehaviour, IHitbox
 
         _distanceTraveled = 0f;
     }
+    // (B) Projectiles that spawn other projectiles
+    public virtual void Initialize(ProjectilePool pool, ProjectilePool poolSecondary, ProjectileStats stats, Transform spawn)
+    {
+        // Object Pools
+        _pool = pool;
+        _poolSecondary = poolSecondary;
+
+        // Projectile Stats
+        _stats = stats;
+
+        // Spawn Position
+        transform.position = spawn.position;
+
+        _distanceTraveled = 0f;
+    }
+    // (C) Projectiles that track a target
+    public virtual void Initialize(ProjectilePool pool, ProjectileStats stats, Transform spawn, Transform target)
+    {
+        // Object Pools
+        _pool = pool;
+
+        // Tracking Target
+        _target = target;
+
+        // Projectile Stats
+        _stats = stats;
+
+        // Spawn Position
+        transform.position = spawn.position;
+
+        _distanceTraveled = 0f;
+    }
+    // (D) Projectiles that track a target AND spawn other projectiles
+    public virtual void Initialize(ProjectilePool pool, ProjectilePool poolSecondary, ProjectileStats stats, Transform spawn, Transform target)
+    {
+        // Object Pools
+        _pool = pool;
+        _poolSecondary = poolSecondary;
+
+        // Tracking Target
+        _target = target;
+
+        // Projectile Stats
+        _stats = stats;
+
+        // Spawn Position
+        transform.position = spawn.position;
+
+        _distanceTraveled = 0f;
+    }
+    #endregion
 
     // Collision Detection
     protected virtual void Update()
@@ -41,15 +98,12 @@ public abstract class Projectile : MonoBehaviour, IHitbox
         );
 
         // Handle hit if detected
-        if (hits > 0)
-        {
-            OnHit(_hits[0]);
-        }
+        if (hits > 0) OnHit(_hits[0]);
     }
 
     // Projectile Movement
     protected virtual void FixedUpdate() => Move();
-    
+
     public virtual void OnHit(Collider other)
     {
         if (other.gameObject.TryGetComponent(out IDamageable e))
