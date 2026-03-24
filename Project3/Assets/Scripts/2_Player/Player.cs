@@ -5,26 +5,30 @@
 using UnityEngine;
 public class Player : MonoBehaviour
 {
-    // Used by enemy attacks to target player
     public static Player Instance { get; private set; }
 
-    [SerializeField] private Camera mainCamera;
-    [Space]
     [SerializeField] private PlayerMovement playerMovement;
-    [SerializeField] private PlayerAttack playerAttack;
-    [SerializeField] private PlayerBlock playerBlock;
-    [Space]
-    [SerializeField] private PlayerHealth playerHealth;
     [Space]
     [SerializeField] private PlayerAnimationController animationController;
     [SerializeField] private PlayerAnimationRig animationRig;
     [Space]
+    [SerializeField] private Camera mainCamera;
     [SerializeField] private Transform cameraHeight;
     [SerializeField] private Vector3 cameraOffset;
 
     private PlayerInput _inputActions;
 
-    void Awake() => Instance = this;
+    void Awake()
+    {
+        // Singleton Initialization
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
 
     void Start()
     {
@@ -32,11 +36,8 @@ public class Player : MonoBehaviour
         _inputActions = new PlayerInput();
         _inputActions.Enable();
 
-        // Player Actions (Movement/Attacks)
+        // Player Actions
         playerMovement.Initialize();
-        playerAttack.Initialize();
-        playerHealth.Initialize();
-        playerBlock.Initialize();
 
         // Character Animations
         animationController.Initialize();
@@ -48,7 +49,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        // Movement Input
+        // Read Movement Input
         var input = _inputActions.Movement;
         var movementInput = new MovementInput
         {
@@ -57,16 +58,6 @@ public class Player : MonoBehaviour
             MousePosition   = input.MousePosition.ReadValue<Vector2>()
         };
         playerMovement.UpdateInput(movementInput);
-
-        // Combat Input
-        var attackInput  = new AttackInput
-        {
-            Ranged          =   _inputActions.Combat.RangedAttack.IsPressed(),
-            Melee           =   _inputActions.Combat.MeleeAttack.WasPressedThisFrame(),
-            MousePosition   =   input.MousePosition.ReadValue<Vector2>()
-        };
-        playerAttack.UpdateInput(attackInput);
-        playerBlock.UpdateInput(_inputActions.Combat.Parry.WasPressedThisFrame());
     }
 
     void LateUpdate()
@@ -75,13 +66,6 @@ public class Player : MonoBehaviour
 
         // Rotate character
         playerMovement.UpdateRotation(deltaTime);
-
-        // Trigger Attacks
-        playerAttack.UpdateAttack(playerMovement.GetState(), deltaTime);
-        playerAttack.UpdateMeleeHitbox();
-        
-        // Update PlayerBlock
-        playerBlock.UpdateBlock(deltaTime);
 
         // Update Animations
         animationController.UpdateAnimation();

@@ -2609,24 +2609,18 @@ MonoBehaviour:
   projectileSpeed: 45
   projectileRange: 50
   fireRate: 0.3
-  meleeTarget:
-    serializedVersion: 2
-    m_Bits: 64
-  enemyHurtbox:
-    serializedVersion: 2
-    m_Bits: 128
-  animator: {fileID: 0}
   meleeDamage: 2.5
-  sweepRadius: 0.2
-  meleeBase: {fileID: 0}
-  meleeTip: {fileID: 0}
   meleeOuterRange: 8
   meleeInnerRange: 2
   dashSpeed: 100
   dashAcceleration: 50
   dashDuration: 0.08
   targetedDashSpeedMultiplier: 1.5
-  comboBuffer: 0.5
+  comboBuffer: 0.55
+  animator: {fileID: 1880560395011664864}
+  enemyHurtbox:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!1 &8930084885393481805
 GameObject:
   m_ObjectHideFlags: 0

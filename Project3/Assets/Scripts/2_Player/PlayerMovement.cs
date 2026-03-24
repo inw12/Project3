@@ -22,29 +22,27 @@ public enum MovementAction
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-    // Used by 'PlayerAttack' to toggle player's movement input AND to move the character during melee attacks
-    public static PlayerMovement Instance { get; private set; }
+    [Header("Movement")]
+    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float moveAcceleration = 10f;
+    [SerializeField] private float moveRotation = 10f;
+    [Header("Dodge")]
+    [SerializeField] private CapsuleCollider hurtbox;
+    [Space]
+    [SerializeField] private float dodgeSpeed= 7f;
+    [SerializeField] private float dodgeAcceleration = 15f;
+    [SerializeField] private float dodgeDuration = 1f;
 
-    private struct DodgeInfo
+    private struct DodgeData
     {
         public Vector3 Direction;
         public bool Triggered;
         public float Timer;
     }
-
-    [Space]
-    [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float moveAcceleration = 10f;
-    [SerializeField] private float moveRotation = 10f;
-    [Space]
-    [SerializeField] private CapsuleCollider hurtbox;
-    [SerializeField] private float dodgeSpeed= 7f;
-    [SerializeField] private float dodgeAcceleration = 15f;
-    [SerializeField] private float dodgeDuration = 1f;
-    private DodgeInfo _dodgeInfo;
+    private DodgeData _dodgeData;
 
     private CharacterController _controller;
-    private bool _inputEnabled;
+    private bool _movementInputEnabled;
 
     // Requested Inputs
     private Vector3 _requestedMovement;
@@ -57,13 +55,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void Initialize()
     {
-        Instance = this;
-
         // CharacterController
         _controller = GetComponent<CharacterController>();
 
         // Player Input
-        _inputEnabled = true;
+        _movementInputEnabled = true;
         
         // State Machine
         _state.CurrentAction = MovementAction.Idle;
@@ -72,30 +68,19 @@ public class PlayerMovement : MonoBehaviour
         _prevState = _state;
     }
 
-    // Should be called in UPDATE() in 'Player'
+    // * Read player input *
+    //  Called in UPDATE() in 'Player.cs'
     public void UpdateInput(MovementInput input)
     {
-        if (_inputEnabled)
+        if (_movementInputEnabled)
         {
             // Movement Direction
             _requestedMovement = new Vector3(input.Movement.x, 0f, input.Movement.y).normalized;
 
             // Dodge Input
             _requestedDodge = input.Dodge;
-            if (_requestedDodge && !_dodgeInfo.Triggered && _requestedMovement.sqrMagnitude > 0f)   // Trigger Dodge (if pressed)
-            {
-                // Update dodge info
-                _dodgeInfo.Triggered = true;
-                _dodgeInfo.Direction = _requestedMovement;
-                _dodgeInfo.Timer = 0f;
-
-                // Disable hurtbox
-                hurtbox.enabled = false;
-
-                // Disable player inputs
-                _inputEnabled = false;
-            }
-
+            TryTriggerDodge();
+            
             // Mouse Input
             _requestedCursor = input.MousePosition;
         }
@@ -104,25 +89,16 @@ public class PlayerMovement : MonoBehaviour
     // Should be called in FIXEDUPDATE() in 'Player'
     public void UpdateMovement(float deltaTime)
     {
-        // Gravity
-        _state.IsGrounded = _controller.isGrounded;
-        if (_state.IsGrounded)
-        {
-            if (_prevState.Velocity.y < -2f) {
-                _state.Velocity.y = -2f;
-            }
-        } else {
-            _state.Velocity += 2 * Time.deltaTime * Physics.gravity;
-        }
+        ApplyGravity();        
 
-        // Dodge Movement
-        if (_dodgeInfo.Triggered)
+        // * DODGE Movement
+        if (_dodgeData.Triggered)
         {
             _state.CurrentAction = MovementAction.Dodge;
-            _dodgeInfo.Timer += deltaTime;
+            _dodgeData.Timer += deltaTime;
 
-            // Sustain this movement during dodge duration
-            var targetVelocity = dodgeSpeed * _dodgeInfo.Direction;
+            // Sustain dodge velocity during duration
+            var targetVelocity = dodgeSpeed * _dodgeData.Direction;
             _state.Velocity = Vector3.Lerp
             (
                 _state.Velocity,
@@ -131,14 +107,14 @@ public class PlayerMovement : MonoBehaviour
             );
 
             // Reset everything once dodge duration reached
-            if (_dodgeInfo.Timer > dodgeDuration)
+            if (_dodgeData.Timer > dodgeDuration)
             {
-                _dodgeInfo.Triggered = false;
-                _inputEnabled = true;
+                _dodgeData.Triggered = false;
+                _movementInputEnabled = true;
                 hurtbox.enabled = true;
             }
         }
-        // Regular Movement
+        // * REGULAR Movement
         else if (_requestedMovement.sqrMagnitude > 0f)
         {
             _state.CurrentAction = MovementAction.Move;
@@ -151,11 +127,10 @@ public class PlayerMovement : MonoBehaviour
                 1f - Mathf.Exp(-moveAcceleration * deltaTime)
             );
         }
-        // Idle
-        else
+        // * IDLE
+        else if (_requestedMovement.sqrMagnitude == 0f && _movementInputEnabled)
         {
             _state.CurrentAction = MovementAction.Idle;
-
             _state.Velocity = Vector3.Lerp
             (
                 _state.Velocity,
@@ -163,6 +138,7 @@ public class PlayerMovement : MonoBehaviour
                 1f - Mathf.Exp(-moveAcceleration * deltaTime)
             );
         }
+
 
         // Apply Movement
         _controller.Move(_state.Velocity * deltaTime);
@@ -173,48 +149,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpdateRotation(float deltaTime)
     {
-        // Ranged Attack Orientation (towards cursor)
-        if (PlayerAttack.Instance.GetState().CurrentAttack is not Attack.None && _state.CurrentAction is not MovementAction.Dodge)
-        {
-            Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedCursor);
-            if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity))
-            {
-                var targetDirection = (hit.point - transform.position).normalized;
-                targetDirection.y = 0f;
-
-                var targetRotation = Quaternion.LookRotation(targetDirection);
-                transform.rotation = Quaternion.Lerp
-                (
-                    transform.rotation,
-                    targetRotation,
-                    1f - Mathf.Exp(-moveRotation * 2f * deltaTime)
-                );
-            }
-        }
-        // Melee Attack Orientation (when valid target is in range)
-        else if (PlayerAttack.Instance.GetState().CurrentAttack is Attack.Melee && PlayerAttack.Instance.HasMeleeTarget())
-        {
-            var enemy = PlayerAttack.Instance.GetState().MeleeTarget;
-            var targetRotation = Quaternion.LookRotation(enemy);
-            transform.rotation = Quaternion.Lerp
-            (
-                transform.rotation,
-                targetRotation,
-                1f - Mathf.Exp(-moveRotation * 2f * deltaTime)
-            );
-        }
-        else if (_state.CurrentAction is MovementAction.Dodge)
-        {
-            var targetRotation = Quaternion.LookRotation(_dodgeInfo.Direction);
-            transform.rotation = Quaternion.Lerp
-            (
-                transform.rotation,
-                targetRotation,
-                1f - Mathf.Exp(-moveRotation * deltaTime)
-            );
-        }
         // Rotate player towards direction of movement
-        else if (_requestedMovement.sqrMagnitude > 0f)
+        if (_requestedMovement.sqrMagnitude > 0f)
         {
             var targetRotation = Quaternion.LookRotation(_requestedMovement);
             transform.rotation = Quaternion.Lerp
@@ -226,18 +162,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    public void EnableMovementInput() => _inputEnabled = true;
+    // Public Methods used by other classes to influence Player movement
+    public void EnableMovementInput() => _movementInputEnabled = true;
     public void DisableMovementInput()
     {
         // Disable input
-        _inputEnabled = false;
+        _movementInputEnabled = false;
 
         // Stop any character movement
         _requestedMovement = _state.Velocity = Vector3.zero;
         _state.CurrentAction = MovementAction.Idle;
-    } 
+    }
     
-    public void UpdateVelocity(Vector3 velocity, float acceleration)
+    // Velocity Getter/Setter
+    public void SetVelocity(Vector3 velocity, float acceleration)
     {
         _state.Velocity = Vector3.Lerp
         (
@@ -246,7 +184,40 @@ public class PlayerMovement : MonoBehaviour
             1f - Mathf.Exp(-acceleration * Time.deltaTime)
         );
     }
+    public Vector3 GetVelocity() => _state.Velocity;
 
+    // State Getters
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
+
+    // Helper Functions
+    private void ApplyGravity()
+    {
+        // Gravity
+        _state.IsGrounded = _controller.isGrounded;
+        if (_state.IsGrounded)
+        {
+            if (_prevState.Velocity.y < -2f) {
+                _state.Velocity.y = -2f;
+            }
+        } else {
+            _state.Velocity += 2 * Time.deltaTime * Physics.gravity;
+        }
+    }
+    private void TryTriggerDodge()
+    {
+        if (_requestedDodge && !_dodgeData.Triggered && _requestedMovement.sqrMagnitude > 0f)
+        {
+            // Update dodge info
+            _dodgeData.Triggered = true;
+            _dodgeData.Direction = _requestedMovement;
+            _dodgeData.Timer = 0f;
+
+            // Disable hurtbox
+            hurtbox.enabled = false;
+
+            // Disable player inputs
+            _movementInputEnabled = false;
+        }
+    }
 }

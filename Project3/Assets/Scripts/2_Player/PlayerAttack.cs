@@ -160,7 +160,7 @@ public class PlayerAttack : MonoBehaviour
                 // Combo START (0 -> 1)
                 if (!_comboActive) 
                 {
-                    PlayerMovement.Instance.DisableMovementInput();
+                    //PlayerMovement.Instance.DisableMovementInput();
 
                     // Set combo as Active
                     _comboActive = true;
@@ -269,7 +269,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 _dashVelocity = _dashTimer < dashDuration ? _dashVelocity : Vector3.zero;
                 _dashVelocity = innerHits == 0 ? _dashVelocity : Vector3.zero;
-                PlayerMovement.Instance.UpdateVelocity(_dashVelocity, dashAcceleration);
+                //PlayerMovement.Instance.UpdateVelocity(_dashVelocity, dashAcceleration);
             }
 
             // Reset combo when timer exceeds input window
@@ -294,7 +294,7 @@ public class PlayerAttack : MonoBehaviour
         _comboActive = false;
         animator.SetBool("ComboActive", _comboActive);
 
-        PlayerMovement.Instance.EnableMovementInput();
+        //PlayerMovement.Instance.EnableMovementInput();
     }
 
     public AttackState GetState() => _state;
