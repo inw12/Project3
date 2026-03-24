@@ -15,7 +15,8 @@ public enum CombatAction
 {
     None    = 0,
     Ranged  = 1,
-    Melee   = 2
+    Melee   = 2,
+    Parry   = 3
 }
 public class PlayerCombat : MonoBehaviour
 {

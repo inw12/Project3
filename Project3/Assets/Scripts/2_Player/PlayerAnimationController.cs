@@ -1,53 +1,63 @@
 using UnityEngine;
+/// ************************
+/// * Animator Metrics:
+///     - xVelocity
+///     - yVelocity
+///     - MovementAction
+///     - CombatAction
+///     - MeleeTrigger
+///     - ComboCount
+///     - HitstunActive
+/// ************************
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimationController : MonoBehaviour
 {
-    private struct AnimatorParameters
-    {
-        private float xVelocity;
-        private float yVelocity;
-        private int CurrentAction;
-        private int ComboCounter;
-        private bool MeleeTrigger;  // is "Trigger", not bool
-        private bool HitstunActive;
-        private bool BlockTrigger;  // is "Trigger", not bool
-        private bool IsBlocking;
-        private bool ParryActive;
-    }
-    private AnimatorParameters _parameter;
-
     [Header("Components Requiring Animation Control")]
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerCombat playerCombat;
-    
+
     private Animator _animator;
 
-    private static readonly int movementAction = Animator.StringToHash("MovementAction");
-    private static readonly int combatAction = Animator.StringToHash("CombatAction");
-    private MovementState _prevState;
+    // Action States
+    private MovementState _movementState;
+    private MovementState _prevMovementState;
+    private CombatState _combatState;
+    private CombatState _prevCombatState;
 
     public void Initialize()
     {
         _animator = GetComponent<Animator>();
 
         // Initialize Animator Values
-        _animator.SetInteger(movementAction, (int)playerMovement.GetState().CurrentAction);
-        _animator.SetInteger(combatAction, (int)playerCombat.GetState().CurrentAttack);
+        _animator.SetInteger("MovementAction", (int)playerMovement.GetState().CurrentAction);
+        _animator.SetInteger("CombatAction", (int)playerCombat.GetState().CurrentAttack);
     }
 
     public void UpdateAnimation()
     {
-        var state = playerMovement.GetState();
-        var velocity = transform.InverseTransformDirection(state.Velocity.normalized);
+        _movementState = playerMovement.GetState();
+        _combatState = playerCombat.GetState();
 
+
+        // * Velocity (x/y)
+        var velocity = transform.InverseTransformDirection(_movementState.Velocity.normalized);
         _animator.SetFloat("xVelocity", velocity.x);
         _animator.SetFloat("yVelocity", velocity.z);
 
-        if (_prevState.CurrentAction != state.CurrentAction)
+        // * Movement Action
+        if (_prevMovementState.CurrentAction != _movementState.CurrentAction)
         {
-            _animator.SetInteger(movementAction, (int)state.CurrentAction);
+            _animator.SetInteger("MovementAction", (int)_movementState.CurrentAction);
         }
 
-        _prevState = state;
+        // * Combat Action
+        if (_prevCombatState.CurrentAttack != _combatState.CurrentAttack)
+        {
+            _animator.SetInteger("CombatAction", (int)_combatState.CurrentAttack);
+        }
+
+
+        _prevMovementState = _movementState;
+        _prevCombatState = _combatState;
     }
 }
