@@ -13,7 +13,61 @@ public class PlayerAttackMelee : MonoBehaviour
     private float _dashTimer;
 
     [Header("Combo")]
-    [SerializeField] private float comboExtensionWindow;
+    [SerializeField] private float comboBuffer;
     private int _comboCounter;
     private float _comboTimer;
+
+    [Header("Unity Components")]
+    [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private Transform melee1Hitbox;
+    [SerializeField] private Transform melee2Hitbox;
+    [SerializeField] private Transform melee3Hitbox;
+
+    // For enemy tracking/targeting
+    private readonly Collider[] _outerHits = new Collider[5];
+    private Vector3 _target;
+
+    public void Initialize()
+    {
+        _comboCounter = 0;
+
+        _comboTimer = 0f;
+        _dashTimer = 0f;
+    }
+
+    // Called every frame in "PlayerCombat" when in the "Melee" state
+    public void UpdateMeleeAttack(ref CombatState state, float deltaTime)
+    {
+        // Increment Timers
+        _dashTimer += deltaTime;
+        _comboTimer += deltaTime;
+
+        // Scan for enemies
+        var outerHits = Physics.OverlapSphereNonAlloc
+        (
+            transform.position,
+            meleeOuterRange,
+            _outerHits,
+            enemyLayer,
+            QueryTriggerInteraction.Ignore
+        );
+        _target = outerHits > 0 ? _outerHits[0].transform.position : Vector3.zero;
+
+        // Exit Melee State once timer exceeds combo input buffer
+        if (_comboTimer > comboBuffer) 
+        {
+            _comboCounter = 0;
+
+            state.CurrentAction = CombatAction.None;
+        }
+    }
+
+    // Called whenever "melee" button is pressed
+    public void Attack()
+    {
+        _comboTimer = 0f;
+        _dashTimer = 0f;
+
+        _comboCounter++;
+    }
 }

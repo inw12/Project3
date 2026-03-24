@@ -1,11 +1,4 @@
 using UnityEngine;
-public struct CombatInput
-{
-    public bool Ranged;
-    public bool Melee;
-    public bool Parry;
-    public Vector2 MousePosition;
-}
 public struct CombatState
 {
     public CombatAction CurrentAction;
@@ -17,6 +10,13 @@ public enum CombatAction
     Ranged  = 1,
     Melee   = 2,
     Parry   = 3
+}
+public struct CombatInput
+{
+    public bool Ranged;
+    public bool Melee;
+    public bool Parry;
+    public Vector2 MousePosition;
 }
 public class PlayerCombat : MonoBehaviour
 {
@@ -40,9 +40,6 @@ public class PlayerCombat : MonoBehaviour
     // State Machine
     private CombatState _state;
     private CombatState _prevState;
-
-    // Melee Variables
-    private bool _comboActive;
 
     void Awake()
     {
@@ -68,8 +65,6 @@ public class PlayerCombat : MonoBehaviour
 
         // Initialize Combat Actions
         rangedAttack.Initialize();
-
-        _comboActive = false;
     }
 
     public void UpdateInput(CombatInput input)
@@ -78,37 +73,30 @@ public class PlayerCombat : MonoBehaviour
         {
             _requestedMousePos = input.MousePosition;
 
-            // Parry should only be available if the button is pressed
-            // AND we're not performing a melee attack
-            // AND we're not performing a dodge
-            _requestedParry = input.Parry && !_comboActive && PlayerMovement.Instance.GetState().CurrentAction is not MovementAction.Dodge;
+            // Only allow combat actions when NOT DODGING
+            if (PlayerMovement.Instance.GetState().CurrentAction is not MovementAction.Dodge)
+            {
+                // Parry should only be available if the button is pressed
+                //  AND we're not performing a melee attack
+                _requestedParry = input.Parry && _state.CurrentAction is not CombatAction.Melee;
 
-            // Ranged attack should only be available if the button is pressed
-            // AND we're not in the middle of a melee attack string
-            _requestedRanged = input.Ranged && !_comboActive && PlayerMovement.Instance.GetState().CurrentAction is not MovementAction.Dodge;
+                // Melee attack should only be available if the button is pressed
+                //  AND we're not performing a parry
+                _requestedMelee = input.Melee && _state.CurrentAction is not CombatAction.Parry;
 
-            // Melee attack should only be available if the button is pressed
-            // AND we're not firing ranged attacks
-            _requestedMelee = input.Melee && !_requestedRanged && PlayerMovement.Instance.GetState().CurrentAction is not MovementAction.Dodge;
+                // Ranged attack should only be available if the button is pressed
+                //  AND we're not performing a melee attack
+                //  AND we're not performing a parry
+                _requestedRanged = input.Ranged && _state.CurrentAction is not CombatAction.Melee or CombatAction.Parry;
+            }
         }       
     }
 
     public void UpdateCombatAction(float deltaTime)
     {
-        if (_requestedRanged)
-        {
-            _state.CurrentAction = CombatAction.Ranged;
-            rangedAttack.Attack(ref _state, _requestedMousePos, deltaTime);
-        }
-        else if (_requestedMelee)
-        {
-            _state.CurrentAction = CombatAction.Melee;
-        }
-    }
-
-    public void CancelCurrentAction()
-    {
-        _state.CurrentAction = CombatAction.None;
+        if (_requestedParry) Debug.Log(_requestedParry);
+        if (_requestedMelee) Debug.Log(_requestedMelee);
+        if (_requestedRanged) Debug.Log(_requestedRanged);
     }
 
     // Public methods to enable/disable combat inputs

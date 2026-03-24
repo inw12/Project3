@@ -3345,6 +3345,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 435e25864f50e425cbd759be984615c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerAttackMelee
+  damage: 2
+  meleeOuterRange: 8
+  meleeInnerRange: 2
+  dashSpeed: 20
+  dashAcceleration: 50
+  dashDuration: 0.6
+  comboBuffer: 0.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  melee1Hitbox: {fileID: 6215441363599116621}
+  melee2Hitbox: {fileID: 1637483394108173747}
+  melee3Hitbox: {fileID: 298684522370693075}
 --- !u!114 &8283323078812855509
 MonoBehaviour:
   m_ObjectHideFlags: 0
