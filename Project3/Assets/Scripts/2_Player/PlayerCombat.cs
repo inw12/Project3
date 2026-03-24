@@ -89,14 +89,39 @@ public class PlayerCombat : MonoBehaviour
                 //  AND we're not performing a parry
                 _requestedRanged = input.Ranged && _state.CurrentAction is not CombatAction.Melee or CombatAction.Parry;
             }
+            else
+            {
+                _requestedParry = _requestedMelee = _requestedRanged = false;
+            }
         }       
     }
 
     public void UpdateCombatAction(float deltaTime)
     {
-        if (_requestedParry) Debug.Log(_requestedParry);
-        if (_requestedMelee) Debug.Log(_requestedMelee);
-        if (_requestedRanged) Debug.Log(_requestedRanged);
+        switch (_state.CurrentAction)
+        {
+            case CombatAction.Parry:
+                OnParry();
+                break;
+            case CombatAction.Melee:
+                OnMeleeAttack();
+                break;
+            case CombatAction.Ranged:
+                OnRangedAttack();
+                break;
+            default:
+                TryEnterNewState();
+                break;
+        };
+
+        if (_prevState.CurrentAction != _state.CurrentAction)
+        {
+            Debug.Log(_state.CurrentAction);
+        }
+
+
+        // Update previous state
+        _prevState = _state;
     }
 
     // Public methods to enable/disable combat inputs
@@ -106,4 +131,28 @@ public class PlayerCombat : MonoBehaviour
     // State Getters
     public CombatState GetState() => _state;
     public CombatState GetPrevState() => _prevState;
+
+    private void OnParry()
+    {
+        
+    }
+    private void OnMeleeAttack()
+    {
+        
+    }
+    private void OnRangedAttack()
+    {
+        rangedAttack.Attack(ref _state, _requestedMousePos, Time.deltaTime);
+
+        if (!_requestedRanged)
+        {
+            _state.CurrentAction = CombatAction.None;
+        }
+    }
+    private void TryEnterNewState()
+    {
+        _state.CurrentAction = _requestedParry ? CombatAction.Parry
+                                : _requestedMelee ? CombatAction.Melee
+                                    : _requestedRanged ? CombatAction.Ranged : CombatAction.None;
+    }
 }
