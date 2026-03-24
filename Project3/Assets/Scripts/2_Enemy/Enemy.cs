@@ -32,6 +32,7 @@ public class Enemy : MonoBehaviour
     // Called by all 'EnemyAttack' variants to exit attack state
     public static Enemy Instance { get; private set; }
 
+    [SerializeField] private bool stateMachineActive;
     [SerializeField] private float attackCooldown;
     private float _cooldownTimer;
     [Space]
@@ -100,45 +101,48 @@ public class Enemy : MonoBehaviour
         currentAction = _state.CurrentAction;
         currentAttack = _state.CurrentAttack;
 
-        _cooldownTimer += Time.deltaTime;
-        if (_cooldownTimer >= attackCooldown)
+        if (stateMachineActive)
         {
-            // Request the next attack
-            // _requestedAttack = (EnemyAttackType)Random.Range(1, 5);
-            
-            // Transition from Idle -> Attack
-            if (_state.CurrentAction is EnemyAction.Idle)
+            _cooldownTimer += Time.deltaTime;
+            if (_cooldownTimer >= attackCooldown)
             {
-                _state.CurrentAction = EnemyAction.Attack;
-                _state.CurrentAttack = EnemyAttackType.Ranged;
+                // Request the next attack
+                // _requestedAttack = (EnemyAttackType)Random.Range(1, 5);
+                
+                // Transition from Idle -> Attack
+                if (_state.CurrentAction is EnemyAction.Idle)
+                {
+                    _state.CurrentAction = EnemyAction.Attack;
+                    _state.CurrentAttack = EnemyAttackType.Ranged;
+                }
             }
-        }
 
-        // Update Attack State
-        if (_state.CurrentAction is EnemyAction.Attack)
-        {
-            switch(_state.CurrentAttack)
+            // Update Attack State
+            if (_state.CurrentAction is EnemyAction.Attack)
             {
-                case EnemyAttackType.Ranged:
-                    GetRangedAttack();
-                    break;
-                default:
-                    break;
-            };
-        }
+                switch(_state.CurrentAttack)
+                {
+                    case EnemyAttackType.Ranged:
+                        GetRangedAttack();
+                        break;
+                    default:
+                        break;
+                };
+            }
 
-        // Update Animator Controller
-        // * only update the animator on state change
-        if (_prevState.CurrentAction != _state.CurrentAction || _prevState.CurrentAttack != _state.CurrentAttack)
-        {
-            var current = new EnemyAnimatorVariables
+            // Update Animator Controller
+            // * only update the animator on state change
+            if (_prevState.CurrentAction != _state.CurrentAction || _prevState.CurrentAttack != _state.CurrentAttack)
             {
-                CurrentAction = (int)_state.CurrentAction,
-                CurrentAttack = (int)_state.CurrentAttack,
-                AttackID = _currentAttack ? _currentAttack.GetAttackID() : 0
-            };
-            animationController.UpdateAnimator(current);
-        }
+                var current = new EnemyAnimatorVariables
+                {
+                    CurrentAction = (int)_state.CurrentAction,
+                    CurrentAttack = (int)_state.CurrentAttack,
+                    AttackID = _currentAttack ? _currentAttack.GetAttackID() : 0
+                };
+                animationController.UpdateAnimator(current);
+            }
+        }        
 
         //#region Randomized State Machine Control
         //// Request a new attack after duration

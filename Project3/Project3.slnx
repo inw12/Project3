@@ -1,9 +1,9 @@
 ﻿<Solution>
+  <Project Path="Enemy.csproj" />
   <Project Path="Core.csproj" />
   <Project Path="Combat.csproj" />
   <Project Path="Player.csproj" />
   <Project Path="Input.csproj" />
-  <Project Path="Enemy.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
   <Project Path="VFX.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
