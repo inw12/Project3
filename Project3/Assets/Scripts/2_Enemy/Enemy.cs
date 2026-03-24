@@ -44,6 +44,7 @@ public class Enemy : MonoBehaviour
     [Header("Enemy Components")]
     [SerializeField] private EnemyMovement enemyMovement;
     [SerializeField] private EnemyAnimationController animationController;
+    [SerializeField] private EnemyHealth enemyHealth;
 
     [Header("Basic Stats")]
     [SerializeField] private float health = 100f;
@@ -84,6 +85,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         // Initialize Enemy Components
+        enemyHealth.Initialize(health);
         enemyMovement.Initialize(moveSpeed);
         animationController.Initialize(this);
 
