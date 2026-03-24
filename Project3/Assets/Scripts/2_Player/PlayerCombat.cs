@@ -41,6 +41,9 @@ public class PlayerCombat : MonoBehaviour
     private CombatState _state;
     private CombatState _prevState;
 
+    // Melee Attack Stuff
+    private bool _meleeStarted; // used to trigger the first hit of the melee attack combo
+
     void Awake()
     {
         // Singleton Initialization
@@ -66,6 +69,8 @@ public class PlayerCombat : MonoBehaviour
         // Initialize Combat Actions
         rangedAttack.Initialize();
         meleeAttack.Initialize();
+
+        _meleeStarted = false;
     }
 
     public void UpdateInput(CombatInput input)
@@ -131,12 +136,18 @@ public class PlayerCombat : MonoBehaviour
     }
     private void OnMeleeAttack(float deltaTime)
     {
+        if (!_meleeStarted)
+        {
+            _meleeStarted = true;
+            meleeAttack.TriggerAttack();
+        }
+
         if (_requestedMelee)
         {
             meleeAttack.TriggerAttack();
         }
 
-        meleeAttack.UpdateMeleeAttack(ref _state, deltaTime);
+        meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, deltaTime);
     }
     private void OnRangedAttack(float deltaTime)
     {

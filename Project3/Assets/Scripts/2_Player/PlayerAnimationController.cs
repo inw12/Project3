@@ -60,4 +60,6 @@ public class PlayerAnimationController : MonoBehaviour
         _prevMovementState = _movementState;
         _prevCombatState = _combatState;
     }
+
+    private void TriggerMelee() => _animator.SetTrigger("MeleeTrigger");
 }

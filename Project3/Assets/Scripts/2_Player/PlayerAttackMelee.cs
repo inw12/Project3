@@ -18,6 +18,7 @@ public class PlayerAttackMelee : MonoBehaviour
     private float _comboTimer;
 
     [Header("Unity Components")]
+    [SerializeField] private PlayerAnimationController animationController;
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private Transform melee1Hitbox;
     [SerializeField] private Transform melee2Hitbox;
@@ -33,7 +34,7 @@ public class PlayerAttackMelee : MonoBehaviour
     }
 
     // Called every frame in "PlayerCombat" when in the "Melee" state
-    public void UpdateMeleeAttack(ref CombatState state, float deltaTime)
+    public void UpdateMeleeAttack(ref CombatState state, ref bool meleeStarted, float deltaTime)
     {
         // Increment Timers
         _dashTimer += deltaTime;
@@ -55,6 +56,7 @@ public class PlayerAttackMelee : MonoBehaviour
         {
             ResetMeleeCombo();
             state.CurrentAction = CombatAction.None;
+            meleeStarted = false;
         }
     }
 
