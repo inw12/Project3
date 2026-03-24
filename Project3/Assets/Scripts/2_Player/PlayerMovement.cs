@@ -163,17 +163,31 @@ public class PlayerMovement : MonoBehaviour
 
     public void UpdateRotation(float deltaTime)
     {
-        // Rotate player towards direction of movement
-        if (_requestedMovement.sqrMagnitude > 0f)
+        Quaternion targetRotation;
+        var combatState = PlayerCombat.Instance.GetState();
+
+        // Rotate character towards MOUSE POSITION (Ranged Attack)
+        if (combatState.CurrentAttack is AttackType.Ranged)
         {
-            var targetRotation = Quaternion.LookRotation(_requestedMovement);
-            transform.rotation = Quaternion.Lerp
-            (
-                transform.rotation,
-                targetRotation,
-                1f - Mathf.Exp(-moveRotation * deltaTime)
-            );
+            targetRotation = Quaternion.LookRotation(combatState.Target);
         }
+        // Rotate character towards DIRECTION OF MOVEMENT (Basic Movement)
+        else if (_requestedMovement.sqrMagnitude > 0f)
+        {
+            targetRotation = Quaternion.LookRotation(_requestedMovement);
+        }
+        else
+        {
+            targetRotation = Quaternion.LookRotation(transform.forward);
+        }
+
+        // Apply Rotation
+        transform.rotation = Quaternion.Lerp
+        (
+            transform.rotation,
+            targetRotation,
+            1f - Mathf.Exp(-moveRotation * deltaTime)
+        );
     }
 
     // Public Methods used by other classes to influence Player movement

@@ -78,7 +78,7 @@ public class Player : MonoBehaviour
         var deltaTime = Time.deltaTime;
 
         // Update Combat Actions
-        playerCombat.UpdateCombatAction();
+        playerCombat.UpdateCombatAction(deltaTime);
 
         // Rotate character
         playerMovement.UpdateRotation(deltaTime);

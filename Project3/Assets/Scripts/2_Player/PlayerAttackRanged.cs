@@ -13,4 +13,40 @@ public class PlayerAttackRanged : MonoBehaviour
     [SerializeField] private ProjectilePool projectilePool;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform projectileSpawn;
+
+    public void Initialize()
+    {
+        _fireTimer = fireRate;
+    }
+
+    public void Attack(ref CombatState state, Vector2 mousePos, float deltaTime)
+    {
+        // "WHERE are we attacking?"
+        Ray cursorPosition = Camera.main.ScreenPointToRay(mousePos);
+        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer)) {
+            state.Target = hit.point;
+        }
+
+        // Increment Fire Rate Timer
+        _fireTimer += deltaTime;
+
+        // Calculate Projectile Direction
+        var source = Vector3.ProjectOnPlane(projectileSpawn.position, Vector3.up);
+        _projectileDirection = (state.Target - source).normalized;
+
+        // Fire Projectile
+        if (_fireTimer >= fireRate)
+        {
+            var stats = new ProjectileStats
+            {
+                Damage = damage,
+                Speed = projectileSpeed,
+                Range = projectileRange,
+                Direction = _projectileDirection
+            };
+            projectilePool.Get(stats, projectileSpawn);
+
+            _fireTimer = 0f;
+        }
+    }
 }

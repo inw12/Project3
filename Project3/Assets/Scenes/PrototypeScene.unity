@@ -3358,8 +3358,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerAttackRanged
   damage: 1
-  fireRate: 0.24
-  projectileSpeed: 25
+  fireRate: 0.42
+  projectileSpeed: 45
   projectileRange: 50
   projectilePool: {fileID: 7003397382392103176}
   groundLayer:

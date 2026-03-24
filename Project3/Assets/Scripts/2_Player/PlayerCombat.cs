@@ -18,7 +18,8 @@ public enum AttackType
 public class PlayerCombat : MonoBehaviour
 {
     /// * Referenced by:
-    ///     - 'PlayerAnimationRig.cs' (ranged attack animation rig)
+    ///     - 'PlayerMovement.cs'       (handles character rotation depending on current attack)
+    ///     - 'PlayerAnimationRig.cs'   (triggers ranged attack animation rig)
     public static PlayerCombat Instance { get; private set; }
 
     [SerializeField] private PlayerAttackRanged rangedAttack;
@@ -62,6 +63,9 @@ public class PlayerCombat : MonoBehaviour
         _state.Target = Vector3.zero;
         _prevState = _state;
 
+        // Initialize Combat Actions
+        rangedAttack.Initialize();
+
         _comboActive = false;
     }
 
@@ -86,8 +90,17 @@ public class PlayerCombat : MonoBehaviour
         }       
     }
 
-    public void UpdateCombatAction()
+    public void UpdateCombatAction(float deltaTime)
     {
+        if (_requestedRanged)
+        {
+            _state.CurrentAttack = AttackType.Ranged;
+            rangedAttack.Attack(ref _state, _requestedMousePos, deltaTime);
+        }
+        else
+        {
+            CancelCurrentAction();
+        }
     }
 
     public void CancelCurrentAction()
