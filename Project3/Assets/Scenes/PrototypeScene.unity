@@ -713,6 +713,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 19796090802898730, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 5866666020585567277}
+    - target: {fileID: 19796090802898730, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
+      propertyPath: comboBuffer
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 19796090802898730, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
       propertyPath: projectilePool
       value: 
       objectReference: {fileID: 7003397382392103176}
@@ -817,6 +825,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1541122181272990309}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &5866666020585567277 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1880560395011664864, guid: bbe90e715743b4519bb0ad7894450c38, type: 3}
+  m_PrefabInstance: {fileID: 655707669892106791}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6940556245658543488
 GameObject:
   m_ObjectHideFlags: 0
