@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public struct MovementInput
 {
     public Vector2 Movement;
@@ -18,7 +17,6 @@ public enum MovementAction
     Move  = 1, 
     Dodge = 2
 }
-
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
