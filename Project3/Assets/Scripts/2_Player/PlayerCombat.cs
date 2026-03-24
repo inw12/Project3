@@ -65,6 +65,7 @@ public class PlayerCombat : MonoBehaviour
 
         // Initialize Combat Actions
         rangedAttack.Initialize();
+        meleeAttack.Initialize();
     }
 
     public void UpdateInput(CombatInput input)
@@ -98,51 +99,48 @@ public class PlayerCombat : MonoBehaviour
 
     public void UpdateCombatAction(float deltaTime)
     {
+        // State Machine Control
         switch (_state.CurrentAction)
         {
             case CombatAction.Parry:
                 OnParry();
                 break;
             case CombatAction.Melee:
-                OnMeleeAttack();
+                OnMeleeAttack(deltaTime);
                 break;
             case CombatAction.Ranged:
-                OnRangedAttack();
+                OnRangedAttack(deltaTime);
                 break;
             default:
                 TryEnterNewState();
                 break;
         };
 
-        if (_prevState.CurrentAction != _state.CurrentAction)
-        {
+        // Debug Message
+        if (_prevState.CurrentAction != _state.CurrentAction) {
             Debug.Log(_state.CurrentAction);
-        }
-
+        }        
 
         // Update previous state
         _prevState = _state;
     }
 
-    // Public methods to enable/disable combat inputs
-    public void EnableCombatInput() => _combatInputEnabled = true;
-    public void DisableCombatInput() => _combatInputEnabled = false;
-
-    // State Getters
-    public CombatState GetState() => _state;
-    public CombatState GetPrevState() => _prevState;
-
     private void OnParry()
     {
         
     }
-    private void OnMeleeAttack()
+    private void OnMeleeAttack(float deltaTime)
     {
-        
+        if (_requestedMelee)
+        {
+            meleeAttack.TriggerAttack();
+        }
+
+        meleeAttack.UpdateMeleeAttack(ref _state, deltaTime);
     }
-    private void OnRangedAttack()
+    private void OnRangedAttack(float deltaTime)
     {
-        rangedAttack.Attack(ref _state, _requestedMousePos, Time.deltaTime);
+        rangedAttack.Attack(ref _state, _requestedMousePos, deltaTime);
 
         if (!_requestedRanged)
         {
@@ -155,4 +153,12 @@ public class PlayerCombat : MonoBehaviour
                                 : _requestedMelee ? CombatAction.Melee
                                     : _requestedRanged ? CombatAction.Ranged : CombatAction.None;
     }
+
+    // Public methods to enable/disable combat inputs
+    public void EnableCombatInput() => _combatInputEnabled = true;
+    public void DisableCombatInput() => _combatInputEnabled = false;
+
+    // State Getters
+    public CombatState GetState() => _state;
+    public CombatState GetPrevState() => _prevState;
 }

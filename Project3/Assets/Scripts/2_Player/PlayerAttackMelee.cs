@@ -29,10 +29,7 @@ public class PlayerAttackMelee : MonoBehaviour
 
     public void Initialize()
     {
-        _comboCounter = 0;
-
-        _comboTimer = 0f;
-        _dashTimer = 0f;
+        ResetMeleeCombo();
     }
 
     // Called every frame in "PlayerCombat" when in the "Melee" state
@@ -56,18 +53,24 @@ public class PlayerAttackMelee : MonoBehaviour
         // Exit Melee State once timer exceeds combo input buffer
         if (_comboTimer > comboBuffer) 
         {
-            _comboCounter = 0;
-
+            ResetMeleeCombo();
             state.CurrentAction = CombatAction.None;
         }
     }
 
     // Called whenever "melee" button is pressed
-    public void Attack()
+    public void TriggerAttack()
     {
         _comboTimer = 0f;
         _dashTimer = 0f;
 
         _comboCounter++;
+    }
+
+    private void ResetMeleeCombo()
+    {
+        _comboCounter = 0;
+        _comboTimer = 0f;
+        _dashTimer = 0f;
     }
 }
