@@ -1,16 +1,11 @@
 using UnityEngine;
-
-public class OnMeleeIdle : MonoBehaviour
+public class OnMeleeIdle : StateMachineBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
     }
-
-    // Update is called once per frame
-    void Update()
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+        PlayerCombat.Instance.MeleeAnimationEnd();
     }
 }

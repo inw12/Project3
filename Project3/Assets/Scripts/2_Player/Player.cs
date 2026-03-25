@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Transform cameraHeight;
     [SerializeField] private Vector3 cameraOffset;
+    [SerializeField] private float cameraAcceleration = 5f;
 
     private PlayerInput _inputActions;
 
@@ -88,7 +89,13 @@ public class Player : MonoBehaviour
         animationRig.UpdateRig();
 
         // Update Camera Position
-        mainCamera.transform.position = cameraHeight.position + cameraOffset;
+        var cameraTarget = cameraHeight.position + cameraOffset;
+        mainCamera.transform.position = Vector3.Lerp
+        (
+            mainCamera.transform.position,
+            cameraTarget,
+            1f - Mathf.Exp(-cameraAcceleration * deltaTime)
+        );
     }
 
     void FixedUpdate()  // Trigger CHARACTER MOVEMENT

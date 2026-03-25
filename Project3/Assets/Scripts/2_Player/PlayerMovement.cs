@@ -166,9 +166,15 @@ public class PlayerMovement : MonoBehaviour
         var combatState = PlayerCombat.Instance.GetState();
 
         // Rotate character towards MOUSE POSITION ------------ (Ranged Attack)
-        if (combatState.CurrentAction is CombatAction.Ranged)
+        if (combatState.CurrentAction is CombatAction.Ranged or CombatAction.Melee)
         {
             targetRotation = Quaternion.LookRotation(combatState.Target);
+        }
+        // Rotate character towards MOUSE POSITION ------------ (Melee Attack)
+        else if (combatState.CurrentAction is CombatAction.Melee)
+        {
+            targetRotation = Quaternion.LookRotation(combatState.Target);
+            transform.rotation = targetRotation;
         }
         // Rotate character towards DIRECTION OF MOVEMENT ----- (Basic Movement)
         else if (_requestedMovement.sqrMagnitude > 0f)
@@ -213,6 +219,7 @@ public class PlayerMovement : MonoBehaviour
         );
     }
     public Vector3 GetVelocity() => _state.Velocity;
+    public void ResetVelocity() => _state.Velocity = Vector3.zero;
 
     // State Getters
     public MovementState GetState() => _state;

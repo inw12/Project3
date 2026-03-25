@@ -816,6 +816,7 @@ MonoBehaviour:
   mainCamera: {fileID: 330585545}
   cameraHeight: {fileID: 7001436372860613998}
   cameraOffset: {x: 0, y: 0, z: -17.5}
+  cameraAcceleration: 5
 --- !u!1 &298510299320132965
 GameObject:
   m_ObjectHideFlags: 0
@@ -3351,10 +3352,10 @@ MonoBehaviour:
   damage: 2
   meleeOuterRange: 8
   meleeInnerRange: 2
-  dashSpeed: 20
-  dashAcceleration: 50
-  dashDuration: 0.6
-  comboBuffer: 0.25
+  dashSpeed: 50
+  dashAcceleration: 15
+  dashDuration: 0.03
+  comboBuffer: 0.5
   animationController: {fileID: 1782681039542158505}
   enemyLayer:
     serializedVersion: 2

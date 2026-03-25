@@ -11,6 +11,7 @@ public class PlayerAttackMelee : MonoBehaviour
     [SerializeField] private float dashSpeed;
     [SerializeField] private float dashAcceleration;
     [SerializeField] private float dashDuration;
+    private Vector3 _dashVelocity;
     private float _dashTimer;
 
     [Header("Combo")]
@@ -28,6 +29,7 @@ public class PlayerAttackMelee : MonoBehaviour
 
     // For enemy tracking/targeting
     private readonly Collider[] _outerHits = new Collider[5];
+    private readonly Collider[] _innerHits = new Collider[5];
     private Vector3 _target;
 
     private bool _meleeInputEnabled;
@@ -48,6 +50,15 @@ public class PlayerAttackMelee : MonoBehaviour
     // Called every frame in "PlayerCombat" when in the "Melee" state
     public void UpdateMeleeAttack(ref CombatState state, ref bool meleeStarted, ref bool meleeInputEnabled, float deltaTime)
     {
+        // Exit Melee State once timer exceeds combo input buffer
+        if (_comboTimer > comboBuffer) 
+        {
+            state.CurrentAction = CombatAction.None;
+            meleeStarted = false;
+            ResetMeleeCombo();
+            PlayerMovement.Instance.EnableMovementInput();
+        }
+
         // Update melee input status
         _meleeInputEnabled = meleeInputEnabled;
 
@@ -55,10 +66,10 @@ public class PlayerAttackMelee : MonoBehaviour
         if (_meleeInputEnabled)
         {
             // Increment Timers
-            _dashTimer += deltaTime;
             _comboTimer += deltaTime;
         }
-        
+        _dashTimer += deltaTime;
+
         // Scan for enemies
         var outerHits = Physics.OverlapSphereNonAlloc
         (
@@ -67,16 +78,23 @@ public class PlayerAttackMelee : MonoBehaviour
             _outerHits,
             enemyLayer
         );
+        var innerHits = Physics.OverlapSphereNonAlloc
+        (
+            transform.position,
+            meleeOuterRange,
+            _innerHits,
+            enemyLayer
+        );
         _target = outerHits > 0 ? _outerHits[0].transform.position : Vector3.zero;
 
-        // Exit Melee State once timer exceeds combo input buffer
-        if (_comboTimer > comboBuffer) 
-        {
-            ResetMeleeCombo();
-            state.CurrentAction = CombatAction.None;
-            meleeStarted = false;
-            PlayerMovement.Instance.EnableMovementInput();
-        }
+        // Calculate target velocity for melee dash
+        var direction = _target == Vector3.zero ? (state.Target - transform.position).normalized
+                                                : (_target - transform.position).normalized;
+        _dashVelocity = direction * dashSpeed;        
+
+        _dashVelocity = _dashTimer < dashDuration ? _dashVelocity : Vector3.zero;
+        _dashVelocity = innerHits == 0 ? _dashVelocity : Vector3.zero;
+        PlayerMovement.Instance.SetVelocity(_dashVelocity, dashAcceleration);
     }
 
     // Called whenever "melee" button is pressed

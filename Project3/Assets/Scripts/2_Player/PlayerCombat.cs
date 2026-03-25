@@ -133,6 +133,11 @@ public class PlayerCombat : MonoBehaviour
                 break;
         };    
 
+        if (_prevState.CurrentAction != _state.CurrentAction)
+        {
+            Debug.Log(_state.CurrentAction);
+        }
+
         // Update previous state
         _prevState = _state;
     }
@@ -147,7 +152,7 @@ public class PlayerCombat : MonoBehaviour
         meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, ref _meleeInputEnabled, deltaTime);
 
         // Melee Combo START
-        if (!_meleeStarted)
+        if (!_meleeStarted && _state.CurrentAction is CombatAction.Melee)
         {
             _meleeStarted = true;
             PlayerMovement.Instance.DisableMovementInput();
@@ -184,7 +189,9 @@ public class PlayerCombat : MonoBehaviour
     public CombatState GetState() => _state;
     public CombatState GetPrevState() => _prevState;
 
+    #region StateMachineBehavior Methods
     // Bool setters for 'OnMeleeStart.cs' & 'OnMeleeEnd.cs' StateMachineBehaviors
     public void MeleeAnimationStart() => _meleeInputEnabled = false;
     public void MeleeAnimationEnd() => _meleeInputEnabled = true;
+    #endregion
 }
