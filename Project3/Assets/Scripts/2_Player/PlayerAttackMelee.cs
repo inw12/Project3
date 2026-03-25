@@ -21,6 +21,7 @@ public class PlayerAttackMelee : MonoBehaviour
     [Header("Unity Components")]
     [SerializeField] private PlayerAnimationController animationController;
     [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform melee1Hitbox;
     [SerializeField] private Transform melee2Hitbox;
     [SerializeField] private Transform melee3Hitbox;
@@ -36,26 +37,35 @@ public class PlayerAttackMelee : MonoBehaviour
         ResetMeleeCombo();
     }
 
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, meleeOuterRange);
+        Gizmos.color = Color.orange;
+        Gizmos.DrawWireSphere(transform.position, meleeInnerRange);
+    }
+
     // Called every frame in "PlayerCombat" when in the "Melee" state
     public void UpdateMeleeAttack(ref CombatState state, ref bool meleeStarted, ref bool meleeInputEnabled, float deltaTime)
     {
+        // Update melee input status
         _meleeInputEnabled = meleeInputEnabled;
 
+        // Input buffers should only update when able to input
         if (_meleeInputEnabled)
         {
             // Increment Timers
             _dashTimer += deltaTime;
             _comboTimer += deltaTime;
         }
-
+        
         // Scan for enemies
         var outerHits = Physics.OverlapSphereNonAlloc
         (
             transform.position,
             meleeOuterRange,
             _outerHits,
-            enemyLayer,
-            QueryTriggerInteraction.Ignore
+            enemyLayer
         );
         _target = outerHits > 0 ? _outerHits[0].transform.position : Vector3.zero;
 

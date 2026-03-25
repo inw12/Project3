@@ -29,6 +29,8 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private PlayerAttackRanged rangedAttack;
     [SerializeField] private PlayerAttackMelee meleeAttack;
     [SerializeField] private PlayerParry parry;
+    [Space]
+    [SerializeField] private LayerMask groundLayer;
 
     private bool _combatInputEnabled;
 
@@ -65,7 +67,7 @@ public class PlayerCombat : MonoBehaviour
 
         // State Machine Initialization
         _state.CurrentAction = CombatAction.None;
-        _state.Target = Vector3.zero;
+        _state.Target = Vector3.forward;
         _prevState = _state;
 
         // Initialize Combat Actions
@@ -102,7 +104,14 @@ public class PlayerCombat : MonoBehaviour
             {
                 _requestedParry = _requestedMelee = _requestedRanged = false;
             }
-        }       
+        }     
+
+        // Mark world position relative to mouse position on screen
+        Ray cursorPosition = Camera.main.ScreenPointToRay(_requestedMousePos);
+        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer))
+        {
+            _state.Target = hit.point;
+        }  
     }
 
     public void UpdateCombatAction(float deltaTime)
@@ -122,12 +131,7 @@ public class PlayerCombat : MonoBehaviour
             default:
                 TryEnterNewState();
                 break;
-        };
-
-        // Debug Message
-        if (_prevState.CurrentAction != _state.CurrentAction) {
-            Debug.Log(_state.CurrentAction);
-        }        
+        };    
 
         // Update previous state
         _prevState = _state;
@@ -139,6 +143,9 @@ public class PlayerCombat : MonoBehaviour
     }
     private void OnMeleeAttack(float deltaTime)
     {
+        // Update Melee Data
+        meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, ref _meleeInputEnabled, deltaTime);
+
         // Melee Combo START
         if (!_meleeStarted)
         {
@@ -152,13 +159,10 @@ public class PlayerCombat : MonoBehaviour
         {
             meleeAttack.TriggerAttack();
         }
-
-        // Update Melee Data
-        meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, ref _meleeInputEnabled, deltaTime);
     }
     private void OnRangedAttack(float deltaTime)
     {
-        rangedAttack.Attack(ref _state, _requestedMousePos, deltaTime);
+        rangedAttack.Attack(ref _state, deltaTime);
 
         if (!_requestedRanged)
         {

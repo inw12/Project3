@@ -3321,6 +3321,9 @@ MonoBehaviour:
   rangedAttack: {fileID: 8283323078812855509}
   meleeAttack: {fileID: 8283323078812855508}
   parry: {fileID: 8283323078812855507}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &8283323078812855507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3356,6 +3359,9 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
   melee1Hitbox: {fileID: 6215441363599116621}
   melee2Hitbox: {fileID: 1637483394108173747}
   melee3Hitbox: {fileID: 298684522370693075}

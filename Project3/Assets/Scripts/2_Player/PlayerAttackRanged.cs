@@ -19,14 +19,8 @@ public class PlayerAttackRanged : MonoBehaviour
         _fireTimer = fireRate;
     }
 
-    public void Attack(ref CombatState state, Vector2 mousePos, float deltaTime)
+    public void Attack(ref CombatState state, float deltaTime)
     {
-        // "WHERE are we attacking?"
-        Ray cursorPosition = Camera.main.ScreenPointToRay(mousePos);
-        if (Physics.Raycast(cursorPosition, out RaycastHit hit, Mathf.Infinity, groundLayer)) {
-            state.Target = hit.point;
-        }
-
         // Increment Fire Rate Timer
         _fireTimer += deltaTime;
 
