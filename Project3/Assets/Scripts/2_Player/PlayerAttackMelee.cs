@@ -22,7 +22,6 @@ public class PlayerAttackMelee : MonoBehaviour
     [Header("Unity Components")]
     [SerializeField] private PlayerAnimationController animationController;
     [SerializeField] private LayerMask enemyLayer;
-    [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform melee1Hitbox;
     [SerializeField] private Transform melee2Hitbox;
     [SerializeField] private Transform melee3Hitbox;
@@ -37,6 +36,7 @@ public class PlayerAttackMelee : MonoBehaviour
     public void Initialize()
     {
         ResetMeleeCombo();
+        _meleeInputEnabled = true;
     }
 
     void OnDrawGizmosSelected()
@@ -48,7 +48,7 @@ public class PlayerAttackMelee : MonoBehaviour
     }
 
     // Called every frame in "PlayerCombat" when in the "Melee" state
-    public void UpdateMeleeAttack(ref CombatState state, ref bool meleeStarted, ref bool meleeInputEnabled, float deltaTime)
+    public void UpdateMeleeAttack(ref CombatState state, ref bool meleeStarted, float deltaTime)
     {
         // Exit Melee State once timer exceeds combo input buffer
         if (_comboTimer > comboBuffer) 
@@ -58,9 +58,6 @@ public class PlayerAttackMelee : MonoBehaviour
             ResetMeleeCombo();
             PlayerMovement.Instance.EnableMovementInput();
         }
-
-        // Update melee input status
-        _meleeInputEnabled = meleeInputEnabled;
 
         // Input buffers should only update when able to input
         if (_meleeInputEnabled)
@@ -81,11 +78,16 @@ public class PlayerAttackMelee : MonoBehaviour
         var innerHits = Physics.OverlapSphereNonAlloc
         (
             transform.position,
-            meleeOuterRange,
+            meleeInnerRange,
             _innerHits,
             enemyLayer
         );
         _target = outerHits > 0 ? _outerHits[0].transform.position : Vector3.zero;
+
+        var directionToTarget = (Vector3.ProjectOnPlane(_target, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
+        var directionToCursor = (Vector3.ProjectOnPlane(state.Target, Vector3.up) - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
+
+        _target = Vector3.Dot(directionToCursor, directionToTarget) > 0f ? _target : Vector3.zero;
 
         // Calculate target velocity for melee dash
         var direction = _target == Vector3.zero ? (state.Target - transform.position).normalized
@@ -119,4 +121,7 @@ public class PlayerAttackMelee : MonoBehaviour
         _comboTimer = 0f;
         _dashTimer = 0f;
     }
+
+    public void EnableMeleeInput() => _meleeInputEnabled = true;
+    public void DisableMeleeInput() => _meleeInputEnabled = false;
 }

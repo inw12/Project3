@@ -46,7 +46,6 @@ public class PlayerCombat : MonoBehaviour
 
     // Melee Attack Stuff
     private bool _meleeStarted; // used to trigger the first hit of the melee attack combo
-    private bool _meleeInputEnabled;
 
     void Awake()
     {
@@ -75,7 +74,6 @@ public class PlayerCombat : MonoBehaviour
         meleeAttack.Initialize();
 
         _meleeStarted = false;
-        _meleeInputEnabled = true;
     }
 
     public void UpdateInput(CombatInput input)
@@ -149,7 +147,7 @@ public class PlayerCombat : MonoBehaviour
     private void OnMeleeAttack(float deltaTime)
     {
         // Update Melee Data
-        meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, ref _meleeInputEnabled, deltaTime);
+        meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, deltaTime);
 
         // Melee Combo START
         if (!_meleeStarted && _state.CurrentAction is CombatAction.Melee)
@@ -191,7 +189,7 @@ public class PlayerCombat : MonoBehaviour
 
     #region StateMachineBehavior Methods
     // Bool setters for 'OnMeleeStart.cs' & 'OnMeleeEnd.cs' StateMachineBehaviors
-    public void MeleeAnimationStart() => _meleeInputEnabled = false;
-    public void MeleeAnimationEnd() => _meleeInputEnabled = true;
+    public void EnableMeleeInput() => meleeAttack.EnableMeleeInput();
+    public void DisableMeleeInput() => meleeAttack.DisableMeleeInput();
     #endregion
 }
