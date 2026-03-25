@@ -51,7 +51,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: -4726129338327161112}
   m_StateMachineBehaviours:
-  - {fileID: 6383487089972936805}
+  - {fileID: -5880876902048528658}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -163,7 +163,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 5909029810506461709}
   m_StateMachineBehaviours:
-  - {fileID: 4631866689480986578}
+  - {fileID: 7235108437938730165}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -178,6 +178,30 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!114 &-6587942191309535412
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b08b1f457b714d08b6ae276b62998ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::DisableMeleeInput
+--- !u!114 &-5880876902048528658
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d016afd21bf82410ebf12b2d63a2a159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::EnableMeleeInput
 --- !u!206 &-4881763881138050274
 BlendTree:
   m_ObjectHideFlags: 1
@@ -444,8 +468,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 6996344790941959312}
-  m_StateMachineBehaviours:
-  - {fileID: 1898069126048978914}
+  m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -652,7 +675,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 7502788157048700773}
   m_StateMachineBehaviours:
-  - {fileID: 5569526291601242828}
+  - {fileID: -6587942191309535412}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -878,7 +901,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: -440479210623452191}
   m_StateMachineBehaviours:
-  - {fileID: 909362407891570472}
+  - {fileID: 8589022122216771174}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1044,7 +1067,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: -7369638155669858419}
   m_StateMachineBehaviours:
-  - {fileID: -4025083298921839184}
+  - {fileID: 8865234298766402392}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1132,7 +1155,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: -3690584187199509401}
   m_StateMachineBehaviours:
-  - {fileID: 4677341344914413866}
+  - {fileID: 8451096039934187888}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1159,8 +1182,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 3668223714326076453}
-  m_StateMachineBehaviours:
-  - {fileID: -3670301423487358486}
+  m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1187,8 +1209,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 8160473008021345588}
-  m_StateMachineBehaviours:
-  - {fileID: -8842410214694301175}
+  m_StateMachineBehaviours: []
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1253,6 +1274,18 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &7235108437938730165
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b08b1f457b714d08b6ae276b62998ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::DisableMeleeInput
 --- !u!114 &7451472613536465824
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1312,3 +1345,39 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &8451096039934187888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d016afd21bf82410ebf12b2d63a2a159, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::EnableMeleeInput
+--- !u!114 &8589022122216771174
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29915202c46c04559abc88034e4b5ee1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::EnableMeleeInputOnExit
+--- !u!114 &8865234298766402392
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b08b1f457b714d08b6ae276b62998ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::DisableMeleeInput
