@@ -150,6 +150,7 @@ public class PlayerAttackMelee : MonoBehaviour
                 if (hit.TryGetComponent(out IDamageable e))
                 {
                     e.DecreaseHealth(damage);
+                    _hitboxActive = false;
                 }
             }
         }
