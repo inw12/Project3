@@ -131,10 +131,10 @@ public class PlayerCombat : MonoBehaviour
                 break;
         };    
 
-        if (_prevState.CurrentAction != _state.CurrentAction)
-        {
-            Debug.Log(_state.CurrentAction);
-        }
+        //if (_prevState.CurrentAction != _state.CurrentAction)
+        //{
+        //    Debug.Log(_state.CurrentAction);
+        //}
 
         // Update previous state
         _prevState = _state;
@@ -148,6 +148,7 @@ public class PlayerCombat : MonoBehaviour
     {
         // Update Melee Data
         meleeAttack.UpdateMeleeAttack(ref _state, ref _meleeStarted, deltaTime);
+        meleeAttack.UpdateHitbox(deltaTime);
 
         // Melee Combo START
         if (!_meleeStarted && _state.CurrentAction is CombatAction.Melee)
@@ -191,5 +192,8 @@ public class PlayerCombat : MonoBehaviour
     // Bool setters for 'OnMeleeStart.cs' & 'OnMeleeEnd.cs' StateMachineBehaviors
     public void EnableMeleeInput() => meleeAttack.EnableMeleeInput();
     public void DisableMeleeInput() => meleeAttack.DisableMeleeInput();
+
+    public void EnableMeleeHitbox() => meleeAttack.EnableMeleeHitbox();
+    public void DisableMeleeHitbox() => meleeAttack.DisableMeleeHitbox();
     #endregion
 }

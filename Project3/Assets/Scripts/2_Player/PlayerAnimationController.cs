@@ -66,4 +66,8 @@ public class PlayerAnimationController : MonoBehaviour
         _animator.SetTrigger("MeleeTrigger");
         _animator.SetInteger("ComboCount", comboCount);
     }
+    public void UpdateMeleeAnimation(bool hitstunActive)
+    {
+        _animator.SetBool("HitstunActive", hitstunActive);
+    }
 }

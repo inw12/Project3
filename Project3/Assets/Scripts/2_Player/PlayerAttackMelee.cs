@@ -16,9 +16,12 @@ public class PlayerAttackMelee : MonoBehaviour
     private float _dashTimer;
 
     [Header("Combo")]
+    [SerializeField] private float hitstunDuration;
     [SerializeField] private float comboBuffer;
     private int _comboCounter;
     private float _comboTimer;
+    private bool _hitstunActive;
+    private float _hitstunTimer;
 
     [Header("Unity Components")]
     [SerializeField] private PlayerAnimationController animationController;
@@ -26,13 +29,18 @@ public class PlayerAttackMelee : MonoBehaviour
     [SerializeField] private Transform melee1Hitbox;
     [SerializeField] private Transform melee2Hitbox;
     [SerializeField] private Transform melee3Hitbox;
+    [SerializeField] private float hitboxRadius;
+    [SerializeField] private float hitboxOffset;
+    private bool _hitboxActive;
 
     // For enemy tracking/targeting
+    private readonly Collider[] _meleeHits = new Collider[5];
     private readonly Collider[] _outerHits = new Collider[5];
     private readonly Collider[] _innerHits = new Collider[5];
     private Vector3 _target;
 
     private bool _meleeInputEnabled;
+    private Vector3 _meleeGizmos;
 
     public void Initialize()
     {
@@ -44,8 +52,10 @@ public class PlayerAttackMelee : MonoBehaviour
     {
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, meleeOuterRange);
-        Gizmos.color = Color.orange;
+        Gizmos.color = Color.blue;
         Gizmos.DrawWireSphere(transform.position, meleeInnerRange);
+        Gizmos.color = Color.yellow;
+        if (_meleeGizmos != null) Gizmos.DrawWireSphere(_meleeGizmos, hitboxRadius);
     }
 
     // Called every frame in "PlayerCombat" when in the "Melee" state
@@ -104,6 +114,58 @@ public class PlayerAttackMelee : MonoBehaviour
         PlayerMovement.Instance.SetVelocity(_dashVelocity, dashAcceleration);
     }
 
+    public void UpdateHitbox(float deltaTime)
+    {
+        // Get hitbox location
+        var source = _comboCounter switch
+        {
+            2 => melee2Hitbox,
+            3 => melee3Hitbox,
+            _ => melee1Hitbox
+        };
+        var offset = transform.forward * hitboxOffset;
+
+        _meleeGizmos = source.position + offset;
+
+        if (_hitboxActive)
+        {
+            // Scan for hits
+            var hits = Physics.OverlapSphereNonAlloc
+            (
+                source.position + offset,
+                hitboxRadius,
+                _meleeHits,
+                enemyLayer
+            );
+
+            // Trigger hit
+            if (hits > 0 && !_hitstunActive)
+            {
+                _hitstunActive = true;
+                _hitstunTimer = 0f;
+
+                animationController.UpdateMeleeAnimation(_hitstunActive);
+
+                var hit = _meleeHits[0];
+                if (hit.TryGetComponent(out IDamageable e))
+                {
+                    e.DecreaseHealth(damage);
+                }
+            }
+        }
+
+        // Update hitstun timer
+        if (_hitstunActive)
+        {
+            _hitstunTimer += deltaTime;
+            if (_hitstunTimer >= hitstunDuration)
+            {
+                _hitstunActive = false;
+                animationController.UpdateMeleeAnimation(_hitstunActive);
+            }
+        }
+    }
+
     // Called whenever "melee" button is pressed
     public void TriggerAttack()
     {
@@ -129,4 +191,7 @@ public class PlayerAttackMelee : MonoBehaviour
 
     public void EnableMeleeInput() => _meleeInputEnabled = true;
     public void DisableMeleeInput() => _meleeInputEnabled = false;
+
+    public void EnableMeleeHitbox() => _hitboxActive = true;
+    public void DisableMeleeHitbox() => _hitboxActive = false;
 }

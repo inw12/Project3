@@ -3351,19 +3351,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Player::PlayerAttackMelee
   damage: 2
   meleeOuterRange: 8
-  meleeInnerRange: 2.5
+  meleeInnerRange: 3
   dashSpeed: 50
   dashAcceleration: 15
   dashDuration: 0.03
   targetedDashSpeedMultiplier: 1.5
+  hitstunDuration: 0.1
   comboBuffer: 0.5
   animationController: {fileID: 1782681039542158505}
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   melee1Hitbox: {fileID: 6215441363599116621}
   melee2Hitbox: {fileID: 1637483394108173747}
   melee3Hitbox: {fileID: 298684522370693075}
+  hitboxRadius: 1.5
+  hitboxOffset: 1
 --- !u!114 &8283323078812855509
 MonoBehaviour:
   m_ObjectHideFlags: 0
